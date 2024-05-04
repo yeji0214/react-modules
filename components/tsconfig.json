@@ -23,9 +23,22 @@
     /* Testing */
     "types": ["jest"],
 
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@/assets": ["src/assets/*"],
+      "@/data": ["src/data/*"],
+      "@/lib": ["src/lib/*"],
+      "@/stories": ["src/stories/*"],
+      "@/style": ["src/style/*"]
+    }
   },
-  "include": ["src/lib"],
+  "include": [
+    "src/**/*",
+    "src/types/svg.d.ts",
+    "src/stories/Modal.stories.tsx"
+  ],
   "exclude": ["node_modules", "dist", "**/*.test.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
