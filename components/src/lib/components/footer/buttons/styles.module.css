@@ -1,0 +1,33 @@
+@import url('../../../../index.css');
+
+.modalButton {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  width: 100%;
+  padding: 0.6em 1.2em;
+  font-size: var(--button-font-size);
+  font-weight: var(--button-font-weight);
+  font-family: inherit;
+  background-color: var(--grayscale-main);
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+
+.modalButton:hover {
+  border-color: var(--button-border-blue);
+}
+
+.modalButton:focus,
+.modalButton:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+.confirmButton {
+  background-color: var(--grayscale-main);
+  color: var(--white);
+}
+
+.closeButton {
+  background-color: var(--white-variable);
+  color: var(--black);
+}
