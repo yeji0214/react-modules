@@ -1,7 +1,7 @@
 {
-  "name": "hooks",
-  "version": "0.0.1",
-  "description": "npm modules",
+  "name": "brgndy-card-validate-hooks",
+  "version": "0.0.6",
+  "description": "카드 정보 입력 유효성 검사 커스텀 훅 모음집",
   "type": "module",
   "types": "dist/index.d.ts",
   "main": "dist/index.js",
