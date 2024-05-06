@@ -1,6 +1,6 @@
 {
-  "name": "hooks",
-  "version": "0.0.1",
+  "name": "newjeans",
+  "version": "0.0.2",
   "description": "npm modules",
   "type": "module",
   "types": "dist/index.d.ts",
@@ -14,7 +14,7 @@
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "test": "jest"
+    "test": "jest --verbose"
   },
   "dependencies": {
     "react": "^18.2.0",
@@ -24,6 +24,7 @@
     "@testing-library/jest-dom": "^6.4.2",
     "@testing-library/react": "^15.0.5",
     "@types/jest": "^29.5.12",
+    "@types/mocha": "^10.0.6",
     "@types/node": "^20.12.7",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
@@ -36,6 +37,7 @@
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
     "path": "^0.12.7",
+    "react-testing-library": "^8.0.1",
     "ts-jest": "^29.1.2",
     "typescript": "^5.2.2",
     "vite": "^5.2.0",
