@@ -1,0 +1,45 @@
+.container {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.backDrop {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.35);
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.bottom {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.modalSection {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  position: fixed;
+  padding: 24px 32px;
+  min-height: 216px;
+  background-color: #fff;
+}
+
+.center > .modalSection {
+  width: 80vw;
+  border-radius: 8px;
+}
+
+.bottom > .modalSection {
+  width: 100%;
+  border-radius: 8px 8px 0 0;
+}
