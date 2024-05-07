@@ -1,15 +1,15 @@
 #root {
-  max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
+  max-width: 1280px;
   text-align: center;
 }
 
 .logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
   transition: filter 300ms;
+  will-change: filter;
+  padding: 1.5em;
+  height: 6em;
 }
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
@@ -27,6 +27,18 @@
   }
 }
 
+#toast-modal-position {
+  margin: 0 auto;
+  margin-top: 2rem;
+  border: 2px solid black;
+  border-radius: 10px;
+  width: 300px;
+  height: 2rem;
+  color: rgb(54, 54, 138);
+  font-size: 1.2rem;
+  line-height: 1.5rem;
+  text-align: center;
+}
 @media (prefers-reduced-motion: no-preference) {
   a:nth-of-type(2) .logo {
     animation: logo-spin infinite 20s linear;
