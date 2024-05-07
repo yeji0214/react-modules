@@ -23,4 +23,9 @@ export default defineConfig({
     },
   },
   plugins: [react(), dts()],
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
+    },
+  },
 });

@@ -23,9 +23,17 @@
     /* Testing */
     "types": ["jest"],
 
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    }
   },
-  "include": ["src/lib"],
+  "include": [
+    "src/**/*",
+    "src/types/svg.d.ts",
+    "src/stories/Modal.stories.tsx"
+  ],
   "exclude": ["node_modules", "dist", "**/*.test.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
