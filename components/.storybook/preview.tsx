@@ -1,3 +1,4 @@
+import React from "react";
 import type { Preview } from "@storybook/react";
 
 const preview: Preview = {
@@ -10,5 +11,13 @@ const preview: Preview = {
     },
   },
 };
+
+export const decorators = [
+  (Story) => (
+    <div style={{ width: "100px", height: "300px" }}>
+      <Story />
+    </div>
+  ),
+];
 
 export default preview;
