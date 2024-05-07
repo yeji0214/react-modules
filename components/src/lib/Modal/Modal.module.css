@@ -1,0 +1,77 @@
+:root {
+  --modal-z-index: 90;
+  --modal-dimmed: 1;
+  --modal-bg-color: #ffffff;
+  --modal-dimmed-color: rgba(0, 0, 0, 0.35);
+  --modal-text-color: rgba(0, 0, 0, 1);
+}
+
+.modal {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dimmed {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: var(--modal-dimmed-color);
+  z-index: var(--modal-dimmed);
+}
+
+.modalContainer {
+  width: 240px;
+  height: 168px;
+  max-height: 240px;
+  max-width: 375px;
+  padding: 24px 32px;
+  border-radius: 8px;
+  background-color: var(--modal-bg-color);
+  z-index: var(--modal-z-index);
+  overflow-y: auto;
+}
+
+.bottom {
+  align-items: flex-end;
+}
+
+.modalContainerBottom {
+  width: 100%;
+  border-radius: 8px 8px 0px 0px;
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modalTitle {
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 26px;
+  color: var(--modal-text-color);
+}
+
+.modalContent,
+.modalFooter {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.modalContainer,
+.modalContent,
+.modalFooter {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.modalContainer :-webkit-scrollbar,
+.modalContent :-webkit-scrollbar,
+.modalFooter :-webkit-scrollbar {
+  display: none;
+}

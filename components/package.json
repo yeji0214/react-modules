@@ -1,23 +1,25 @@
 {
-  "name": "compoents",
-  "version": "0.0.1",
-  "description": "npm modules",
+  "name": "@jaymyong66/simple-modal",
+  "version": "0.0.2",
+  "description": "Displays a dialog with a custom content that requires attention or provides additional information.",
   "type": "module",
-  "types": "dist/index.d.ts",
+  "types": "dist/lib/index.d.ts",
   "main": "dist/index.js",
   "module": "dist/index.js",
   "files": [
     "dist"
   ],
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host",
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "chromatic": "npx chromatic --project-token=chpt_e5e0efa0eeae0d7"
   },
   "dependencies": {
+    "@jaymyong66/simple-modal": "^0.0.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
@@ -38,6 +40,7 @@
     "@typescript-eslint/eslint-plugin": "^7.2.0",
     "@typescript-eslint/parser": "^7.2.0",
     "@vitejs/plugin-react-swc": "^3.5.0",
+    "chromatic": "^11.3.0",
     "eslint": "^8.57.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.6",
