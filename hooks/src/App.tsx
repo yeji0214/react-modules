@@ -1,10 +1,15 @@
-import React from "react";
-import "./App.css";
+import './App.css';
+import { CardCVC, CardExpiryDate, CardHolder, CardNumbers, CardPassword, Issuer } from './components';
 
 function App() {
   return (
     <>
-      <h1>Hooks Modules</h1>
+      <CardHolder />
+      <CardCVC />
+      <Issuer />
+      <CardPassword />
+      <CardNumbers />
+      <CardExpiryDate />
     </>
   );
 }
