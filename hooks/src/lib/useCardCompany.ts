@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { CardCompanyErrorMessage } from '../constants/error';
-import { ErrorStatus } from '../types/errorStatus';
+import { CARD_COMPANY_ERROR_MESSAGE } from '@/constants/error';
+import { ErrorStatus } from '@/types/errorStatus';
 
 const checkIncludeArray = (optionArr: string[], value: string) => {
   if (!optionArr.includes(value) || !value) {
@@ -8,13 +8,7 @@ const checkIncludeArray = (optionArr: string[], value: string) => {
   }
 };
 
-const useCardCompany = ({
-  initialValue,
-  optionArray,
-}: {
-  initialValue: string;
-  optionArray: string[];
-}) => {
+const useCardCompany = (initialValue: string, optionArray: string[]) => {
   const [value, setValue] = useState(initialValue);
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -24,7 +18,7 @@ const useCardCompany = ({
       setValue(value);
     } catch (e) {
       if (e instanceof Error) {
-        setErrorMessage(CardCompanyErrorMessage[ErrorStatus.INVALID_OPTION]);
+        setErrorMessage(CARD_COMPANY_ERROR_MESSAGE[ErrorStatus.INVALID_OPTION]);
       }
     }
   };

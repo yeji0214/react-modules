@@ -1,18 +1,18 @@
 import { ChangeEvent, FocusEvent } from 'react';
-import useInput from './useInput';
+import useInput from '@/lib/useInput';
 import {
   validateLengthOver,
   validateNumber,
   validateYear,
   validateMonth,
-} from '../validate/validate';
+} from '@/validate/validate';
 import {
   ExpiryDate,
   ExpiryDateError,
   ExpiryDateKeys,
-} from '../types/expiryDate';
-import { ExpiryDateErrorMessages } from '../constants/error';
-import { EXPIRY_DATE_LENGTH } from '../constants/length';
+} from '@/types/expiryDate';
+import { EXPIRY_DATE_ERROR_MESSAGES } from '@/constants/error';
+import { EXPIRY_DATE_LENGTH } from '@/constants/length';
 
 const expiryDateValidates = (value: string) => {
   validateNumber(value);
@@ -60,8 +60,8 @@ const useExpiryDate = (initialValue: ExpiryDate) => {
   };
 
   const errorMessages = {
-    month: errorStatusMonth && ExpiryDateErrorMessages[errorStatusMonth],
-    year: errorStatusYear && ExpiryDateErrorMessages[errorStatusYear],
+    month: errorStatusMonth && EXPIRY_DATE_ERROR_MESSAGES[errorStatusMonth],
+    year: errorStatusYear && EXPIRY_DATE_ERROR_MESSAGES[errorStatusYear],
   };
 
   for (const key in errorMessages) {

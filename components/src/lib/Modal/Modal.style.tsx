@@ -1,7 +1,7 @@
+import styled, { css } from 'styled-components';
 import Theme from '@/style/theme';
-import styled from 'styled-components';
-
-export type ModalPosition = 'center' | 'bottom';
+import { ModalPosition } from './modal.type';
+import { Size } from '@/types/common.type';
 
 const ModalWrapper = styled.div<{ open: boolean }>`
   position: fixed;
@@ -19,25 +19,46 @@ const ModalBackground = styled.div`
   background-color: ${Theme.background.dark};
 `;
 
-const ModalContainer = styled.div<{ $position: ModalPosition }>`
+const sizeMap = {
+  small: '400px',
+  medium: '600px',
+  large: '800px',
+};
+
+const ModalContainer = styled.div<{
+  $position: ModalPosition;
+  $size: Size;
+}>`
   position: fixed;
-  top: ${({ $position }) => $position === 'center' && '50%'};
-  bottom: ${({ $position }) => $position === 'bottom' && '0px'};
   left: 50%;
-  transform: ${({ $position }) =>
-    $position === 'center' ? 'translate(-50%, -50%)' : 'translate(-50%, 0%)'};
-  min-width: ${({ $position }) => ($position === 'bottom' ? '100%' : '80%')};
-  max-width: 500px;
+  ${({ $position, $size }) => positionMapper($position, $size)}
   min-height: 150px;
   background-color: ${Theme.background.light};
-  border-radius: ${({ $position }) =>
-    $position === 'center' ? '8px' : '8px 8px 0px 0px'};
   color: ${Theme.colors.black};
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   padding: 24px;
 `;
+
+const positionMapper = (position: ModalPosition, size: Size) => {
+  switch (position) {
+    case 'center':
+      return css({
+        top: '50%',
+        transform: 'translate(-50%, -50%)',
+        borderRadius: '8px',
+        width: sizeMap[size],
+      });
+    case 'bottom':
+      return css({
+        bottom: '0px',
+        transform: 'translate(-50%, 0%)',
+        borderRadius: '8px 8px 0px 0px',
+        width: '100%',
+      });
+  }
+};
 
 const Title = styled.span`
   font-size: ${Theme.font.size.large};
@@ -60,16 +81,30 @@ const CloseIcon = styled.button`
   justify-content: center;
   padding: 0;
   cursor: pointer;
+  background: none;
+  border: 0;
   position: absolute;
   top: 20px;
   right: 20px;
 `;
 
 const Content = styled.div`
+  width: calc(100% - 24px);
   margin-bottom: 10px;
 `;
 
-const ConfirmButton = styled.button``;
+const PromptInput = styled.input`
+  width: calc(100% - 24px);
+  height: 40px;
+  padding: 0 10px;
+  margin: 10px 0;
+  border: 1px solid ${Theme.colors.grey};
+  border-radius: 4px;
+
+  &:focus {
+    border: 1px solid ${Theme.colors.black};
+  }
+`;
 
 const S = {
   ModalWrapper,
@@ -77,9 +112,9 @@ const S = {
   ModalBackground,
   ModalHeader,
   CloseIcon,
-  ConfirmButton,
   Content,
   ModalContainer,
+  PromptInput,
 };
 
 export default S;

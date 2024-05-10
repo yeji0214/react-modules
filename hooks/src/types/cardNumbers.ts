@@ -1,4 +1,4 @@
-import { ErrorStatus } from './errorStatus';
+import { ErrorStatus } from '@/types/errorStatus';
 
 export interface CardNumbers {
   cardNumber1: string;
@@ -9,6 +9,6 @@ export interface CardNumbers {
 
 export type CardNumberKeys = keyof CardNumbers;
 
-export type CardNumberError =
+export type CardNumbersError =
   | ErrorStatus.INVALID_LENGTH
   | ErrorStatus.IS_NOT_NUMBER;
