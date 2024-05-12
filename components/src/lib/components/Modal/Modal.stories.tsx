@@ -3,35 +3,33 @@ import { fn } from '@storybook/test';
 
 import Modal from './Modal';
 
-import { MODAL_POSITION_MAP } from './Modal.constant';
+import {
+  MODAL_DEVICE_CLASS_NAME_MAP,
+  MODAL_POSITION_CLASS_NAME_MAP,
+  MODAL_SIZE_CLASS_NAME_MAP,
+} from './Modal.constant';
 
 const meta = {
   title: 'Base/Modal',
   component: Modal,
   parameters: {
     layout: 'centered',
-    docs: {
-      description: {
-        component: '페이지 위에 표시되는 대화 상자 창',
-      },
-    },
   },
   argTypes: {
-    children: {},
     isOpen: {
       control: 'boolean',
-      description: 'modal의 여는 상태',
-    },
-    onToggle: {
-      description: 'modal을 열고 닫기 위한 핸들러 함수',
     },
     position: {
       control: 'radio',
-      options: Object.values(MODAL_POSITION_MAP),
-      description: '모달의 위치',
-      table: {
-        type: { summary: 'ModalPosition' },
-      },
+      options: Object.keys(MODAL_POSITION_CLASS_NAME_MAP),
+    },
+    size: {
+      control: 'radio',
+      options: Object.keys(MODAL_SIZE_CLASS_NAME_MAP),
+    },
+    device: {
+      control: 'radio',
+      options: Object.keys(MODAL_DEVICE_CLASS_NAME_MAP),
     },
   },
   args: {
@@ -40,7 +38,7 @@ const meta = {
 
   render: ({ ...args }) => {
     return (
-      <div className="app">
+      <div className="mobile">
         <Modal {...args}>
           <Modal.ModalHeader title="카드사 선택" />
           <Modal.ModalContent></Modal.ModalContent>
@@ -54,28 +52,56 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'modal이 화면의 center에 나타날 때',
-      },
-    },
-  },
+export const Mobile: Story = {
   args: {
     isOpen: true,
     position: 'center',
   },
 };
 
-export const Bottom: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'modal이 화면의 bottom에 나타날 때',
-      },
-    },
+export const Tablet: Story = {
+  args: {
+    size: 'medium',
+    isOpen: true,
+    position: 'center',
+    device: 'tablet',
   },
+
+  render: ({ ...args }) => {
+    return (
+      <div className="tablet">
+        <Modal {...args}>
+          <Modal.ModalHeader title="카드사 선택" />
+          <Modal.ModalContent></Modal.ModalContent>
+          <Modal.ModalFooter></Modal.ModalFooter>
+        </Modal>
+      </div>
+    );
+  },
+};
+
+export const Desktop: Story = {
+  args: {
+    size: 'large',
+    isOpen: true,
+    position: 'center',
+    device: 'desktop',
+  },
+
+  render: ({ ...args }) => {
+    return (
+      <div className="desktop">
+        <Modal {...args}>
+          <Modal.ModalHeader title="카드사 선택" />
+          <Modal.ModalContent></Modal.ModalContent>
+          <Modal.ModalFooter></Modal.ModalFooter>
+        </Modal>
+      </div>
+    );
+  },
+};
+
+export const ModalPositionBottom: Story = {
   args: {
     isOpen: true,
     position: 'bottom',
@@ -83,17 +109,11 @@ export const Bottom: Story = {
 };
 
 export const AcceptTermsModalWithoutCloseButton: Story = {
-  args: Default.args,
-  parameters: {
-    docs: {
-      description: {
-        story: 'footer 내 button만 존재하는 case',
-      },
-    },
-  },
+  args: Mobile.args,
+
   render: ({ ...args }) => {
     return (
-      <div className="app">
+      <div className="desktop">
         <Modal {...args}>
           <Modal.ModalHeader title="약관에 동의해 주세요" />
           <Modal.ModalContent style={{ margin: '12px 0px 0px 0px' }}>
@@ -114,17 +134,11 @@ export const AcceptTermsModalWithoutCloseButton: Story = {
 };
 
 export const AcceptTermsModalWithCloseButton: Story = {
-  args: Default.args,
-  parameters: {
-    docs: {
-      description: {
-        story: 'header 내 close button과 footer 내 button이 동시에 있는 case',
-      },
-    },
-  },
+  args: Mobile.args,
+
   render: ({ ...args }) => {
     return (
-      <div className="app">
+      <div className="desktop">
         <Modal {...args}>
           <Modal.ModalHeader title="약관에 동의해 주세요">
             <Modal.ModalCloseButton onClick={args.onToggle} />
@@ -144,17 +158,11 @@ export const AcceptTermsModalWithCloseButton: Story = {
 };
 
 export const CardSelectModal: Story = {
-  args: Default.args,
-  parameters: {
-    docs: {
-      description: {
-        story: 'header 내 close button만 존재하는 case',
-      },
-    },
-  },
+  args: Mobile.args,
+
   render: ({ ...args }) => {
     return (
-      <div className="app">
+      <div className="desktop">
         <Modal {...args}>
           <Modal.ModalHeader title="약관에 동의해 주세요">
             <Modal.ModalCloseButton onClick={args.onToggle} />
@@ -169,17 +177,11 @@ export const CardSelectModal: Story = {
 };
 
 export const ModalWithDirectionRow: Story = {
-  args: Default.args,
-  parameters: {
-    docs: {
-      description: {
-        story: 'modal footer의 flex direction이 row인 경우',
-      },
-    },
-  },
+  args: Mobile.args,
+
   render: ({ ...args }) => {
     return (
-      <div className="app">
+      <div className="desktop">
         <Modal {...args}>
           <Modal.ModalHeader title="약관에 동의해 주세요" />
           <Modal.ModalContent style={{ margin: '12px 0px' }}>

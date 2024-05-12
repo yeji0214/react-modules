@@ -1,0 +1,83 @@
+/* modal */
+.modal {
+  height: 100vh;
+  width: 100%;
+  margin: auto;
+  inset: 0;
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 600px(mobile) */
+@media (min-width: 600px) {
+  .modal {
+    max-width: 600px;
+  }
+}
+
+/* 768px(tablet) */
+@media (min-width: 768px) {
+  .modal {
+    max-width: 768px;
+  }
+}
+
+/* 1024px(desktop) */
+@media (min-width: 1024px) {
+  .modal {
+    max-width: 100%;
+  }
+}
+
+.modalDeviceMobile {
+  max-width: 600px;
+}
+
+.modalDeviceTablet {
+  max-width: 768px;
+}
+
+.modalDeviceDesktop {
+  max-width: 100%;
+}
+
+.dimmed {
+  width: 100%;
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.35);
+  z-index: 1;
+}
+
+.modalContainer {
+  padding: 24px 32px;
+  border-radius: 8px;
+  background-color: var(--grey-100);
+  z-index: 999;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.modalContainer :-webkit-scrollbar {
+  display: none;
+}
+
+.modalSizeSmall {
+  width: 256px;
+}
+
+.modalSizeMedium {
+  width: 416px;
+}
+
+.modalSizeLarge {
+  width: 536px;
+}
+
+.modalContainerBottom {
+  width: 100%;
+  border-radius: 8px 8px 0px 0px;
+  align-items: flex-end;
+}
