@@ -1,53 +1,40 @@
-import { useState } from "react";
+import { useState, ChangeEvent, useEffect } from "react";
+import { CardBrands } from "../types/card";
+import {
+  isNumberString,
+  createFormattingCardNumbers,
+  decideCardBrand,
+} from "../utils/card";
 
 const useCardNumbers = () => {
-  const [first, setFirst] = useState("");
-  const [second, setSecond] = useState("");
-  const [third, setThird] = useState("");
-  const [fourth, setFourth] = useState("");
+  const [cardNumbers, setCardNumbers] = useState("");
+  const [cardBrand, setCardBrand] = useState<CardBrands | null>(null);
+  const [isError, setIsError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const [errorMessage, setErrorMessage] = useState(Array(4).fill(null));
+  useEffect(() => {
+    setCardBrand(decideCardBrand(cardNumbers));
+  }, [cardNumbers]);
 
-  const setWrapper = (value: string, setState: (value: string) => void, index: number) => {
-    const number = Number(value);
-    if (Number.isNaN(number)) {
-      setErrorMessage((prev: string) => {
-        const arr = [...prev];
-        arr[index] = "잘못됨 카드 번호를 입력하였습니다";
-        return arr;
-      });
+  const handleCardNumbers = (event: ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value.replaceAll("-", "");
+
+    if (!isNumberString(value)) {
+      setIsError(true);
+      setErrorMessage("숫자만 입력 가능합니다");
       return;
     }
-    setState(value);
-  };
+    setIsError(false);
 
-  const setFirstWrapper = (value: string) => {
-    const MASTER_CARD_START_NUMBER_LIST = [51, 52, 53, 54];
-    // eslint-disable-next-line no-useless-escape
-    const MASTER_REG_PATTERN = new RegExp(
-      `${MASTER_CARD_START_NUMBER_LIST.map(String).join("|")}\d{0,3}$`
-    );
-    if (MASTER_REG_PATTERN.test(value) || value.startsWith("4")) {
-      setErrorMessage((prev) => {
-        return [null, ...prev.slice(1)];
-      });
-    } else {
-      setErrorMessage((prev) => {
-        return ["잘못됨 카드 번호를 입력하였습니다", ...prev.slice(1)];
-      });
-    }
-    setWrapper(value, setFirst, 0);
+    setCardNumbers(value);
   };
 
   return {
-    firstState: [first, setFirstWrapper] as const,
-    secondState: [second, (value: string) => setWrapper(value, setSecond, 1)] as const,
-    thirdState: [third, (value: string) => setWrapper(value, setThird, 2)] as const,
-    fourthState: [fourth, (value: string) => setWrapper(value, setFourth, 3)] as const,
-    error: {
-      isError: errorMessage.some((message: string) => message),
-      errorMessage,
-    },
+    cardNumbers: createFormattingCardNumbers(cardNumbers, cardBrand),
+    cardBrand,
+    handleCardNumbers,
+    isError,
+    errorMessage,
   };
 };
 

@@ -1,31 +1,39 @@
 /** @jsxImportSource @emotion/react */
-import React, { useEffect } from "react";
-import { buttonsStyle, modalContentStyle, modalStyle } from "./Modal.style";
+import { useEffect } from "react";
+import {
+  buttonsStyle,
+  modalContentStyle,
+  modalStyle,
+  inputStyle,
+} from "./Modal.style";
 import useModalHook from "../useModalHook";
 
 import ModalHeader from "../ModalHeader/ModalHeader";
 import Title from "../Title/Title";
 import Button from "../Button/Button";
-import Xmark from "../icon/Xmark";
 
 interface ModalProps {
   position?: "center" | "bottom";
   title?: string;
-  hasConfirmButton?: boolean;
-  closeButtonPosition?: "bottom" | "top";
   onConfirm?: () => void;
   onClose?: () => void;
-  children: React.ReactNode;
+  onChange?: () => void;
+  inputValue?: string;
+  size?: "small" | "medium" | "large";
+  type?: "alert" | "confirm" | "prompt";
+  children?: React.ReactNode;
 }
 
 const Modal: React.FC<ModalProps> = ({
   position = "center",
   title,
-  hasConfirmButton = true,
-  closeButtonPosition = "top",
   onConfirm,
   onClose,
+  onChange,
+  inputValue,
   children,
+  size = "medium",
+  type = "alert",
 }) => {
   const { ref, action } = useModalHook();
 
@@ -47,39 +55,55 @@ const Modal: React.FC<ModalProps> = ({
   }, [action, ref]);
 
   return (
-    <dialog ref={ref} css={modalStyle(position)}>
+    <dialog ref={ref} css={modalStyle(position, size)}>
       <div css={modalContentStyle}>
-        <ModalHeader>
-          {title && <Title>{title}</Title>}
-          {closeButtonPosition === "top" && (
-            <Button
-              type="cancel"
-              handleClick={() => {
-                action.handleClose();
-                if (onClose) onClose();
-              }}
-            >
-              <Xmark />
-            </Button>
-          )}
-        </ModalHeader>
+        <ModalHeader>{title && <Title>{title}</Title>}</ModalHeader>
         <div>{children}</div>
+        {type === "prompt" && (
+          <input
+            type="text"
+            value={inputValue}
+            onChange={onChange}
+            css={inputStyle}
+          />
+        )}
         <div css={buttonsStyle}>
-          {hasConfirmButton && (
+          {type === "alert" && (
             <Button type="confirm" handleClick={onConfirm}>
-              동의하고 저장하기
+              확인
             </Button>
           )}
-          {closeButtonPosition === "bottom" && (
-            <Button
-              type="cancel"
-              handleClick={() => {
-                action.handleClose();
-                if (onClose) onClose();
-              }}
-            >
-              닫기
-            </Button>
+          {type === "confirm" && (
+            <>
+              <Button type="confirm" handleClick={onConfirm}>
+                확인
+              </Button>
+              <Button
+                type="cancel"
+                handleClick={() => {
+                  action.handleClose();
+                  onClose?.();
+                }}
+              >
+                닫기
+              </Button>
+            </>
+          )}
+          {type === "prompt" && (
+            <>
+              <Button type="confirm" handleClick={onConfirm}>
+                확인
+              </Button>
+              <Button
+                type="cancel"
+                handleClick={() => {
+                  action.handleClose();
+                  onClose?.();
+                }}
+              >
+                닫기
+              </Button>
+            </>
           )}
         </div>
       </div>
