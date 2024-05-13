@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import useInput from './useInput';
 import { CustomValidator } from './types';
+import { CardHolderReturn } from './index';
 
 const validateInputType = (value: string) => {
   const isEnglish = /^$|^[a-zA-Z ]+$/.test(value);
@@ -13,6 +14,7 @@ const validateInputType = (value: string) => {
 };
 
 const validateFieldRules = (value: string) => {
+  // 성과 이름의 구조처럼 문자열과 문자열 사이에 공백이 1개 존재하며, 연속으로 2개는 불가
   const isValidHolderFormat = /^(?=\S)(?!.*\s\s).*\s+(?=\S).*$/.test(value);
 
   if (!isValidHolderFormat) {
@@ -25,7 +27,7 @@ const validateFieldRules = (value: string) => {
   return { isValid: true, errorMessage: '' };
 };
 
-const useCardHolder = (initialValue: string, options?: CustomValidator) => {
+const useCardHolder = (initialValue: string, options?: CustomValidator): CardHolderReturn => {
   const { customValidateInputType, customValidateFieldRules } = options ?? {};
   const { value, setValue, handleBlur, isValidValue, validationResult, clearInvalidInitialValue } =
     useInput(initialValue.toUpperCase(), {

@@ -1,6 +1,9 @@
 import { CustomValidator } from './types';
 import useInputs from './useInputs';
 import { useEffect } from 'react';
+import { CardNumbersReturn } from './index';
+
+export type CardBrand = 'Diners' | 'AMEX' | 'UnionPay' | 'VISA' | 'MasterCard';
 
 const validateInputType = (value: string) => {
   const isNumber = !Number.isNaN(Number(value));
@@ -26,15 +29,18 @@ export interface CardNumbersOptions extends CustomValidator {
   isAutoFocus?: boolean;
 }
 
-const useCardNumbers = (initialValue: Record<string, string>, options?: CardNumbersOptions) => {
+const useCardNumbers = (
+  initialValue: Record<string, string>,
+  options?: CardNumbersOptions,
+): CardNumbersReturn => {
   const { isAutoFocus, customValidateInputType, customValidateFieldRules } = options ?? {};
+
   const {
     value,
     setValue,
-    handleBlur,
     validationResult,
     isValidValue,
-    focusNextInputWhenMaxLength,
+    handleValidationResult,
     clearInvalidInitialValues,
   } = useInputs(initialValue, {
     validateInputType: customValidateInputType ?? validateInputType,
@@ -54,6 +60,57 @@ const useCardNumbers = (initialValue: Record<string, string>, options?: CardNumb
     }
   };
 
+  const CardValidateFieldRules = (value: string, parentElement: HTMLElement | null) => {
+    if (cardTypeCondition.Diners) {
+      const secondLength = (parentElement?.childNodes[1] as HTMLInputElement).value.length;
+      const thirdLength = (parentElement?.childNodes[2] as HTMLInputElement).value.length;
+      const isValidSecondLength = secondLength === 0 || secondLength === 6;
+      const isValidThirdLength = thirdLength === 0 || thirdLength === 4;
+
+      if (!isValidSecondLength || !isValidThirdLength) {
+        return { isValid: false, errorMessage: '유효한 카드번호를 입력해주세요' };
+      } else {
+        return { isValid: true, errorMessage: '' };
+      }
+    }
+
+    if (cardTypeCondition.AMEX) {
+      const secondLength = (parentElement?.childNodes[1] as HTMLInputElement).value.length;
+      const thirdLength = (parentElement?.childNodes[2] as HTMLInputElement).value.length;
+      const isValidSecondLength = secondLength === 0 || secondLength === 6;
+      const isValidThirdLength = thirdLength === 0 || thirdLength === 5;
+
+      if (!isValidSecondLength || !isValidThirdLength) {
+        return { isValid: false, errorMessage: '유효한 카드번호를 입력해주세요' };
+      } else {
+        return { isValid: true, errorMessage: '' };
+      }
+    }
+
+    return validateFieldRules(value);
+  };
+
+  const focusNextInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const target = event.target.nextElementSibling;
+    if (target instanceof HTMLInputElement) target.focus();
+  };
+
+  const focusNextInputWhenMaxLength = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    isAutoFocus: boolean,
+    name: string,
+  ) => {
+    const validationResult = CardValidateFieldRules(event.target.value, event.target.parentElement);
+    handleValidationResult(name, validationResult);
+    if (!validationResult.isValid) return;
+    if (isAutoFocus) focusNextInput(event);
+  };
+
+  const handleBlur = (event: React.FocusEvent<HTMLInputElement, Element>, name: string) => {
+    const validationResult = CardValidateFieldRules(event.target.value, event.target.parentElement);
+    handleValidationResult(name, validationResult);
+  };
+
   useEffect(() => {
     clearInvalidInitialValues(
       initialValue,
@@ -63,8 +120,65 @@ const useCardNumbers = (initialValue: Record<string, string>, options?: CardNumb
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const cardNumbersToArray = Array.from(Object.values(value));
+
+  /**
+   * @example Diners('36xx xxxx') true
+   * @example Diners('35xx xxxx') false
+   *
+   * @example AMEX('34xx xxxx') true
+   * @example AMEX('37xx xxxx') true
+   *
+   * @example UnionPay('6221 16xx') true
+   * @example UnionPay('6229 26xx') false
+   * @example UnionPay('624x xxxx') true
+   * @example UnionPay('626x xxxx') true
+   *
+   * @example VISA('4xxx xxxx') true
+   *
+   * @example MasterCard('51xx xxxx') true
+   * @example MasterCard('56xx xxxx') false
+   */
+  const cardTypeCondition: Record<CardBrand, boolean> = {
+    Diners: cardNumbersToArray[0].startsWith('36'),
+    AMEX: cardNumbersToArray[0].startsWith('34') || cardNumbersToArray[0].startsWith('37'),
+    UnionPay:
+      (Number(cardNumbersToArray.join().replace(',', '').slice(0, 6)) >= 622126 &&
+        Number(cardNumbersToArray.join().replace(',', '').slice(0, 6)) <= 622925) ||
+      (Number(cardNumbersToArray[0].slice(0, 3)) >= 624 &&
+        Number(cardNumbersToArray[0].slice(0, 3)) <= 626) ||
+      (Number(cardNumbersToArray[0]) >= 6282 && Number(cardNumbersToArray[0]) <= 6288),
+    VISA: cardNumbersToArray[0].startsWith('4'),
+    MasterCard:
+      Number(cardNumbersToArray[0].slice(0, 2)) >= 51 &&
+      Number(cardNumbersToArray[0].slice(0, 2)) <= 55,
+  };
+
+  const maxLengthByCardBrand: Record<CardBrand, number[]> = {
+    Diners: [4, 6, 4],
+    AMEX: [4, 6, 5],
+    UnionPay: [4, 4, 4, 4],
+    VISA: [4, 4, 4, 4],
+    MasterCard: [4, 4, 4, 4],
+  };
+
+  const getCardBrand = () => {
+    return (Object.keys(cardTypeCondition) as CardBrand[]).find(
+      key => cardTypeCondition[key] === true,
+    );
+  };
+
+  const getInputMaxLengthByCardBrand = () => {
+    const cardBrand = getCardBrand();
+    if (cardBrand === undefined) return [4, 4, 4, 4];
+
+    return maxLengthByCardBrand[cardBrand];
+  };
+
   return {
     value,
+    getCardBrand,
+    getInputMaxLengthByCardBrand,
     runValidationInputTypeByChange: handleChange,
     runValidationFieldRulesByBlur: handleBlur,
     validationResult,
