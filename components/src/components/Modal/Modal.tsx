@@ -1,22 +1,24 @@
 /** @jsxImportSource @emotion/react */
-import React, { MouseEventHandler, PropsWithChildren, ReactNode } from "react";
-import { buttonsStyle, modalContentStyle, modalStyle } from "./Modal.style";
+import { MouseEventHandler, PropsWithChildren, ReactNode } from "react";
+import { buttonsStyle, contentStyle, modalContentStyle, modalStyle } from "./Modal.style";
 
 import ModalHeader from "../ModalHeader/ModalHeader";
-import LongButton from "../LongButton/LongButton";
+import { MainButtonStyleType } from "../MainButton/constants";
+import MainButton from "../MainButton/MainButton";
 
-import ThemeProvider from "../ContextProvider/ThemeProvider";
+import ThemeProvider from "../contextProvider/ThemeProvider";
 
 import useThemeContext from "../../hooks/useThemeContext";
 import useModalContext from "../../hooks/useModalContext";
 
-export interface ModalProps extends PropsWithChildren {
-  position?: "center" | "bottom";
+export interface ModalProps {
   title?: string;
   width?: number;
+  position?: "center" | "bottom";
   theme?: "light" | "dark";
-  hasConfirmButton?: boolean;
+  buttonDirection?: "column" | "row";
   closeButtonPosition?: "bottom" | "top";
+  hasConfirmButton?: boolean;
   onConfirm?: () => void;
   onClose?: () => void;
   confirmMessage?: ReactNode;
@@ -26,22 +28,28 @@ export interface ModalProps extends PropsWithChildren {
 interface DialogProps extends Omit<ModalProps, "theme"> {}
 
 enum ButtonPosition {
-  top = "top",
-  bottom = "bottom",
+  Top = "top",
+  Bottom = "bottom",
 }
 
-const Dialog: React.FC<DialogProps> = ({
-  position = "center",
+enum ButtonDirection {
+  Column = "column",
+  Row = "row",
+}
+
+const Dialog = ({
   title,
   width = 242,
-  hasConfirmButton = true,
+  position = "center",
+  buttonDirection = "column",
   closeButtonPosition = "top",
+  hasConfirmButton = true,
   onConfirm,
   onClose,
   children,
   confirmMessage,
   cancelMessage,
-}) => {
+}: PropsWithChildren<ModalProps>) => {
   const theme = useThemeContext();
   const { dialogRef, action } = useModalContext();
 
@@ -54,16 +62,29 @@ const Dialog: React.FC<DialogProps> = ({
   return (
     <dialog onClick={clickBackdrop} ref={dialogRef} css={modalStyle(position, width, theme)}>
       <div css={modalContentStyle}>
-        <ModalHeader hasCloseButton={closeButtonPosition === ButtonPosition.top}>{title}</ModalHeader>
-        <div>{children}</div>
-        <div css={buttonsStyle}>
+        <ModalHeader hasCloseButton={closeButtonPosition === ButtonPosition.Top}>{title}</ModalHeader>
+        <div css={contentStyle}>{children}</div>
+        <div css={buttonsStyle(buttonDirection)}>
           {hasConfirmButton && (
-            <LongButton isHighLight={true} handleClick={onConfirm}>
+            <MainButton
+              type="submit"
+              buttonType={
+                buttonDirection === ButtonDirection.Row ? MainButtonStyleType.Short : MainButtonStyleType.Long
+              }
+              isHighLight={true}
+              handleClick={() => {
+                if (onConfirm) onConfirm();
+              }}
+            >
               {confirmMessage}
-            </LongButton>
+            </MainButton>
           )}
-          {closeButtonPosition === ButtonPosition.bottom && (
-            <LongButton
+          {closeButtonPosition === ButtonPosition.Bottom && (
+            <MainButton
+              type="button"
+              buttonType={
+                buttonDirection === ButtonDirection.Row ? MainButtonStyleType.Short : MainButtonStyleType.Long
+              }
               isHighLight={false}
               handleClick={() => {
                 action.handleClose();
@@ -71,7 +92,7 @@ const Dialog: React.FC<DialogProps> = ({
               }}
             >
               {cancelMessage}
-            </LongButton>
+            </MainButton>
           )}
         </div>
       </div>
@@ -79,17 +100,32 @@ const Dialog: React.FC<DialogProps> = ({
   );
 };
 
-const Modal: React.FC<ModalProps> = (props) => {
+const Modal = ({ theme, ...props }: PropsWithChildren<ModalProps>) => {
   return (
-    <ThemeProvider value={props.theme}>
+    <ThemeProvider value={theme}>
       <Dialog {...props}></Dialog>
     </ThemeProvider>
   );
 };
 
-export const useModalAction = () => {
-  const { action } = useModalContext();
-  return action;
+enum ModalWidth {
+  Small = 320,
+  Medium = 480,
+  Large = 600,
+}
+
+const SmallModal = ({ ...props }: PropsWithChildren<DialogProps>) => {
+  return <Modal {...props} width={ModalWidth.Small}></Modal>;
 };
+const MediumModal = ({ ...props }: PropsWithChildren<DialogProps>) => {
+  return <Modal {...props} width={ModalWidth.Medium}></Modal>;
+};
+const LargeModal = ({ ...props }: PropsWithChildren<DialogProps>) => {
+  return <Modal {...props} width={ModalWidth.Large}></Modal>;
+};
+
+Modal.Small = SmallModal;
+Modal.Medium = MediumModal;
+Modal.Large = LargeModal;
 
 export default Modal;
