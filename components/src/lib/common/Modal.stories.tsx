@@ -1,17 +1,62 @@
-import Modal, { POSITIONS } from "./Modal";
+import Modal, { ModalSize, POSITIONS, Position } from "./Modal";
 import type { Meta, StoryObj } from "@storybook/react";
-import "../reset.css";
 import useModalState from "./useModalState";
+import { css } from "@emotion/css";
+import { ReactNode } from "react";
 
-const ModalWrapper = ({ onOpen = () => {}, onConfirm = () => {}, onClose = () => {}, ...restProps }) => {
-  const { isOpen, closeModal, confirmModal } = useModalState(true, { onOpen, onClose, onConfirm });
+interface ModalWrapperProps {
+  title: string;
+
+  position?: Position;
+  description?: string;
+  confirmLabel?: string;
+  cancelLabel?: string;
+  size?: ModalSize;
+  children?: ReactNode;
+  closeButton?: boolean;
+
+  onConfirm?: () => void;
+  onOpen?: () => void;
+  onClose?: () => void;
+}
+const ModalWrapper = ({
+  title,
+  description,
+  confirmLabel,
+  cancelLabel,
+  position,
+  size,
+  closeButton,
+
+  children,
+
+  onConfirm = () => {},
+  onOpen = () => {},
+  onClose = () => {},
+}: ModalWrapperProps) => {
+  const { isOpen, closeModal, confirmModal } = useModalState(true, { onConfirm, onOpen, onClose });
+
   return (
-    <Modal
-      isOpen={isOpen}
-      closeModal={closeModal}
-      confirmModal={confirmModal}
-      {...restProps}
-    />
+    <Modal isOpen={isOpen} closeModal={closeModal}>
+      <Modal.Positioner position={position} size={size}>
+        <Modal.Header title={title} closeButton={closeButton} onClose={closeModal} />
+        <Modal.Content description={description}>{children}</Modal.Content>
+        <Modal.Footer
+          confirmLabel={confirmLabel}
+          cancelLabel={cancelLabel}
+          onConfirm={confirmModal}
+          onClose={closeModal}
+          className={css`
+            display: flex;
+            flex-direction: row-reverse;
+            gap: 12px;
+            button {
+              width: 80px;
+            }
+          `}
+        />
+      </Modal.Positioner>
+    </Modal>
   );
 };
 
@@ -48,7 +93,7 @@ const meta = {
         type: "text",
       },
     },
-    close: {
+    closeButton: {
       type: "boolean",
       control: {
         type: "boolean",
@@ -74,12 +119,12 @@ const meta = {
     position: "center",
     title: "title",
     description: "description",
-    close: false,
+    closeButton: false,
     cancelLabel: undefined,
     confirmLabel: undefined,
   },
   tags: ["autodocs"],
-} satisfies Meta<typeof Modal>;
+} satisfies Meta<typeof ModalWrapper>;
 
 export default meta;
 
@@ -137,7 +182,7 @@ export const CloseButton: Story = {
     docs: { description: { story: "닫기버튼이 존재하는 상태" } },
   },
   args: {
-    close: true,
+    closeButton: true,
     onClose: () => {
       alert("close");
     },
@@ -149,7 +194,24 @@ export const Full: Story = {
     docs: { description: { story: "확인/취소버튼과 끄기버튼이 존재하는 상태" } },
   },
   args: {
-    close: true,
+    closeButton: true,
+    confirmLabel: "확인",
+    cancelLabel: "취소",
+    onClose: () => {
+      alert("close");
+    },
+    onConfirm: () => {
+      alert("confirm");
+    },
+  },
+};
+
+export const FullHorizontal: Story = {
+  parameters: {
+    docs: { description: { story: "확인/취소버튼과 끄기버튼이 존재하는 상태" } },
+  },
+  args: {
+    closeButton: true,
     confirmLabel: "확인",
     cancelLabel: "취소",
     onClose: () => {
