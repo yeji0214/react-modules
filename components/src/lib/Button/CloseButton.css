@@ -1,0 +1,10 @@
+.darr-close-button {
+  outline: none;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.darr-close-button:active {
+  transform: scale(0.9);
+}
