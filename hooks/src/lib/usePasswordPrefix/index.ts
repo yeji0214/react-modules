@@ -1,13 +1,17 @@
+import { Validator, ValueOf } from '../type';
+import { useCallback, useState } from 'react';
+
 import REGEXPS from '../constants/regExps';
-import { Validator } from '../type';
 import getErrorMessage from '../utils/getErrorMessage';
+import getOnBlur from '../utils/getOnBlur';
 import getOnChange from '../utils/getOnChange';
-import { useState } from 'react';
 
 export default function usePasswordPrefix() {
   const [passwordPrefix, setPasswordPrefix] = useState('');
 
-  const onChange = getOnChange(setPasswordPrefix);
+  const onChange = useCallback(getOnChange(setPasswordPrefix), []);
+
+  const onBlur = useCallback(getOnBlur(setPasswordPrefix), []);
 
   const errorMessage = getErrorMessage(
     passwordPrefix,
@@ -15,7 +19,7 @@ export default function usePasswordPrefix() {
   );
 
   const isValid = errorMessage === null;
-  return { passwordPrefix, setPasswordPrefix, onChange, errorMessage, isValid };
+  return { passwordPrefix, onChange, onBlur, errorMessage, isValid };
 }
 
 const PASSWORD_PREFIX_LENGTH = 2;
@@ -25,8 +29,7 @@ export const PASSWORD_PREFIX_ERROR_MESSAGE = {
   notDigit: '비밀번호는 숫자만 포함해야 합니다.',
 } as const;
 
-type ErrorMessage =
-  (typeof PASSWORD_PREFIX_ERROR_MESSAGE)[keyof typeof PASSWORD_PREFIX_ERROR_MESSAGE];
+type ErrorMessage = ValueOf<typeof PASSWORD_PREFIX_ERROR_MESSAGE>;
 
 const passwordPrefixValidators: Validator<string, ErrorMessage>[] = [
   {

@@ -1,13 +1,17 @@
+import { Validator, ValueOf } from '../type';
+import { useCallback, useState } from 'react';
+
 import REGEXPS from '../constants/regExps';
-import { Validator } from '../type';
 import getErrorMessage from '../utils/getErrorMessage';
+import getOnBlur from '../utils/getOnBlur';
 import getOnChange from '../utils/getOnChange';
-import { useState } from 'react';
 
 export default function useCardholderName() {
   const [cardholderName, setCardholderName] = useState('');
 
-  const onChange = getOnChange(setCardholderName);
+  const onChange = useCallback(getOnChange(setCardholderName), []);
+
+  const onBlur = useCallback(getOnBlur(setCardholderName), []);
 
   const errorMessage = getErrorMessage(
     cardholderName,
@@ -16,7 +20,7 @@ export default function useCardholderName() {
 
   const isValid = errorMessage === null;
 
-  return { cardholderName, setCardholderName, onChange, isValid, errorMessage };
+  return { cardholderName, onChange, onBlur, isValid, errorMessage };
 }
 
 export const CARD_HOLDER_NAME_ERROR_MESSAGE = {
@@ -25,8 +29,7 @@ export const CARD_HOLDER_NAME_ERROR_MESSAGE = {
   hasTwoBlank: '소유자명의 사이 공백은 최대 한 칸 입력할 수 있습니다',
 } as const;
 
-type ErrorMessage =
-  (typeof CARD_HOLDER_NAME_ERROR_MESSAGE)[keyof typeof CARD_HOLDER_NAME_ERROR_MESSAGE];
+type ErrorMessage = ValueOf<typeof CARD_HOLDER_NAME_ERROR_MESSAGE>;
 
 const TWO_BLANKS = '  ';
 const cardholderNameValidators: Validator<string, ErrorMessage>[] = [

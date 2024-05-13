@@ -1,16 +1,19 @@
-import { useMemo, useState } from 'react';
+import { Validator, ValueOf } from '../type';
+import { useCallback, useMemo, useState } from 'react';
 
 import REGEXPS from '../constants/regExps';
-import { Validator } from '../type';
 import getErrorMessage from '../utils/getErrorMessage';
+import getOnBlur from '../utils/getOnBlur';
 import getOnChange from '../utils/getOnChange';
 
 export default function useExpiryDate() {
   const [expiryMonth, setExpiryMonth] = useState('');
-  const onChangeExpiryMonth = getOnChange(setExpiryMonth);
+  const onChangeExpiryMonth = useCallback(getOnChange(setExpiryMonth), []);
+  const onBlurExpiryMonth = useCallback(getOnBlur(setExpiryMonth), []);
 
   const [expiryYear, setExpiryYear] = useState('');
-  const onChangeExpiryYear = getOnChange(setExpiryYear);
+  const onChangeExpiryYear = useCallback(() => getOnChange(setExpiryYear), []);
+  const onBlurExpiryYear = useCallback(() => getOnBlur(setExpiryYear), []);
 
   const expiryMonthErrorMessage = useMemo(() => {
     return getErrorMessage(expiryMonth, expiryMonthValidators);
@@ -32,10 +35,10 @@ export default function useExpiryDate() {
   return {
     expiryMonth,
     expiryYear,
-    setExpiryMonth,
-    setExpiryYear,
     onChangeExpiryMonth,
     onChangeExpiryYear,
+    onBlurExpiryMonth,
+    onBlurExpiryYear,
     expiryMonthErrorMessage,
     expiryYearErrorMessage,
     expiryDateErrorMessage,
@@ -63,14 +66,11 @@ export const EXPIRY_DATE_ERROR_MESSAGE = {
   expiredDate: `만료된 유효기간 입니다.`,
 } as const;
 
-type MonthErrorMessage =
-  (typeof EXPIRY_MONTH_ERROR_MESSAGE)[keyof typeof EXPIRY_MONTH_ERROR_MESSAGE];
+type MonthErrorMessage = ValueOf<typeof EXPIRY_MONTH_ERROR_MESSAGE>;
 
-type YearErrorMessage =
-  (typeof EXPIRY_YEAR_ERROR_MESSAGE)[keyof typeof EXPIRY_YEAR_ERROR_MESSAGE];
+type YearErrorMessage = ValueOf<typeof EXPIRY_YEAR_ERROR_MESSAGE>;
 
-type DateErrorMessage =
-  (typeof EXPIRY_DATE_ERROR_MESSAGE)[keyof typeof EXPIRY_DATE_ERROR_MESSAGE];
+type DateErrorMessage = ValueOf<typeof EXPIRY_DATE_ERROR_MESSAGE>;
 
 const expiryMonthValidators: Validator<string, MonthErrorMessage>[] = [
   {

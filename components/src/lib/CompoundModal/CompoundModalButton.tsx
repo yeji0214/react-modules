@@ -5,21 +5,17 @@ import useCompoundModalContext from './useCompoundModalContext';
 
 interface CompoundModalButtonProps
   extends React.HTMLAttributes<HTMLButtonElement> {
-  isCloseButton: boolean;
+  closeButton?: boolean;
+  onClick?: () => void;
   buttonTheme?: ButtonTheme;
 }
+export default function CompoundModalButton(props: CompoundModalButtonProps) {
+  const { buttonTheme = 'primary', children, onClick } = props;
 
-export default function CompoundModalButton({
-  isCloseButton,
-  buttonTheme = 'primary',
-  children,
-}: CompoundModalButtonProps) {
-  const { onClose, onConfirm } = useCompoundModalContext();
-
-  const onClick = isCloseButton ? onClose : onConfirm;
+  const { onClose } = useCompoundModalContext();
 
   return (
-    <Button buttonTheme={buttonTheme} onClick={onClick}>
+    <Button buttonTheme={buttonTheme} onClick={onClick ?? onClose}>
       {children}
     </Button>
   );
@@ -29,24 +25,29 @@ interface ButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
   buttonTheme: ButtonTheme;
 }
 
+const buttonStyle: Record<ButtonTheme, object> = {
+  primary: { backgroundColor: COLOR_HEXES.gray1, color: COLOR_HEXES.white },
+  secondary: {
+    backgroundColor: COLOR_HEXES.white,
+    color: COLOR_HEXES.grayTransParent2,
+  },
+};
 const Button = styled.button<ButtonProps>(({ buttonTheme }) => {
-  const backgroundColor =
-    buttonTheme === 'primary' ? COLOR_HEXES.gray1 : COLOR_HEXES.white;
-  const color =
-    buttonTheme === 'primary' ? COLOR_HEXES.white : COLOR_HEXES.gray1;
   return {
     width: '100%',
     height: '44px',
-    backgroundColor,
-    border: '1px solid',
+    border:
+      buttonTheme === 'secondary'
+        ? `1px solid ${COLOR_HEXES.grayTransParent1}`
+        : '0',
     borderRadius: '5px',
 
     fontWeight: 700,
     fontSize: '15px',
     lineHeight: '21.72px',
     alignItems: 'center',
-    color,
     marginTop: '10px',
     cursor: 'pointer',
+    ...buttonStyle[buttonTheme],
   };
 });
