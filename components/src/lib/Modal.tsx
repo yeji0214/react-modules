@@ -1,98 +1,81 @@
 import styled from 'styled-components';
 import { ReactNode } from 'react';
 import ModalHeader from './ModalHeader';
-import ButtonBox from './ButtonBox';
+import { SIZE } from './constant/size';
+import POSITION from './constant/position';
+import ModalDimmed from './ModalDimmed';
+import ModalTitle from './ModalTitle';
+import Button from './Button';
+import ModalFooter from './ModalFooter';
+import ModalBody from './ModalBody';
 
-interface Props {
-  position?: string;
-  title: string;
-  isXButton?: boolean;
-  buttonLayout?: string;
+export type Size = 'small' | 'medium' | 'large';
+
+export type Position = 'bottom' | 'center';
+
+export interface ModalProps {
+  position?: Position;
+  size?: Size;
   children?: ReactNode;
+  dimmedColor?: string;
 
-  closeButtonContent?: string;
-  confirmButton?: string;
-  confirmButtonContent?: string;
-
-  xButtonContent?: string;
-
-  handleConfirm: (e: React.MouseEvent) => void;
-  handleClose: (e: React.MouseEvent) => void;
+  onDimmedClick?: (e: React.MouseEvent) => void;
 }
-const Modal = ({
-  position,
-  title,
-  isXButton = true,
-  buttonLayout = 'row',
-  closeButtonContent,
-  confirmButtonContent = '확인',
-  handleConfirm,
-  handleClose,
+const ModalMain: React.FC<ModalProps> = ({
+  position = 'center',
+  size = 'medium',
+  dimmedColor,
+  onDimmedClick,
   children,
-  xButtonContent,
-}: Props) => {
-  const isClickBackDrop = (e: React.MouseEvent) => {
-    return e.currentTarget === e.target;
-  };
-
+}: ModalProps) => {
   return (
     <>
-      {
-        <ModalContainer
-          $position={position === 'bottom' ? 'flex-end' : 'center'}
-          onClick={(e) => isClickBackDrop(e) && handleClose}
-        >
-          <ModalBoxContainer
-            $minWidth={position === 'bottom' ? '100%' : '200px'}
-            $maxWidth={position === 'bottom' ? '100%' : '85%'}
-          >
-            <ModalHeader
-              title={title}
-              isXButton={isXButton}
-              handleClose={handleClose}
-              xButtonContent={xButtonContent}
-            />
-            <ContentWrapper>{children}</ContentWrapper>
-            <ButtonBox
-              buttonLayout={buttonLayout}
-              closeButtonContent={closeButtonContent}
-              confirmButtonContent={confirmButtonContent}
-              handleClose={handleClose}
-              confirmEvent={handleConfirm}
-            />
-          </ModalBoxContainer>
-        </ModalContainer>
-      }
+      <ModalDimmed
+        color={dimmedColor}
+        onClick={onDimmedClick}
+      />
+      <ModalWrapper
+        style={POSITION[position]}
+        $minWidth={position === 'bottom' ? '100%' : '300px'}
+        $size={SIZE[size]}
+      >
+        <ModalFrame>{children}</ModalFrame>
+      </ModalWrapper>
     </>
   );
 };
 
-const ModalContainer = styled.div<{ $position: string }>`
-  position: fixed;
-  display: flex;
-  align-items: ${(props) => props.$position};
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  justify-content: center;
-  background: rgba(0, 0, 0, 0.35);
+const ModalWrapper = styled.div<{
+  $size: string;
+  $minWidth: string;
+}>`
+  min-width: ${(props) => props.$minWidth};
+  width: ${(props) => props.$size};
+  max-width: ${(props) => props.$size};
+  max-height: 90%;
+
+  @media (max-width: ${(props) => props.$size}) {
+    width: 90%;
+  }
 `;
 
-const ModalBoxContainer = styled.div<{ $minWidth: string; $maxWidth: string }>`
+const ModalFrame = styled.div`
   display: flex;
   flex-direction: column;
-  min-width: ${(props) => props.$minWidth};
-  max-width: ${(props) => props.$maxWidth};
-  max-height: 90%;
   background-color: white;
   padding: 24px 32px;
-  gap: 5px;
+  border: 1px solid gray;
   border-radius: 8px;
+  gap: 5px;
   box-sizing: border-box;
 `;
 
-const ContentWrapper = styled.div`
-  width: 100%;
-  overflow: auto;
-`;
+const Modal = Object.assign(ModalMain, {
+  Dimmed: ModalDimmed,
+  Header: ModalHeader,
+  Title: ModalTitle,
+  Body: ModalBody,
+  Button: Button,
+  Footer: ModalFooter,
+});
 export default Modal;

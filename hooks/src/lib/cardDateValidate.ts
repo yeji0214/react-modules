@@ -1,6 +1,6 @@
 import ERROR_MESSAGES from './constants/error';
 import {
-  CARD_NUMBER,
+  CARD_BRAND_NUMBER_LENGTH,
   CVC_LIMIT,
   DOUBLE_BLANK,
   MONTH_RANGE,
@@ -38,7 +38,7 @@ function throwIfEmpty(value: string) {
   }
 }
 
-function validateMonth(value: string) {
+function throwIfNoneValidationMonth(value: string) {
   if (throwIfEmpty(value) || value === '0') return;
   const month = Number(value);
   if (!(MONTH_RANGE.MIN <= month && month <= MONTH_RANGE.MAX)) {
@@ -46,7 +46,7 @@ function validateMonth(value: string) {
   }
 }
 
-function validateYear(value: string) {
+function throwIfNoneValidationYear(value: string) {
   if (throwIfEmpty(value)) return;
   const year = Number(value);
   if (!(YEAR_RANGE.MIN <= year && year <= YEAR_RANGE.MAX)) {
@@ -60,40 +60,41 @@ function throwIfNoneUpperCase(value: string) {
   }
 }
 
-interface ValidationMap {
-  [key: string]: (value: string) => void;
-}
+export const validateCardNumbers = (
+  value: string,
+  cardType: keyof typeof CARD_BRAND_NUMBER_LENGTH
+) => {
+  throwIfTrimBlank(value);
+  throwIfNoneNumber(value);
+  throwIfNoneMaxLength(value, CARD_BRAND_NUMBER_LENGTH[cardType]);
+};
 
-export const Validation: ValidationMap = {
-  cardNumber: (value: string) => {
+export const validateExpiryDate = (value: string, target: 'month' | 'year') => {
+  if (target === 'month') {
     throwIfTrimBlank(value);
     throwIfNoneNumber(value);
-    throwIfNoneMaxLength(value, CARD_NUMBER.FIELD_LENGTH);
-  },
-  month: (value: string) => {
+    throwIfNoneValidationMonth(value);
+  } else {
     throwIfTrimBlank(value);
     throwIfNoneNumber(value);
-    validateMonth(value);
-  },
-  year: (value: string) => {
-    throwIfTrimBlank(value);
-    throwIfNoneNumber(value);
-    validateYear(value);
-  },
-  userName: (value: string) => {
-    throwIfTrimBlank(value);
-    throwIfDoubleBlank(value);
-    throwIfNoneUpperCase(value);
-  },
-  CVC: (value: string) => {
-    throwIfTrimBlank(value);
-    throwIfNoneNumber(value);
-    throwIfNoneMaxLength(value, CVC_LIMIT.FIELD_LENGTH);
-  },
+    throwIfNoneValidationYear(value);
+  }
+};
 
-  password: (value: string) => {
-    throwIfTrimBlank(value);
-    throwIfNoneNumber(value);
-    throwIfNoneMaxLength(value, PASSWORD.FIELD_LENGTH);
-  },
+export const validateUserName = (value: string) => {
+  throwIfTrimBlank(value);
+  throwIfDoubleBlank(value);
+  throwIfNoneUpperCase(value);
+};
+
+export const validateCVC = (value: string) => {
+  throwIfTrimBlank(value);
+  throwIfNoneNumber(value);
+  throwIfNoneMaxLength(value, CVC_LIMIT.FIELD_LENGTH);
+};
+
+export const validatePassword = (value: string) => {
+  throwIfTrimBlank(value);
+  throwIfNoneNumber(value);
+  throwIfNoneMaxLength(value, PASSWORD.FIELD_LENGTH);
 };

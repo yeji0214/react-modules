@@ -1,23 +1,28 @@
 import { useState } from 'react';
-import { Validation } from './cardDateValidate';
+import { validateExpiryDate } from './cardDateValidate';
+import { ExpiryDateError } from './type/Card';
 
-type CardExpiryName = 'month' | 'year';
+export type CardExpiryName = 'month' | 'year';
 
 const useExpiryDateValidation = () => {
-  const [expiryDateValidation, setExpiryDateValidation] = useState({
-    errorMessage: {
-      month: '',
-      year: '',
-    },
-    isError: {
-      month: false,
-      year: false,
-    },
-  });
+  const [expiryDateValidation, setExpiryDateValidation] =
+    useState<ExpiryDateError>({
+      errorMessage: {
+        month: '',
+        year: '',
+      },
+      isError: {
+        month: false,
+        year: false,
+      },
+    });
 
-  const expiryDateValidateHandler = (value: string, name: CardExpiryName) => {
+  const expiryDateValidateHandler = (
+    value: string,
+    name: CardExpiryName
+  ): ExpiryDateError => {
     try {
-      Validation[name](value);
+      validateExpiryDate(value, name);
       setExpiryDateValidation((prev) => ({
         ...prev,
         errorMessage: { ...prev.errorMessage, [name]: '' },
@@ -29,8 +34,21 @@ const useExpiryDateValidation = () => {
           errorMessage: { ...prev.errorMessage, [name]: error.message },
           isError: { ...prev.isError, [name]: true },
         }));
+        return {
+          ...expiryDateValidation,
+          errorMessage: {
+            ...expiryDateValidation.errorMessage,
+            [name]: error.message,
+          },
+          isError: { ...expiryDateValidation.isError, [name]: true },
+        };
       }
     }
+    return {
+      ...expiryDateValidation,
+      errorMessage: { ...expiryDateValidation.errorMessage, [name]: '' },
+      isError: { ...expiryDateValidation.isError, [name]: false },
+    };
   };
 
   return { expiryDateValidation, expiryDateValidateHandler };

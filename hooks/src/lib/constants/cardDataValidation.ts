@@ -1,9 +1,13 @@
 export const DOUBLE_BLANK = / {2,}/;
 export const UPPERCASE_AND_SPACE_ONLY = /^[A-Z\s]+$/;
 
-export const CARD_NUMBER = {
-  FIELD_LENGTH: 4,
-  TOTAL_FIELDS: 4,
+export const CARD_BRAND_NUMBER_LENGTH = {
+  Visa: 16,
+  MasterCard: 16,
+  Diners: 14,
+  AMEX: 15,
+  UnionPay: 16,
+  Empty: 16,
 };
 
 export const EXPIRATION_DATE = {

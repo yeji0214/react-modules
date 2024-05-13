@@ -1,44 +1,44 @@
 import { useState } from 'react';
-import { Validation } from './cardDateValidate';
-
-type CardNumberName =
-  | 'cardNumber1'
-  | 'cardNumber2'
-  | 'cardNumber3'
-  | 'cardNumber4';
+import { validateCardNumbers } from './cardDateValidate';
+import { CardError } from './type/Card';
+import { CARD_BRAND_NUMBER_LENGTH } from './constants/cardDataValidation';
 
 const useCardNumberValidation = () => {
-  const [cardNumberValidation, setCardNumberValidation] = useState({
-    errorMessage: {
-      cardNumber1: '',
-      cardNumber2: '',
-      cardNumber3: '',
-      cardNumber4: '',
-    },
-    isError: {
-      cardNumber1: false,
-      cardNumber2: false,
-      cardNumber3: false,
-      cardNumber4: false,
-    },
+  const [cardNumberValidation, setCardNumberValidation] = useState<CardError>({
+    errorMessage: '',
+    isError: false,
   });
 
-  const cardNumberValidateHandler = (value: string, name: CardNumberName) => {
+  const cardNumberValidateHandler = (
+    value: string,
+    cardType: keyof typeof CARD_BRAND_NUMBER_LENGTH
+  ): CardError => {
     try {
-      Validation['cardNumber'](value);
+      validateCardNumbers(value, cardType);
       setCardNumberValidation((prev) => ({
         ...prev,
-        errorMessage: { ...prev.errorMessage, [name]: '' },
-        isError: { ...prev.isError, [name]: false },
+        errorMessage: '',
+        isError: false,
       }));
     } catch (error) {
       if (error instanceof Error) {
         setCardNumberValidation((prev) => ({
-          errorMessage: { ...prev.errorMessage, [name]: error.message },
-          isError: { ...prev.isError, [name]: true },
+          ...prev,
+          errorMessage: error.message,
+          isError: true,
         }));
+        return {
+          ...cardNumberValidation,
+          errorMessage: error.message,
+          isError: true,
+        };
       }
     }
+    return {
+      ...cardNumberValidation,
+      errorMessage: '',
+      isError: true,
+    };
   };
 
   return { cardNumberValidation, cardNumberValidateHandler };
