@@ -4,10 +4,7 @@ import Validator from "../utils/validator";
 import { ERROR_MESSAGE, OPTION } from "../constants";
 import formattingMonth from "../utils/formattingMonth";
 
-interface ExpiryDateValue {
-  month: string;
-  year: string;
-}
+type ExpiryDateValue = Record<"month" | "year", string>;
 
 const useExpiryDate = (initialValue: ExpiryDateValue) => {
   const { inputValue, handleInputChange, updateByNameAndValue } = useInput(initialValue);
@@ -35,18 +32,18 @@ const useExpiryDate = (initialValue: ExpiryDateValue) => {
     });
   };
 
-  const handleExpiryDateBlur = (e: FocusEvent<HTMLInputElement>) => {
+  const handleExpiryDateValidator = (e: EventType) => {
     if (e.target !== e.currentTarget) return;
 
-    const { value, name } = e.target;
+    const { value, name } = e.target as HTMLInputElement;
 
-    if (name === "month" && !Validator.checkExpirationMonth(name, value))
+    if (name === "month" && !Validator.checkExpirationMonth(value))
       return setValidationResult({
         isValid: false,
         errorMessage: ERROR_MESSAGE.expiredMonth,
       });
 
-    const newValue = name === "month" ? formattingMonth(value, name) : value;
+    const newValue = name === "month" ? formattingMonth(value) : value;
     updateByNameAndValue({ name, value: newValue });
 
     if (name === "year" && !Validator.checkFillNumber(value, OPTION.expirationDateMaxLength))
@@ -67,37 +64,15 @@ const useExpiryDate = (initialValue: ExpiryDateValue) => {
     });
   };
 
+  const handleExpiryDateBlur = (e: FocusEvent<HTMLInputElement>) => {
+    handleExpiryDateValidator(e);
+  };
+
   const handleExpiryDateEnter = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.target !== e.currentTarget) return;
     if (e.key !== "Enter") return;
+    e.currentTarget.blur();
 
-    const { value, name } = e.target as HTMLInputElement;
-
-    if (name === "month" && !Validator.checkExpirationMonth(name, value))
-      return setValidationResult({
-        isValid: false,
-        errorMessage: ERROR_MESSAGE.expiredMonth,
-      });
-
-    const newValue = name === "month" ? formattingMonth(value, name) : value;
-    updateByNameAndValue({ name, value: newValue });
-
-    if (name === "year" && !Validator.checkFillNumber(value, OPTION.expirationDateMaxLength))
-      return setValidationResult({
-        isValid: false,
-        errorMessage: ERROR_MESSAGE.expiryFormat,
-      });
-
-    if (!Validator.checkDateExpiration(inputValue.month, inputValue.year))
-      return setValidationResult({
-        isValid: false,
-        errorMessage: ERROR_MESSAGE.expiredCard,
-      });
-
-    setValidationResult({
-      isValid: true,
-      errorMessage: "",
-    });
+    handleExpiryDateValidator(e);
   };
 
   return {
