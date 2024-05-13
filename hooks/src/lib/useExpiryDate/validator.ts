@@ -1,9 +1,10 @@
+import { REGEX } from "../constants/regex";
 import { IErrorStatus } from "../useInputValidation";
 
 export const EXPIRY_MONTH_LENGTH = 2;
 export const expiryMonthValidator = {
   onChange: (value: string): IErrorStatus => {
-    if (!/^\d*$/.test(value)) {
+    if (!REGEX.zeroOrMoreDigits.test(value)) {
       return { isError: true, errorMessage: "유효기간 월(月)은 숫자만 포함해야 합니다." };
     }
 
@@ -18,7 +19,11 @@ export const expiryMonthValidator = {
   },
 
   onBlur: (value: string): IErrorStatus => {
-    if (!/^\d+$/.test(value)) {
+    if (value.length === 0) {
+      return { isError: true, errorMessage: "유효기간 월(月)을 입력해 주세요." };
+    }
+
+    if (!REGEX.oneOrMoreDigits.test(value)) {
       return { isError: true, errorMessage: "유효기간 월(月)은 숫자만 포함해야 합니다." };
     }
 
@@ -29,7 +34,7 @@ export const expiryMonthValidator = {
       };
     }
 
-    if (!/^(0[1-9]|1[0-2])$/.test(value)) {
+    if (!REGEX.validMonth.test(value)) {
       return {
         isError: true,
         errorMessage: "유효기간 월(月)은 01월부터 12월 중 하나로 입력해 주세요.",
@@ -45,7 +50,7 @@ const MIN_YEAR = 24;
 const MAX_YEAR = 40;
 export const expiryYearValidator = {
   onChange: (value: string): IErrorStatus => {
-    if (!/^\d*$/.test(value)) {
+    if (!REGEX.zeroOrMoreDigits.test(value)) {
       return { isError: true, errorMessage: "유효기간 년도(年)은 숫자만 포함해야 합니다." };
     }
 
@@ -60,7 +65,11 @@ export const expiryYearValidator = {
   },
 
   onBlur: (value: string): IErrorStatus => {
-    if (!/^\d+$/.test(value)) {
+    if (value.length === 0) {
+      return { isError: true, errorMessage: "유효기간 년도(年)을 입력해 주세요." };
+    }
+
+    if (!REGEX.oneOrMoreDigits.test(value)) {
       return { isError: true, errorMessage: "유효기간 년도(年)은 숫자만 포함해야 합니다." };
     }
 

@@ -6,16 +6,18 @@ import {
   ModalCloseButtonProps,
   ModalContentProps,
   ModalDimmerProps,
+  ModalInputProps,
   ModalMainProps,
 } from "./types/modalProps";
 import style from "./Modal.module.css";
 import { ReactComponent as CloseIcon } from "./assets/closeIcon.svg";
 
-interface IModal extends React.FC<ModalMainProps> {
+export interface IModal extends React.FC<ModalMainProps> {
   Dimmer: React.FC<ModalDimmerProps>;
   Content: React.FC<ModalContentProps>;
   CloseButton: React.FC<ModalCloseButtonProps>;
   Button: React.FC<ModalButtonProps>;
+  Input: React.FC<ModalInputProps>;
 }
 
 export const Modal: IModal = Object.assign(ModalMain, {
@@ -23,6 +25,7 @@ export const Modal: IModal = Object.assign(ModalMain, {
   Content: ModalContent,
   CloseButton: ModalCloseButton,
   Button: ModalButton,
+  Input: ModalInput,
 });
 
 function ModalMain({ children, isOpen, onClose }: ModalMainProps) {
@@ -41,15 +44,20 @@ function ModalDimmer(attributes: ModalDimmerProps) {
   return <div className={style.ModalDimmer} onClick={onClose} {...attributes}></div>;
 }
 
-function ModalContent({ position = "center", children, ...attributes }: ModalContentProps) {
+function ModalContent({
+  position = "center",
+  size = "medium",
+  children,
+  ...attributes
+}: ModalContentProps) {
   return (
-    <div className={classnames(style.ModalContent, style[position])} {...attributes}>
+    <div className={classnames(style.ModalContent, style[position], style[size])} {...attributes}>
       {children}
     </div>
   );
 }
 
-function ModalCloseButton(attributes: ModalCloseButtonProps) {
+function ModalCloseButton({ length = "14px", ...attributes }: ModalCloseButtonProps) {
   const { onClose } = useModalContext();
 
   return (
@@ -58,15 +66,37 @@ function ModalCloseButton(attributes: ModalCloseButtonProps) {
       aria-label="모달창 닫기"
       className={style.ModalCloseButton}
       onClick={onClose}
+      width={length}
+      height={length}
       {...attributes}
     />
   );
 }
 
-function ModalButton({ children, theme = "dark", ...attributes }: ModalButtonProps) {
+function ModalButton({
+  children,
+  theme = "dark",
+  size = "large",
+  fullWidth = false,
+  disabled = false,
+  ...attributes
+}: ModalButtonProps) {
   return (
-    <button className={classnames([style.ModalButton, style[theme]])} {...attributes}>
+    <button
+      disabled={disabled}
+      className={classnames([
+        style.ModalButton,
+        style[theme],
+        style[size],
+        { [style.fullWidth]: fullWidth, [style.disabled]: disabled },
+      ])}
+      {...attributes}
+    >
       {children}
     </button>
   );
+}
+
+function ModalInput(attributes: ModalInputProps) {
+  return <input className={style.ModalInput} {...attributes} />;
 }
