@@ -3,7 +3,7 @@ import textColorGenerator from '../utils/textColorGenerator';
 import hoverColorGenerator from '../utils/hoverColorGenerator';
 
 const BUTTON_SIZE_TABLE = {
-  small: { width: '100px', height: '32px', fontSize: '12px' },
+  small: { width: '80px', height: '36px', fontSize: '12px' },
   medium: { width: '160px', height: '44px', fontSize: '15px' },
   large: { width: '240px', height: '56px', fontSize: '18px' },
 };
@@ -17,15 +17,33 @@ const BUTTON_STYLE_TABLE = (primaryColor: string) => {
     },
     border: {
       backgroundColor: '#ffffff',
-      color: primaryColor,
-      border: `2px solid ${primaryColor}`,
+      color: '#333333BF',
+      border: `1px solid #33333340`,
     },
     text: {
       backgroundColor: 'transparent',
-      color: primaryColor,
+      color: '#333333BF',
       border: 'none',
     },
   };
+};
+
+const BUTTON_DISABLED_STYLE_TABLE = {
+  primary: {
+    backgroundColor: '#DDDDDD',
+    color: '#FFFFFF',
+    border: 'none',
+  },
+  border: {
+    backgroundColor: '#ffffff',
+    color: '#dddddd',
+    border: `1px solid #dddddd`,
+  },
+  text: {
+    backgroundColor: '#eeeeee',
+    color: '#bbbbbb',
+    border: 'none',
+  },
 };
 
 export const Button = styled.button<{
@@ -50,7 +68,7 @@ export const Button = styled.button<{
     BUTTON_STYLE_TABLE(props.primaryColor)[props.buttonStyle].backgroundColor};
   border: ${(props) =>
     BUTTON_STYLE_TABLE(props.primaryColor)[props.buttonStyle].border};
-  border-radius: 8px;
+  border-radius: 4px;
 
   &:hover {
     background-color: ${(props) => {
@@ -62,15 +80,27 @@ export const Button = styled.button<{
       }
     }};
   }
+
+  &:disabled {
+    background-color: ${(props) =>
+      BUTTON_DISABLED_STYLE_TABLE[props.buttonStyle].backgroundColor};
+    border: ${(props) => BUTTON_DISABLED_STYLE_TABLE[props.buttonStyle].border};
+  }
 `;
 
 export const ButtonText = styled.p<{
   size: ButtonSize;
   buttonStyle: ButtonStyle;
   primaryColor: string;
+  disabled: boolean;
 }>`
   font-size: ${(props) => BUTTON_SIZE_TABLE[props.size].fontSize};
-  color: ${(props) =>
-    BUTTON_STYLE_TABLE(props.primaryColor)[props.buttonStyle].color};
+  color: ${(props) => {
+    if (props.disabled) {
+      return BUTTON_DISABLED_STYLE_TABLE[props.buttonStyle].color;
+    }
+    return BUTTON_STYLE_TABLE(props.primaryColor)[props.buttonStyle].color;
+  }};
   font-weight: 700;
+  margin-block: 0;
 `;

@@ -1,108 +1,47 @@
-import * as Styled from './Modal.styled';
+import {
+  ModalBody,
+  ModalButtonContainer,
+  ModalCloseButton,
+  ModalContainer,
+  ModalDescription,
+  ModalDimmedLayer,
+  ModalHeader,
+  ModalInputField,
+  ModalTitle
+} from './index'
 
-import Button from '../Button/Button';
-import CLOSE_BUTTON from '../../asset/close-button.svg';
-
-import { ButtonProps } from '../Button/Button';
-import { useEffect } from 'react';
-
-interface ModalProps {
+export interface DefaultModalProps {
+  size?: ModalSize;
   isOpened: boolean;
   onClose: () => void;
-  zIndex?: number;
   title?: string;
   description?: string;
   children?: JSX.Element;
   modalPosition?: ModalPosition;
-  primaryButton?: ButtonProps;
-  secondaryButton?: ButtonProps;
   buttonPosition?: ButtonPosition;
   primaryColor?: string;
   showCloseButton?: boolean;
 }
 
-const Modal = ({
-  isOpened,
-  onClose,
-  zIndex = 0,
-  title = '',
-  description = '',
-  children,
-  modalPosition = 'center',
-  primaryButton,
-  secondaryButton,
-  buttonPosition = 'row',
-  primaryColor,
-  showCloseButton = false,
-}: ModalProps) => {
+interface ModalProp {
+  children: JSX.Element
+}
 
-  useEffect(() => {
-    if (isOpened) document.body.style.overflow = 'hidden';
-    else document.body.style.overflow = 'scroll';
-    document.body.addEventListener('keydown', handleKeyDownEsc);
-    return document.body.removeEventListener('keydown', handleKeyDownEsc);
-  }, [isOpened])
+const Modal = ({ children }: ModalProp) => {
 
-  const handleKeyDownEsc = (e: KeyboardEvent) => {
-    if (e.key === 'Escape' && isOpened) {
-      onClose();
-    }
-  };
-
-  return (
-    <>
-      {isOpened && (
-        <Styled.DimmedLayer onClick={onClose} zIndex={zIndex}>
-          <Styled.ModalContainer
-            modalPosition={modalPosition}
-            onClick={(e) => {
-              e.stopPropagation();
-            }}
-          >
-            <Styled.ModalHeader>
-              <Styled.ModalTitle>{title}</Styled.ModalTitle>
-              {showCloseButton && (
-                <Styled.ModalCloseButton
-                  src={CLOSE_BUTTON}
-                  onClick={onClose}
-                />
-              )}
-            </Styled.ModalHeader>
-            <Styled.ModalBody>
-              <Styled.ModalDescription>{description}</Styled.ModalDescription>
-              <div>{children}</div>
-            </Styled.ModalBody>
-            <Styled.ButtonContainer buttonPosition={buttonPosition}>
-              {primaryButton && (
-                <Button
-                  text={primaryButton.text}
-                  onClick={primaryButton.onClick}
-                  size={primaryButton.size || 'medium'}
-                  width={primaryButton.width || 'full'}
-                  buttonStyle={primaryButton.buttonStyle || 'primary'}
-                  primaryColor={
-                    primaryColor || primaryButton.primaryColor || '#333333'
-                  }
-                />
-              )}
-              {secondaryButton && (
-                <Button
-                  text={secondaryButton.text}
-                  onClick={secondaryButton.onClick || onClose}
-                  size={secondaryButton.size || 'medium'}
-                  width={secondaryButton.width || 'full'}
-                  buttonStyle={secondaryButton.buttonStyle || 'border'}
-                  primaryColor={
-                    primaryColor || secondaryButton.primaryColor || '#333333'
-                  }
-                />
-              )}
-            </Styled.ButtonContainer>
-          </Styled.ModalContainer>
-        </Styled.DimmedLayer>
-      )}
-    </>
-  );
+  return (<>
+    {children}
+  </>)
 };
+
+Modal.Body = ModalBody;
+Modal.ButtonContainer = ModalButtonContainer;
+Modal.CloseButton = ModalCloseButton;
+Modal.Container = ModalContainer;
+Modal.Description = ModalDescription;
+Modal.DimmedLayer = ModalDimmedLayer;
+Modal.Header = ModalHeader;
+Modal.InputField = ModalInputField;
+Modal.Title = ModalTitle;
 
 export default Modal;
