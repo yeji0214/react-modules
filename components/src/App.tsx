@@ -1,35 +1,58 @@
-import React, { useReducer } from 'react';
+import React, { useReducer, useState } from 'react';
 
-import { Modal } from './lib';
+import { AlertModal, ConfirmModal, PromptModal } from './lib';
 
 function App() {
-  const [isOpen, toggleIsOpen] = useReducer(prev => !prev, false);
+  const [isOpenAlert, toggleAlertModal] = useReducer(prev => !prev, false);
+  const [isOpenConfirm, toggleConfirmModal] = useReducer(prev => !prev, false);
+  const [isOpenPrompt, togglePromptModal] = useReducer(prev => !prev, false);
+  const [inputValue, setInputValue] = useState('');
 
   return (
     <>
-      <button onClick={toggleIsOpen}>모달열기</button>
-      <Modal isOpen={isOpen} position="bottom" isAnimation duration={300}>
-        <Modal.Dimmed onDimmedClick={() => toggleIsOpen()} />
-        <Modal.Header>
-          <Modal.Title title="제목" />
-          <Modal.CloseIcon onClose={() => toggleIsOpen()} />
-        </Modal.Header>
-        <Modal.Content>
-          <div>내용</div>
-          <div>내용</div>
-          <div>내용</div>
-        </Modal.Content>
-        <Modal.Footer>
-          <Modal.ConfirmButton
-            label="동의하고 저장하기"
-            onConfirm={() => {
-              alert('확인');
-              toggleIsOpen();
-            }}
-          />
-          <Modal.CloseButton label="닫기" onClose={() => toggleIsOpen()} />
-        </Modal.Footer>
-      </Modal>
+      <button onClick={toggleAlertModal}>Alert 모달열기</button>
+      <button onClick={toggleConfirmModal}>Confirm 모달열기</button>
+      <button onClick={togglePromptModal}>Prompt 모달열기</button>
+
+      <AlertModal
+        isOpen={isOpenAlert}
+        onDimmedClick={() => toggleAlertModal()}
+        onCloseIcon={() => toggleAlertModal()}
+        onConfirmButton={() => toggleAlertModal()}
+        title="AlertModal 제목입니다."
+        content="AlertModal content 입니다."
+        isAnimation
+        animationDuration={300}
+        buttonLabel="테스트"
+      />
+      <ConfirmModal
+        isOpen={isOpenConfirm}
+        onDimmedClick={() => toggleConfirmModal()}
+        onCloseIcon={() => toggleConfirmModal()}
+        onCloseButton={() => toggleConfirmModal()}
+        onConfirmButton={() => toggleConfirmModal()}
+        title="ConfirmModal 제목입니다."
+        content="ConfirmModal content 입니다."
+        isAnimation
+        animationDuration={300}
+        closeButtonLabel="취소?"
+        confirmButtonLabel="확인?"
+      />
+      <PromptModal
+        isOpen={isOpenPrompt}
+        value={inputValue}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setInputValue(e.target.value)}
+        onDimmedClick={() => togglePromptModal()}
+        onCloseIcon={() => togglePromptModal()}
+        onCloseButton={() => togglePromptModal()}
+        onConfirmButton={() => togglePromptModal()}
+        title="ConfirmModal 제목입니다."
+        content="ConfirmModal content 입니다."
+        isAnimation
+        animationDuration={300}
+        closeButtonLabel="취소!"
+        confirmButtonLabel="확인!"
+      />
     </>
   );
 }

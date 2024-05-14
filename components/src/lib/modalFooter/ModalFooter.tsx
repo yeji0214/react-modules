@@ -7,19 +7,41 @@ const FOOTER_POSITION_TYPE: Record<ContainerPosition, string> = {
   'column-reverse': styles.columnReverse,
 };
 
-type ContainerPosition = 'row' | 'row-reverse' | 'column' | 'column-reverse';
+type ContainerPosition = Extract<
+  React.CSSProperties['flexDirection'],
+  'row' | 'row-reverse' | 'column' | 'column-reverse'
+>;
+
+type FlexAlign = Extract<
+  React.CSSProperties['justifyContent'],
+  'flex-start' | 'flex-end' | 'center' | 'space-between' | 'space-around' | 'space-evenly'
+>;
+
+type ContainerRowAlign = FlexAlign;
+type ContainerColAlign = FlexAlign;
 
 export interface ContainerProps extends React.HTMLAttributes<HTMLElement> {
   position?: ContainerPosition;
+  justifyContent?: ContainerRowAlign;
+  alignItems?: ContainerColAlign;
 }
 
 const Container = ({
   position = 'column',
+  justifyContent,
+  alignItems,
   children,
   ...rest
 }: React.PropsWithChildren<ContainerProps>) => {
+  const rowAlign = justifyContent || 'space-between';
+  const colAlign = alignItems || 'center';
+
   return (
-    <footer className={FOOTER_POSITION_TYPE[position]} {...rest}>
+    <footer
+      className={FOOTER_POSITION_TYPE[position]}
+      style={{ justifyContent: rowAlign, alignItems: colAlign }}
+      {...rest}
+    >
       {children}
     </footer>
   );

@@ -19,10 +19,8 @@ function App() {
     options: ['BC', 'KB', '하나', '우리'],
     placeholder: '카드사를 입력해주세요',
   });
-  const cardNumbersInfo = useCardNumbers(
-    { first: '쿠키', second: '1234', third: '치코', fourth: '웨디' },
-    { isAutoFocus: true },
-  );
+
+  const cardNumbersInfo = useCardNumbers({ first: '1234' });
 
   const getErrorMessage = () => {
     const errorDetails = Object.values(cardNumbersInfo.errorInfo);
@@ -33,6 +31,13 @@ function App() {
   return (
     <div>
       <form>
+        <div>
+          {cardNumbersInfo.cardBrand && <span>카드 브랜드 : {cardNumbersInfo.cardBrand}</span>}
+          <div>
+            <div>포맷팅 제공 : {cardNumbersInfo.formattedCardNumber}</div>
+            <div>포맷팅 커스텀 : {cardNumbersInfo.formattedCardNumberList.join('%')}</div>
+          </div>
+        </div>
         <fieldset>
           <span>cvc : </span>
           <input
@@ -130,43 +135,7 @@ function App() {
               cardNumbersInfo.handleBlur(event, 'first');
             }}
             aria-invalid={!cardNumbersInfo.errorInfo.first.isValid}
-            maxLength={4}
-          />
-          <input
-            type="text"
-            value={cardNumbersInfo.value.second}
-            onChange={event => {
-              cardNumbersInfo.handleChange(event, 'second');
-            }}
-            onBlur={event => {
-              cardNumbersInfo.handleBlur(event, 'second');
-            }}
-            aria-invalid={!cardNumbersInfo.errorInfo.second.isValid}
-            maxLength={4}
-          />
-          <input
-            type="password"
-            value={cardNumbersInfo.value.third}
-            onChange={event => {
-              cardNumbersInfo.handleChange(event, 'third');
-            }}
-            onBlur={event => {
-              cardNumbersInfo.handleBlur(event, 'third');
-            }}
-            aria-invalid={!cardNumbersInfo.errorInfo.third.isValid}
-            maxLength={4}
-          />
-          <input
-            type="password"
-            value={cardNumbersInfo.value.fourth}
-            onChange={event => {
-              cardNumbersInfo.handleChange(event, 'fourth');
-            }}
-            onBlur={event => {
-              cardNumbersInfo.handleBlur(event, 'fourth');
-            }}
-            aria-invalid={!cardNumbersInfo.errorInfo.fourth.isValid}
-            maxLength={4}
+            maxLength={cardNumbersInfo.validMaxLength}
           />
           <span>{getErrorMessage()}</span>
         </fieldset>

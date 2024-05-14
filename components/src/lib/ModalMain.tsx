@@ -11,6 +11,9 @@ import CloseButton from './closeButton/CloseButton';
 import ConfirmButton from './confirmButton/ConfirmButton';
 import ModalFooter from './modalFooter/ModalFooter';
 
+type ModalPosition = 'center' | 'bottom';
+type ModalSize = 'small' | 'medium' | 'large';
+
 const MODAL_WRAPPER_TYPE: Record<ModalPosition, string> = {
   center: styles.modalWrapper,
   bottom: styles.modalBottomWrapper,
@@ -21,20 +24,26 @@ const MODAL_TYPE: Record<ModalPosition, string> = {
   bottom: styles.modalBottom,
 };
 
-type ModalPosition = 'center' | 'bottom';
+const MODAL_SIZE: Record<ModalSize, string> = {
+  small: styles.small,
+  medium: styles.medium,
+  large: styles.large,
+};
 
 interface ModalMainProps extends React.HTMLAttributes<HTMLDivElement> {
   isOpen: boolean;
+  size?: ModalSize;
   position?: ModalPosition;
   isAnimation?: boolean;
-  duration?: number;
+  animationDuration?: number;
 }
 
 const ModalMain = ({
   isOpen,
+  size,
   position = 'center',
   isAnimation = false,
-  duration,
+  animationDuration,
   style,
   children,
   ...rest
@@ -43,10 +52,12 @@ const ModalMain = ({
     isAnimation,
     isOpen,
     position,
-    delay: duration,
+    delay: animationDuration,
   });
 
   const modalClass = isAnimation ? modalAnimationClass : MODAL_TYPE[position];
+  const modalWrapperClass = MODAL_WRAPPER_TYPE[position];
+  const modalSizeClass = size ? MODAL_SIZE[size] : '';
 
   if (!mounted) {
     return null;
@@ -55,16 +66,15 @@ const ModalMain = ({
   return (
     <>
       {createPortal(
-        <div className={MODAL_WRAPPER_TYPE[position]}>
+        <div className={`${modalWrapperClass} ${modalSizeClass}`} style={style}>
           <div
             className={modalClass}
-            style={{ animationDuration: `${duration}ms`, ...style }}
+            style={{ animationDuration: `${animationDuration}ms` }}
             {...rest}
           >
             {children}
           </div>
         </div>,
-
         document.body,
       )}
     </>
