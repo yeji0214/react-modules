@@ -1,6 +1,6 @@
 {
-  "name": "vwh-test-modal-component",
-  "version": "0.0.3",
+  "name": "vwh-wtc-lv2-payments-modal",
+  "version": "0.0.9",
   "description": "lv2 mission2 step1",
   "type": "module",
   "types": "dist/index.d.ts",
@@ -40,6 +40,7 @@
     "@typescript-eslint/eslint-plugin": "^7.2.0",
     "@typescript-eslint/parser": "^7.2.0",
     "@vitejs/plugin-react-swc": "^3.5.0",
+    "choriver-modal-component": "^0.0.3",
     "chromatic": "^11.3.1",
     "eslint": "^8.57.0",
     "eslint-plugin-react-hooks": "^4.6.0",
@@ -51,7 +52,6 @@
     "typescript": "^5.2.2",
     "vite": "^5.2.0",
     "vite-plugin-dts": "^3.9.0",
-    "vwh-test-modal-component": "^0.0.1",
-    "vwh-test-modal-components": "^0.0.1"
+    "vwh-wtc-lv2-payments-modal": "^0.0.9"
   }
 }

@@ -1,35 +1,21 @@
-import React, { useState } from "react";
-import "./App.css";
-import { Modal } from "./lib";
+import React from 'react';
+import { useState } from 'react';
+import './App.css';
+import { Modal } from 'vwh-wtc-lv2-payments-modal';
 
 function App() {
-  const isOpenState = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
 
-  const onOpen = () => {};
+  const openModal = () => setIsOpen(true);
 
-  const onConfirm = () => {};
-
-  const onClose = () => {};
+  const onConfirm = (formValues: Record<string, string>) => {
+    Object.entries(formValues).forEach(([key, value]) => {
+      console.log(key + ' : ' + value);
+    });
+  };
 
   return (
-    <>
-      <h1>Component Modules</h1>
-      <button type="button" onClick={() => isOpenState[1](true)}>
-        모달 열기
-      </button>
-      <Modal
-        isOpenState={isOpenState}
-        position="center"
-        title="title"
-        description="description"
-        close={true}
-        cancelLabel="cancel"
-        confirmLabel="confirm"
-        onOpen={onOpen}
-        onConfirm={onConfirm}
-        onClose={onClose}
-      />
-    </>
+    <h1 style={{ marginBottom: '20px' }}>Hooks Module</h1>
   );
 }
 
