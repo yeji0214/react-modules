@@ -10,9 +10,21 @@
   --color-white: #fff;
 
   --color-bg-contents: var(--color-white);
-  --color-primary: #333333;
-  --color-btn-txt: var(--color-white);
-  --color-close-btn-txt: #8b95a1;
+  --color-bg-primary: #333333;
+  --color-bg-secondary: var(--color-white);
+
+  --color-border-btn: #33333340;
+
+  --color-txt-primary-btn: var(--color-white);
+  --color-txt-secondary-btn: #333333bf;
+  --color-txt-close-btn: #8b95a1;
+  --color--txt-description: #0a0d13;
+
+  /* size */
+  --button-small: 5rem;
+  --modal-small: 20rem;
+  --modal-medium: 30rem;
+  --modal-large: 37.5rem;
 }
 
 * {
@@ -34,7 +46,6 @@
 .contents {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   align-items: flex-start;
   gap: 1rem;
 
@@ -46,8 +57,24 @@
   padding: 1.5rem 2rem;
 }
 
+.contents.fitContent {
+  width: fit-content;
+}
+
+.contents.small {
+  width: var(--modal-small);
+}
+
+.contents.medium {
+  width: var(--modal-medium);
+}
+
+.contents.large {
+  width: var(--modal-large);
+}
+
 /* position */
-.default,
+.defaultPosition,
 .center {
   position: relative;
   top: 50%;
@@ -55,10 +82,6 @@
   transform: translate(-50%, -50%);
 
   border-radius: 0.5rem;
-
-  min-width: 19rem;
-  max-width: 80%;
-  min-height: 13.5rem;
 }
 
 .bottom {
@@ -77,6 +100,16 @@
   text-align: left;
 }
 
+/* Description */
+.description {
+  margin: 0;
+  color: var(--color--txt-description);
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 15px;
+  text-align: left;
+}
+
 /* buttons */
 /* common */
 button {
@@ -91,15 +124,33 @@ button:hover {
 /* Button */
 .button {
   border-radius: 0.3125rem;
-  background-color: var(--color-primary);
   padding: 0.5rem 0;
-  width: 100%;
 
-  color: var(--color-btn-txt);
   font-weight: 700;
   font-size: 0.9375rem;
   line-height: 1.375rem;
   text-align: center;
+}
+
+/* Button - size */
+.button.small {
+  width: var(--button-small);
+}
+
+.button.fullWidth {
+  width: 100%;
+}
+
+/* Button - variant */
+.button.primary {
+  background-color: var(--color-bg-primary);
+  color: var(--color-txt-primary-btn);
+}
+
+.button.secondary {
+  border: 1px solid var(--color-border-btn);
+  background-color: var(--color-bg-secondary);
+  color: var(--color-txt-secondary-btn);
 }
 
 /* CloseButton */
@@ -107,7 +158,7 @@ button:hover {
 .box {
   width: 100%;
   height: 2.75rem;
-  color: var(--color-close-btn-txt);
+  color: var(--color-txt-close-btn);
   font-weight: 700;
   font-size: 0.9375rem;
   line-height: 1.375rem;
