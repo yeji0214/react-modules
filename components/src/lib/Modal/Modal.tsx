@@ -4,28 +4,26 @@ import ModalHeader from './ModalHeader/ModalHeader';
 import ModalContent from './ModalContent/ModalContent';
 import ModalFooter from './ModalFooter/ModalFooter';
 
+import type {
+  ModalSizeType,
+  ModalPositionType,
+  ButtonInterface,
+  ButtonsPositionType,
+} from '../types/ModalTypes';
+
 import * as Styled from './Modal.style';
-
-export type ModalPositionType = 'center' | 'bottom';
-export type ModalButtonType = 'primary' | 'secondary';
-
-export interface ModalButtonInterface {
-  text: string;
-  style: ModalButtonType;
-  onClick: () => void;
-}
 
 export interface ModalProps {
   isOpen: boolean;
   title: string;
-  children: React.ReactNode;
+  size?: ModalSizeType;
   position?: ModalPositionType;
-  width?: { basicWidth: string; minWidth: string };
   hasCloseButton?: boolean;
-  footerButtons?: ModalButtonInterface[];
   isClosableOnClickBackdrop?: boolean;
   zIndex?: { backdrop: number; modal: number };
   backdropOpacity?: string;
+  buttons?: ButtonInterface[];
+  buttonsFlexDirection?: ButtonsPositionType;
   onClose: () => void;
 }
 
@@ -33,15 +31,16 @@ export default function Modal({
   isOpen,
   title,
   children,
+  size = 'medium',
   position = 'center',
-  width = { basicWidth: '50%', minWidth: '300px' },
   hasCloseButton = true,
-  footerButtons,
   isClosableOnClickBackdrop = true,
   zIndex = { backdrop: 999, modal: 1000 },
   backdropOpacity = '50%',
+  buttons,
+  buttonsFlexDirection = 'column',
   onClose,
-}: ModalProps) {
+}: React.PropsWithChildren<ModalProps>) {
   const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -70,12 +69,12 @@ export default function Modal({
         $zIndex={zIndex.backdrop}
         $opacity={backdropOpacity}
         onClick={handleClickBackdrop}
-      ></Styled.ModalBackdrop>
+      />
 
       <Styled.ModalWrapper
         ref={modalRef}
         $position={position}
-        $width={width}
+        $size={size}
         $zIndex={zIndex.modal}
         onKeyDown={handleKeyDown}
         onClick={(event) => event.stopPropagation()}
@@ -87,9 +86,14 @@ export default function Modal({
           onClose={onClose}
         />
 
-        <ModalContent>{children}</ModalContent>
+        {children && <ModalContent>{children}</ModalContent>}
 
-        {footerButtons && <ModalFooter bottons={footerButtons} />}
+        {buttons && (
+          <ModalFooter
+            buttons={buttons}
+            buttonsFlexDirection={buttonsFlexDirection}
+          />
+        )}
       </Styled.ModalWrapper>
     </Styled.ModalPositioner>
   );

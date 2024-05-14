@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {
-  useCardNumbers,
+  useCardNumber,
   useCardBrand,
   useCardExpiryDate,
   useCardHolder,
@@ -12,20 +12,21 @@ import {
 import './App.css';
 
 const cardBrands = ['신한카드', '현대카드', '카카오뱅크'];
-const cardNumbersFormat = [4, 4, 4, 4];
 
 function App() {
   const {
-    cardNumbers,
-    validationResult: cardNumbersValidationResult,
-    validStates,
-    handleUpdateCardNumbers,
-  } = useCardNumbers(cardNumbersFormat);
+    cardNumber,
+    cardGlobalBrand,
+    cardNumberFormat,
+    cardNumberFormatted,
+    validationResult: cardNumberValidationResult,
+    handleUpdateCardNumber,
+  } = useCardNumber();
   const {
     brand,
     validationResult: brandValidationResult,
     handleUpdateBrand,
-  } = useCardBrand(cardBrands);
+  } = useCardBrand({ allowedBrands: cardBrands });
   const {
     expiryDate,
     validationResult: expiryDateValidationResult,
@@ -46,30 +47,30 @@ function App() {
   return (
     <>
       <h1>Hooks Modules</h1>
+
       <section>
-        <h2>useCardNumbers</h2>
+        <h2>useCardNumber</h2>
         <div className="input-container">
-          {cardNumbersFormat.map((length, index) => (
-            <input
-              key={index}
-              type="text"
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                handleUpdateCardNumbers(index, event.target.value)
-              }
-              placeholder={Array.from({ length }, (_, index) => (index + 1).toString()).join('')}
-            />
-          ))}
+          <input
+            type="text"
+            value={cardNumberFormatted}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+              handleUpdateCardNumber(event.target.value, event)
+            }
+            placeholder="카드번호를 입력해 주세요."
+          />
         </div>
         <div className="output-container">
-          <p>cardNumbers: {cardNumbers.join(' ')}</p>
-          <p>validStates: {validStates.join(' ')}</p>
+          <p>cardNumber: {cardNumber}</p>
+          <p>cardGlobalBrand: {cardGlobalBrand}</p>
+          <p>cardNumberFormat: {cardNumberFormat.join(', ')}</p>
           <p>
-            isValid:{' '}
-            {cardNumbersValidationResult.isValid !== null
-              ? cardNumbersValidationResult.isValid.toString()
+            isValid:
+            {cardNumberValidationResult.isValid !== null
+              ? cardNumberValidationResult.isValid.toString()
               : 'null'}
           </p>
-          <p>errorMessage: {cardNumbersValidationResult.errorMessage}</p>
+          <p>errorMessage: {cardNumberValidationResult.errorMessage}</p>
         </div>
       </section>
 

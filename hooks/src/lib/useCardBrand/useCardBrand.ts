@@ -1,7 +1,14 @@
 import { useState } from 'react';
 import ValidationResult from '../types/ValidationResult';
+import DEFAULT_CARD_BRANDS from '../constants/defaultCardBrands';
 
-import DEFAULT_CARD_BRANDS from './defaultCardBrands';
+import { getValidationResult, validateInitialParams } from './useCardBrand.util';
+
+interface CardBrandParams {
+  allowedBrands?: string[];
+  initialValue?: string;
+  errorMessages?: CardBrandErrorMessages;
+}
 
 interface BrandValidationResult {
   brand: string;
@@ -9,7 +16,7 @@ interface BrandValidationResult {
   handleUpdateBrand: (value: string) => void;
 }
 
-interface CardBrandErrorMessages {
+export interface CardBrandErrorMessages {
   invalidBrand: string;
   emptyAllowedBrands: string;
   initialValueNotExistsInAllowedBrands: string;
@@ -27,11 +34,11 @@ export const DEFAULT_PARAMS = {
   },
 };
 
-export default function useCardBrand(
-  allowedBrands: string[] = DEFAULT_PARAMS.allowedBrands,
-  initialValue: string = DEFAULT_PARAMS.initialValue,
-  errorMessages: CardBrandErrorMessages = DEFAULT_PARAMS.errorMessages,
-): BrandValidationResult {
+export default function useCardBrand({
+  allowedBrands = DEFAULT_PARAMS.allowedBrands,
+  initialValue = DEFAULT_PARAMS.initialValue,
+  errorMessages = DEFAULT_PARAMS.errorMessages,
+}: CardBrandParams = {}): BrandValidationResult {
   validateInitialParams(allowedBrands, initialValue, errorMessages);
 
   const [brand, setBrand] = useState(initialValue);
@@ -45,41 +52,4 @@ export default function useCardBrand(
   };
 
   return { brand, validationResult, handleUpdateBrand };
-}
-
-function validateInitialParams(
-  allowedBrands: string[],
-  initialValue: string,
-  errorMessages: CardBrandErrorMessages,
-) {
-  if (allowedBrands.length < 1) {
-    throw new Error(errorMessages.emptyAllowedBrands);
-  }
-
-  if (!validateBrand([...allowedBrands, ''], initialValue)) {
-    throw new Error(errorMessages.initialValueNotExistsInAllowedBrands);
-  }
-}
-
-function getValidationResult(
-  allowedBrands: string[],
-  value: string,
-  errorMessages: CardBrandErrorMessages,
-) {
-  if (value === DEFAULT_PARAMS.initialValue) {
-    return { isValid: null };
-  }
-
-  if (!validateBrand(allowedBrands, value)) {
-    return {
-      isValid: false,
-      errorMessage: errorMessages.invalidBrand,
-    };
-  }
-
-  return { isValid: true };
-}
-
-function validateBrand(allowedBrands: string[], value: string) {
-  return allowedBrands.includes(value);
 }

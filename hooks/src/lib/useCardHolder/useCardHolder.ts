@@ -1,9 +1,15 @@
 import { useState } from 'react';
 import ValidationResult from '../types/ValidationResult';
-import Validation from '../utils/Validation';
 import ErrorMessages from '../types/ErrorMessages';
 
 import { validateAllowedLength } from '../utils/validateInitialParams';
+import { getValidationResult } from './useCardHolder.util';
+
+interface CardHolderParams {
+  allowedLength?: number;
+  initialValue?: string;
+  errorMessages?: CardHolderErrorMessages;
+}
 
 interface CardHolderValidationResult {
   cardHolder: string;
@@ -11,7 +17,7 @@ interface CardHolderValidationResult {
   handleUpdateCardHolder: (value: string) => void;
 }
 
-interface CardHolderErrorMessages extends ErrorMessages {
+export interface CardHolderErrorMessages extends ErrorMessages {
   inputLength: (allowedLength: number) => string;
 }
 
@@ -35,11 +41,11 @@ export const DEFAULT_PARAMS = {
   },
 };
 
-export default function useCardHolder(
-  allowedLength: number = DEFAULT_PARAMS.allowedLength,
-  initialValue: string = DEFAULT_PARAMS.initialValue,
-  errorMessages: CardHolderErrorMessages = DEFAULT_PARAMS.errorMessages,
-): CardHolderValidationResult {
+export default function useCardHolder({
+  allowedLength = DEFAULT_PARAMS.allowedLength,
+  initialValue = DEFAULT_PARAMS.initialValue,
+  errorMessages = DEFAULT_PARAMS.errorMessages,
+}: CardHolderParams = {}): CardHolderValidationResult {
   validateAllowedLength({
     allowedLength,
     minLength: DEFAULT_LENGTH.minLength,
@@ -62,30 +68,4 @@ export default function useCardHolder(
     validationResult,
     handleUpdateCardHolder,
   };
-}
-
-function getValidationResult(
-  value: string,
-  allowedLength: number,
-  errorMessages: CardHolderErrorMessages,
-) {
-  if (value === DEFAULT_PARAMS.initialValue) {
-    return { isValid: null };
-  }
-
-  if (!Validation.isEnglishWithSpace(value)) {
-    return { isValid: false, errorMessage: errorMessages.inputType };
-  }
-
-  if (
-    !Validation.isNumberInRange({
-      min: DEFAULT_LENGTH.minLength,
-      max: allowedLength,
-      value: value.length,
-    })
-  ) {
-    return { isValid: false, errorMessage: errorMessages.inputLength(allowedLength) };
-  }
-
-  return { isValid: true };
 }
