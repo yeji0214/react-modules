@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { REGEX } from "./constants";
 
 interface ValidationResult {
@@ -6,32 +6,37 @@ interface ValidationResult {
   errorMessages: string[];
 }
 
-const useCVCValidation = () => {
+const MAX_LENGTH = 3;
+
+const useCVC = () => {
+  const [cvc, setCVC] = useState("");
   const [validationResult, setValidationResult] = useState<ValidationResult>({
     isValid: false,
     errorMessages: [],
   });
 
-  const handleCVCChange = (value: string, maxLength: number) => {
+  const handleCVCChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
     const errors: string[] = [];
     const isNumericInput = REGEX.onlyNumber.test(value);
-    const isValidLength = value.length === maxLength;
+    const isValidLength = value.length === MAX_LENGTH;
 
     if (!isNumericInput) {
       errors.push("숫자로 입력해주세요.");
     }
 
     if (!isValidLength) {
-      errors.push(`${maxLength}자로 입력해주세요.`);
+      errors.push(`${MAX_LENGTH}자로 입력해주세요.`);
     }
-
     setValidationResult({
       isValid: isNumericInput && isValidLength,
       errorMessages: errors,
     });
+    if (!isNumericInput) return;
+    setCVC(value);
   };
 
-  return { validationResult, handleCVCChange };
+  return { validationResult, cvc, handleCVCChange };
 };
 
-export default useCVCValidation;
+export default useCVC;

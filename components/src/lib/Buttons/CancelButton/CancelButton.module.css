@@ -1,0 +1,10 @@
+.button-cancel {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: var(--default-button-height);
+  border-radius: var(--default-border-radius);
+  color: var(--default-secondary-color);
+  margin: var(--default-margin);
+}

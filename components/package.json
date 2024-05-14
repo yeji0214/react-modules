@@ -1,6 +1,6 @@
 {
   "name": "paran-simple-modal",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "simple modal component",
   "type": "module",
   "types": "dist/index.d.ts",
@@ -19,7 +19,7 @@
     "chromatic": "dotenv -- cross-var chromatic --project-token=%CHROMATIC_PROJECT_TOKEN%"
   },
   "dependencies": {
-    "paran-simple-modal": "^0.0.7",
+    "paran-simple-modal": "^0.0.9",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
@@ -40,7 +40,7 @@
     "@typescript-eslint/eslint-plugin": "^7.2.0",
     "@typescript-eslint/parser": "^7.2.0",
     "@vitejs/plugin-react-swc": "^3.5.0",
-    "chromatic": "^11.3.0",
+    "chromatic": "^11.3.2",
     "cross-var": "^1.1.0",
     "dotenv-cli": "^7.4.1",
     "eslint": "^8.57.0",
