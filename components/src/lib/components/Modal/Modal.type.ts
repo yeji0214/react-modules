@@ -1,5 +1,5 @@
 import { HTMLAttributes } from 'react';
-import type { Size } from '../type/common';
+import type { Size } from '../../type/common';
 
 export type Direction = 'row' | 'column';
 export type Position = 'center' | 'bottom' | 'top';
@@ -14,10 +14,13 @@ export interface ModalProps extends HTMLAttributes<HTMLElement> {
   shadow?: boolean;
   animation?: boolean;
   zIndex?: number;
+  customWidth?: string;
+  customHeight?: string;
 }
 
 export interface ModalFooterProps extends HTMLAttributes<HTMLElement> {
   direction?: Direction;
+  position?: 'left' | 'right' | 'center';
 }
 
 export interface ModalHeaderType extends HTMLAttributes<HTMLElement> {}

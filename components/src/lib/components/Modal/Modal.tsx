@@ -1,8 +1,8 @@
 import type { ModalProps, ModalFooterProps, ModalHeaderType, ModalBodyType } from './Modal.type';
 import styles from './Modal.module.css';
-import { StrictPropsWithChildren } from '../type/common';
-import usePreventScroll from '../hooks/usePreventScroll';
-import useKeyPress from '../hooks/useKeyPress';
+import { StrictPropsWithChildren } from '../../type/common';
+import usePreventScroll from '../../hooks/usePreventScroll';
+import useKeyPress from '../../hooks/useKeyPress';
 
 export const ModalHeader = ({ children, ...rest }: StrictPropsWithChildren<ModalHeaderType>) => {
   return (
@@ -20,9 +20,14 @@ export const ModalBody = ({ children, ...rest }: StrictPropsWithChildren<ModalBo
   );
 };
 
-export const ModalFooter = ({ children, direction = 'column', ...rest }: StrictPropsWithChildren<ModalFooterProps>) => {
+export const ModalFooter = ({
+  children,
+  direction = 'column',
+  position = 'center',
+  ...rest
+}: StrictPropsWithChildren<ModalFooterProps>) => {
   return (
-    <footer {...rest} className={`${styles.modalFooter} ${styles[direction]}`}>
+    <footer {...rest} className={`${styles.modalFooter} ${styles[direction]} ${styles[position]}`}>
       {children}
     </footer>
   );
@@ -38,6 +43,8 @@ export const ModalMain = ({
   shadow = true,
   animation = true,
   zIndex = 100,
+  customWidth,
+  customHeight,
   ...rest
 }: StrictPropsWithChildren<ModalProps>) => {
   usePreventScroll(isOpen);
@@ -45,18 +52,24 @@ export const ModalMain = ({
 
   if (!isOpen) return null;
 
-  const modalStyle = {
+  const modalLayoutStyle = {
     zIndex,
+  };
+
+  const modalContainerStyle = {
+    width: customWidth,
+    height: customHeight,
   };
 
   return (
     <div
-      style={modalStyle}
+      style={modalLayoutStyle}
       className={`${styles.modalLayout} ${styles[position]} ${animation ? styles.animation : ''}`}
     >
       <div onClick={close} className={`${styles.modalBackdrop} ${styles[backdropType]}`} />
       <div
         {...rest}
+        style={modalContainerStyle}
         className={`${styles.modalContainer} ${styles[size]} ${styles[position]} ${shadow ? styles.shadow : ''} ${animation ? styles.animation : ''}`}
       >
         {children}

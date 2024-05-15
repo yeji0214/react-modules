@@ -1,11 +1,7 @@
 import { useState } from 'react';
-import {
-  isNotNumber,
-  isValidNumberLength,
-  isValidNumberRange,
-  validateExpiredDate,
-} from '../../utils/validation/validation';
+import { isNotNumber, isValidNumberRange, validateExpiredDate } from '../../utils/validation/validation';
 import type { EXPIRED_TYPE } from '../..//utils/validation/validation.type';
+import { formatMonth } from '../../utils/formatMonth';
 
 export const EXPIRATION_DATE_ERROR_MESSAGES = {
   NOT_NUMBER: '숫자를 입력해주세요.',
@@ -21,7 +17,7 @@ type Date<T> = {
 
 const VALID_DATE_LENGTH = 2;
 
-type useCardExpirationDateProps = {
+export type useCardExpirationDateProps = {
   month?: string;
   year?: string;
 };
@@ -34,7 +30,7 @@ const useCardExpirationDate = ({ month = '', year = '' }: useCardExpirationDateP
   const getMonthErrorMessage = (month: string, isExpiredDate: EXPIRED_TYPE) => {
     if (isNotNumber(month)) return EXPIRATION_DATE_ERROR_MESSAGES.NOT_NUMBER;
 
-    if (!isValidNumberLength(month, VALID_DATE_LENGTH)) return EXPIRATION_DATE_ERROR_MESSAGES.INVALID_MONTH;
+    if (month.length < VALID_DATE_LENGTH) return '';
 
     if (!isValidNumberRange(Number(month), 1, 12)) return EXPIRATION_DATE_ERROR_MESSAGES.INVALID_MONTH;
 
@@ -46,7 +42,7 @@ const useCardExpirationDate = ({ month = '', year = '' }: useCardExpirationDateP
   const getYearErrorMessage = (year: string, isExpiredDate: EXPIRED_TYPE) => {
     if (isNotNumber(year)) return EXPIRATION_DATE_ERROR_MESSAGES.NOT_NUMBER;
 
-    if (!isValidNumberLength(year, VALID_DATE_LENGTH)) return EXPIRATION_DATE_ERROR_MESSAGES.INVALID_YEAR;
+    if (year.length < VALID_DATE_LENGTH) return '';
 
     if (isExpiredDate === 'INVALID_YEAR') return EXPIRATION_DATE_ERROR_MESSAGES.EXPIRED_DATE;
 
@@ -60,19 +56,17 @@ const useCardExpirationDate = ({ month = '', year = '' }: useCardExpirationDateP
     const yearErrorMessage = getYearErrorMessage(year, isExpiredDate);
 
     setErrorMessages({ month: monthErrorMessage, year: yearErrorMessage });
-    setIsValid({ month: monthErrorMessage === '', year: yearErrorMessage === '' });
-  };
-
-  const formatMonth = (month: string) => {
-    if (isValidNumberRange(Number(month), 2, 9)) return month.padStart(2, '0');
-
-    return month;
+    setIsValid({
+      month: monthErrorMessage === '' && month.length === VALID_DATE_LENGTH,
+      year: yearErrorMessage === '' && year.length === VALID_DATE_LENGTH,
+    });
   };
 
   const handleMonthChange = (month: string) => {
-    if (!isNotNumber(month)) setDate({ ...date, month: formatMonth(month) });
+    const formattedMonth = formatMonth(month);
+    if (!isNotNumber(month)) setDate({ ...date, month: formattedMonth });
 
-    checkValidDate({ month });
+    checkValidDate({ month: formattedMonth });
   };
 
   const handleYearChange = (year: string) => {
@@ -86,8 +80,8 @@ const useCardExpirationDate = ({ month = '', year = '' }: useCardExpirationDateP
     year: date.year,
     handleMonthChange,
     handleYearChange,
-    monthErrorMessages: errorMessages.month,
-    yearErrorMessages: errorMessages.year,
+    monthErrorMessage: errorMessages.month,
+    yearErrorMessage: errorMessages.year,
     isValidMonth: isValid.month,
     isValidYear: isValid.year,
   };

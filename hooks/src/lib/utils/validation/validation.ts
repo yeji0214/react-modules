@@ -1,12 +1,14 @@
 import { EXPIRED_TYPE } from './validation.type';
 
-export const isNotNumber = (value: string) => isNaN(Number(value));
+export const isNotNumber = (value: string) => {
+  if (isNaN(Number(value))) return true;
+  if (value.length > value.trim().length) return true; // 공백이 포함되어도 숫자가 아니다.
+  return false;
+};
 
-export const isValidNumberLength = (value: string, validLength: number) =>
-  value.length === validLength;
+export const isValidNumberLength = (value: string, validLength: number) => value.length === validLength;
 
-export const isValidNumberRange = (number: number, min: number, max: number) =>
-  number >= min && number <= max;
+export const isValidNumberRange = (number: number, min: number, max: number) => number >= min && number <= max;
 
 export const validateExpiredDate = (month: string, year: string): EXPIRED_TYPE => {
   if (month.length < 2 || year.length < 2) return false;
@@ -31,8 +33,7 @@ export const NUMBER_ERROR_MESSAGES = {
 export const getNumberErrorMessage = (number: string, validLength: number) => {
   if (isNotNumber(number)) return NUMBER_ERROR_MESSAGES.NOT_NUMBER;
 
-  if (!isValidNumberLength(number, validLength))
-    return NUMBER_ERROR_MESSAGES.MAX_LENGTH(validLength);
+  if (!isValidNumberLength(number, validLength)) return NUMBER_ERROR_MESSAGES.MAX_LENGTH(validLength);
 
   return '';
 };
