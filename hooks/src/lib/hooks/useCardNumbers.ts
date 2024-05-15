@@ -1,36 +1,49 @@
 import { useState } from "react";
+import useCardBrand from "./useCardBrand";
 
-import { INPUT_REGEX } from "../constants/regex";
+import { CARD_BRANDS_INFO } from "../constants/cardBrands";
 import { ERROR_MESSAGES } from "../constants/messages";
+import { INPUT_REGEX } from "../constants/regex";
 
-function useCardNumbers(maxLength: number, inputCount = 1) {
-  const [cardNumbers, setCardNumbers] = useState(Array(inputCount).fill(""));
-  const [cardNumberErrors, setCardNumberErrors] = useState(
-    Array(inputCount).fill(false)
-  );
+function useCardNumbers() {
+  const { cardBrand, handleCardBrandChange } = useCardBrand();
 
-  const handleCardNumbersChange = (value: string, inputIndex: number) => {
-    const isValidNumber = INPUT_REGEX.cardNumber(maxLength).test(value);
+  const [cardNumbers, setCardNumbers] = useState("");
+  const [cardNumbersError, setCardNumbersError] = useState(false);
 
-    const updatedErrors = [...cardNumberErrors];
-    updatedErrors[inputIndex] = !isValidNumber;
-    setCardNumberErrors(updatedErrors);
+  const formatCardNumber = (value: string) => {
+    const cardNumbers = [...value];
+    const formattedNumbers: string[] = [];
 
-    const updatedNumbers = [...cardNumbers];
-    updatedNumbers[inputIndex] = value;
-    setCardNumbers(updatedNumbers);
+    CARD_BRANDS_INFO[cardBrand].formatting.forEach((formatIndex) => {
+      formattedNumbers.push(cardNumbers.splice(0, formatIndex).join(""));
+    });
+
+    return formattedNumbers;
+  };
+
+  const handleCardNumbersChange = (value: string) => {
+    handleCardBrandChange(value);
+
+    const isValidNumber = INPUT_REGEX.cardNumber(
+      CARD_BRANDS_INFO[cardBrand].maxLength
+    ).test(value);
+    setCardNumbersError(!isValidNumber);
+
+    setCardNumbers(value);
   };
 
   const getCardNumbersErrorMessage = () => {
-    return cardNumberErrors.some((isError) => isError)
-      ? `${maxLength}${ERROR_MESSAGES.maxLengthNumber}`
+    return cardNumbersError
+      ? `${CARD_BRANDS_INFO[cardBrand].maxLength}${ERROR_MESSAGES.maxLengthNumber}`
       : undefined;
   };
 
   return {
-    cardNumbers,
-    cardNumberErrors,
+    cardNumbers: formatCardNumber(cardNumbers),
+    cardNumbersError,
     getCardNumbersErrorMessage,
+    cardBrand,
     handleCardNumbersChange,
   };
 }
