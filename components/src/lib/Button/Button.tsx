@@ -3,12 +3,28 @@ import * as Styled from './Button.styled';
 export type ButtonSize = 'small' | 'medium' | 'large';
 export type ButtonWidth = 'fixed' | 'fit' | 'full';
 export type ButtonStyle = 'primary' | 'border' | 'text';
+
 export interface ButtonProps {
   text: string;
   onClick: () => void;
+  /**
+   * @defaultValue 'medium'
+   */
   size?: ButtonSize;
+
+  /**
+   * @defaultValue 'fixed'
+   */
   width?: ButtonWidth;
+
+  /**
+   * @defaultValue 'primary'
+   */
   buttonStyle?: ButtonStyle;
+
+  /**
+   * @defaultValue '#333333'
+   */
   primaryColor?: string;
 }
 

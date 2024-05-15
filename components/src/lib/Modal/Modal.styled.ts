@@ -1,4 +1,9 @@
-import { ButtonPosition, ModalPosition } from './Modal';
+import {
+  ButtonJustifyContent,
+  ButtonPosition,
+  ModalPosition,
+  ModalSize,
+} from './Modal';
 
 import styled from 'styled-components';
 
@@ -13,7 +18,16 @@ export const DimmedLayer = styled.div`
   background-color: rgba(0, 0, 0, 0.4);
 `;
 
-export const ModalContainer = styled.div<{ modalPosition: ModalPosition }>`
+const ModalWidth: Record<ModalSize, number> = {
+  small: 320,
+  medium: 480,
+  large: 600,
+};
+
+export const ModalContainer = styled.div<{
+  modalPosition: ModalPosition;
+  size: ModalSize;
+}>`
   position: ${(props) =>
     props.modalPosition === 'center' ? 'relative' : 'fixed'};
   inset: ${(props) =>
@@ -23,7 +37,8 @@ export const ModalContainer = styled.div<{ modalPosition: ModalPosition }>`
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: ${(props) => (props.modalPosition === 'center' ? '640px' : '')};
+  max-width: ${(props) =>
+    props.modalPosition === 'center' ? `${ModalWidth[props.size]}px` : ''};
   max-height: 80vh;
   box-sizing: border-box;
   gap: 16px;
@@ -44,6 +59,8 @@ export const ModalHeader = styled.div`
 export const ModalCloseButton = styled.img`
   width: 18px;
   height: 18px;
+
+  cursor: pointer;
 `;
 
 export const ModalTitle = styled.h2`
@@ -74,9 +91,25 @@ export const ModalDescription = styled.p`
   color: #999999;
 `;
 
-export const ButtonContainer = styled.div<{ buttonPosition: ButtonPosition }>`
+export const ModalTextBody = styled.p`
+  margin-block-start: 0;
+  margin-block-end: 0;
+
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.6;
+  text-align: left;
+  color: #333333;
+`;
+
+export const ButtonContainer = styled.div<{
+  buttonPosition: ButtonPosition;
+  buttonJustifyContent: ButtonJustifyContent;
+}>`
   display: flex;
   flex-direction: ${(props) =>
     props.buttonPosition === 'row' ? 'row-reverse' : 'column'};
+
+  justify-content: ${(props) => props.buttonJustifyContent};
   gap: 16px;
 `;

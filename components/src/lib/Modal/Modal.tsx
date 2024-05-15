@@ -1,36 +1,51 @@
 import * as Styled from './Modal.styled';
 
-import { ButtonSize, ButtonStyle, ButtonWidth } from '../Button/Button';
-
-import Button from '../Button/Button';
-import CLOSE_BUTTON from '../../asset/close-button.svg';
+import { ButtonProps } from '../Button/Button';
+import ModalFooter from './ModalFooter';
+import ModalHeader from './ModalHeader';
 import useBlockedScroll from '../hooks/useBlockedScroll';
 import useEscKeyDown from '../hooks/useEscKeyDown';
 
+export type ModalSize = 'small' | 'medium' | 'large';
 export type ModalPosition = 'center' | 'bottom';
 export type ButtonPosition = 'row' | 'column';
+export type ButtonJustifyContent = 'center' | 'left' | 'right';
 
 export interface ModalProps {
   isOpened: boolean;
   closeModal: () => void;
   title?: string;
   description?: string;
-  children?: JSX.Element;
+
+  /**
+   * @defaultValue 'large'
+   */
+  size?: ModalSize;
+
+  /**
+   * @defaultValue 'center'
+   */
   modalPosition?: ModalPosition;
+
   primaryButton?: ButtonProps;
   secondaryButton?: ButtonProps;
-  buttonPosition?: ButtonPosition;
-  primaryColor?: string;
-  showCloseButton?: boolean;
-}
 
-export interface ButtonProps {
-  text: string;
-  onClick: () => void;
-  size?: ButtonSize;
-  width?: ButtonWidth;
-  buttonStyle?: ButtonStyle;
+  /**
+   * @defaultValue 'row'
+   */
+  buttonPosition?: ButtonPosition;
+
+  /**
+   * @defaultValue 'center'
+   */
+  buttonJustifyContent?: ButtonJustifyContent;
+
   primaryColor?: string;
+
+  /**
+   * @defaultValue 'false'
+   */
+  showCloseButton?: boolean;
 }
 
 const Modal = ({
@@ -38,16 +53,33 @@ const Modal = ({
   closeModal,
   title = '',
   description = '',
+  size = 'large',
   children,
   modalPosition = 'center',
   primaryButton,
   secondaryButton,
   buttonPosition = 'row',
+  buttonJustifyContent = 'center',
   primaryColor,
   showCloseButton = false,
-}: ModalProps) => {
+}: React.PropsWithChildren<ModalProps>) => {
   useBlockedScroll(isOpened);
   useEscKeyDown(closeModal);
+
+  const modalHeaderProps = {
+    closeModal,
+    title,
+    showCloseButton,
+  };
+
+  const modalFooterProps = {
+    closeModal,
+    primaryButton,
+    secondaryButton,
+    buttonPosition,
+    buttonJustifyContent,
+    primaryColor,
+  };
 
   return (
     <>
@@ -55,49 +87,17 @@ const Modal = ({
         <Styled.DimmedLayer onClick={closeModal}>
           <Styled.ModalContainer
             modalPosition={modalPosition}
+            size={size}
             onClick={(e) => {
               e.stopPropagation();
             }}
           >
-            <Styled.ModalHeader>
-              <Styled.ModalTitle>{title}</Styled.ModalTitle>
-              {showCloseButton && (
-                <Styled.ModalCloseButton
-                  src={CLOSE_BUTTON}
-                  onClick={closeModal}
-                />
-              )}
-            </Styled.ModalHeader>
+            <ModalHeader {...modalHeaderProps} />
             <Styled.ModalBody>
               <Styled.ModalDescription>{description}</Styled.ModalDescription>
               <div>{children}</div>
             </Styled.ModalBody>
-            <Styled.ButtonContainer buttonPosition={buttonPosition}>
-              {primaryButton && (
-                <Button
-                  text={primaryButton.text}
-                  onClick={primaryButton.onClick}
-                  size={primaryButton.size || 'medium'}
-                  width={primaryButton.width || 'full'}
-                  buttonStyle={primaryButton.buttonStyle || 'primary'}
-                  primaryColor={
-                    primaryColor || primaryButton.primaryColor || '#333333'
-                  }
-                />
-              )}
-              {secondaryButton && (
-                <Button
-                  text={secondaryButton.text}
-                  onClick={secondaryButton.onClick || closeModal}
-                  size={secondaryButton.size || 'medium'}
-                  width={secondaryButton.width || 'full'}
-                  buttonStyle={secondaryButton.buttonStyle || 'border'}
-                  primaryColor={
-                    primaryColor || secondaryButton.primaryColor || '#333333'
-                  }
-                />
-              )}
-            </Styled.ButtonContainer>
+            <ModalFooter {...modalFooterProps} />
           </Styled.ModalContainer>
         </Styled.DimmedLayer>
       )}
