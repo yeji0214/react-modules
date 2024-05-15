@@ -11,6 +11,7 @@ import * as Styled from "./Modal.styled";
 export interface ModalProps extends React.PropsWithChildren {
   children?: React.ReactNode;
   isOpen: boolean;
+  size: "S" | "M" | "L";
   position: "top" | "bottom" | "center";
   onClose: () => void;
   style?: CSSProperties;
@@ -19,11 +20,13 @@ export interface ModalProps extends React.PropsWithChildren {
 const Modal: React.FC<ModalProps> & {
   ModalHeader: ModalHeaderType;
   ModalTitle: ModalTitleType;
-  ModalCloseButton: ModalButtonType;
-  ModalLongButton: ModalButtonType;
+  ModalCloseButton: ModalCloseButtonType;
+  ModalButton: ModalButtonType;
   ModalContent: ModalContentType;
+  ModalInputLabel: ModalInputLabelType;
+  ModalInput: ModalInputType;
   ModalFooter: ModalFooterType;
-} = ({ children, isOpen, position, ...restProps }) => {
+} = ({ children, isOpen, size, position, ...restProps }) => {
   const modalBackdropRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -57,18 +60,16 @@ const Modal: React.FC<ModalProps> & {
   };
 
   return (
-    <>
-      {isOpen && (
-        <Styled.ModalBackdrop
-          ref={modalBackdropRef}
-          onClick={clickBackDropHandler}
-        >
-          <Styled.ModalWrapper position={position} {...restProps}>
-            {children}
-          </Styled.ModalWrapper>
-        </Styled.ModalBackdrop>
-      )}
-    </>
+    isOpen && (
+      <Styled.ModalBackdrop
+        ref={modalBackdropRef}
+        onClick={clickBackDropHandler}
+      >
+        <Styled.ModalWrapper size={size} position={position} {...restProps}>
+          {children}
+        </Styled.ModalWrapper>
+      </Styled.ModalBackdrop>
+    )
   );
 };
 
@@ -88,19 +89,23 @@ const ModalTitle: ModalTitleType = ({ children, ...restProps }) => {
   return <Styled.ModalTitle {...restProps}>{children}</Styled.ModalTitle>;
 };
 
-type ModalButtonType = React.FC<ButtonHTMLAttributes<HTMLButtonElement>>;
+type ModalCloseButtonType = React.FC<ButtonHTMLAttributes<HTMLButtonElement>>;
 
-const ModalCloseButton: ModalButtonType = ({ children, ...restProps }) => {
+const ModalCloseButton: ModalCloseButtonType = ({ children, ...restProps }) => {
   return (
     <Styled.ModalCloseButton {...restProps}>{children}</Styled.ModalCloseButton>
   );
 };
 
-const ModalLongButton: ModalButtonType = ({ children, ...restProps }) => {
+type ModalButtonType = React.FC<
+  ButtonHTMLAttributes<HTMLButtonElement> & { size: "S" | "M" | "L" }
+>;
+
+const ModalButton: ModalButtonType = ({ size, children, ...restProps }) => {
   return (
-    <Styled.ModalLongButton type="button" {...restProps}>
+    <Styled.ModalButton size={size} type="button" {...restProps}>
       {children}
-    </Styled.ModalLongButton>
+    </Styled.ModalButton>
   );
 };
 
@@ -112,19 +117,69 @@ const ModalContent: ModalContentType = ({ children, ...restProps }) => {
   return <Styled.ModalContent {...restProps}>{children}</Styled.ModalContent>;
 };
 
-type ModalFooterType = React.FC<
-  React.PropsWithChildren<HTMLAttributes<HTMLDivElement>>
+type ModalInputLabelType = React.FC<
+  React.PropsWithChildren<
+    React.HTMLAttributes<HTMLLabelElement> & {
+      htmlFor?: string;
+    }
+  >
 >;
 
-const ModalFooter: ModalFooterType = ({ children, ...restProps }) => {
-  return <Styled.ModalFooter {...restProps}>{children}</Styled.ModalFooter>;
+const ModalInputLabel: ModalInputLabelType = ({
+  htmlFor,
+  children,
+  ...restProps
+}) => {
+  return (
+    <Styled.ModalLabel htmlFor={htmlFor} {...restProps}>
+      {children}
+    </Styled.ModalLabel>
+  );
+};
+
+type ModalInputType = React.FC<
+  React.PropsWithChildren<
+    HTMLAttributes<HTMLElement> & {
+      type: HTMLInputElement["type"];
+      placeholder?: string;
+    }
+  >
+>;
+
+const ModalInput: ModalInputType = ({
+  type,
+  placeholder,
+  children,
+  ...restProps
+}) => {
+  return (
+    <Styled.ModalInput type={type} placeholder={placeholder} {...restProps}>
+      {children}
+    </Styled.ModalInput>
+  );
+};
+
+type ModalFooterType = React.FC<
+  React.PropsWithChildren<HTMLAttributes<HTMLDivElement>> & {
+    align: "left" | "center" | "right";
+  }
+>;
+
+const ModalFooter: ModalFooterType = ({ align, children, ...restProps }) => {
+  return (
+    <Styled.ModalFooter align={align} {...restProps}>
+      {children}
+    </Styled.ModalFooter>
+  );
 };
 
 Modal.ModalHeader = ModalHeader;
 Modal.ModalTitle = ModalTitle;
 Modal.ModalCloseButton = ModalCloseButton;
-Modal.ModalLongButton = ModalLongButton;
+Modal.ModalButton = ModalButton;
 Modal.ModalContent = ModalContent;
+Modal.ModalInputLabel = ModalInputLabel;
+Modal.ModalInput = ModalInput;
 Modal.ModalFooter = ModalFooter;
 
 export default Modal;

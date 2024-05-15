@@ -13,6 +13,7 @@ export const ModalBackdrop = styled.div`
 `;
 
 export const ModalWrapper = styled.section<{
+  size: "S" | "M" | "L";
   position: "top" | "center" | "bottom";
 }>`
   position: fixed;
@@ -20,12 +21,27 @@ export const ModalWrapper = styled.section<{
   transform: translateX(-50%);
   margin: 0;
   padding: 0;
-  width: 40%;
-  height: fit-content;
+  max-height: 90%;
   background-color: white;
   box-sizing: border-box;
   border: none;
 
+  ${({ size }) => {
+    switch (size) {
+      case "S":
+        return `
+          width: 30%;
+        `;
+      case "M":
+        return `
+          width: 40%;
+        `;
+      case "L":
+        return `
+          width: 55%;
+        `;
+    }
+  }}
   ${({ position }) => {
     switch (position) {
       case "top":
@@ -44,7 +60,7 @@ export const ModalWrapper = styled.section<{
           transform: translate(-50%, -50%);
         `;
     }
-  }}
+  }};
 `;
 
 export const ModalHeader = styled.header`
@@ -71,12 +87,31 @@ export const ModalCloseButton = styled.button`
   }
 `;
 
-export const ModalLongButton = styled.button`
+export const ModalButton = styled.button<{
+  size: "S" | "M" | "L";
+}>`
   border: none;
   color: white;
   background-color: #333333;
   font-weight: bold;
-  width: 85%;
+  padding: 7px 10px;
+
+  ${({ size }) => {
+    switch (size) {
+      case "S":
+        return `
+          width: 20%;
+        `;
+      case "M":
+        return `
+          width: 50%;
+        `;
+      case "L":
+        return `
+          width: 95%;
+        `;
+    }
+  }}
 
   &:hover {
     border: none;
@@ -84,11 +119,47 @@ export const ModalLongButton = styled.button`
 `;
 
 export const ModalContent = styled.main`
-  margin: 20px 30px;
-  min-height: 40%;
+  margin: 20px 25px;
+  text-align: left;
+  max-height: 500px;
   overflow-wrap: break-word;
+  overflow-y: auto;
 `;
 
-export const ModalFooter = styled.footer`
+export const ModalLabel = styled.label`
+  font-size: 1rem;
+  font-weight: bold;
+  margin-bottom: 4px;
+  display: block;
+`;
+
+export const ModalInput = styled.input`
+  width: 95%;
+  padding: 5px 8px;
+  margin-bottom: 10px;
+`;
+
+export const ModalFooter = styled.footer<{
+  align: "left" | "center" | "right";
+}>`
   margin: 15px 5px;
+  display: flex;
+  gap: 15px;
+  
+  ${({ align }) => {
+    switch (align) {
+      case "left":
+        return `
+        justify-content: flex-start;
+      `;
+      case "center":
+        return `
+        justify-content: center;
+      `;
+      case "right":
+        return `
+        justify-content:  flex-end;
+      `;
+    }
+  }}
 `;

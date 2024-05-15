@@ -1,7 +1,11 @@
 import Modal from "./Modal";
+import AlertModal from "./AlertModal";
+import ConfirmModal from "./ConfirmModal";
+import PromptModal from "./PromptModal";
 
 import { StoryObj, Meta } from "@storybook/react";
 import { fn } from "@storybook/test";
+import { action } from "@storybook/addon-actions";
 
 const meta = {
   title: "Components/Modal",
@@ -36,6 +40,11 @@ const meta = {
         },
       },
       description: "모달 스타일을 자유롭게 정의하는 속성",
+    },
+    size: {
+      control: { type: "radio" },
+      options: ["S", "M", "L"],
+      description: "모달의 크기(너비)를 조정하는 속성",
     },
     position: {
       control: { type: "radio" },
@@ -72,15 +81,16 @@ export const 기본: Story = {
   },
   args: {
     isOpen: true,
+    size: "M",
     position: "center",
   },
 };
 
 export const 제목이_있는_모달: Story = {
   args: {
-    isOpen: true,
-    position: "center",
+    ...기본.args,
   },
+
   parameters: {
     docs: {
       description: {
@@ -102,8 +112,7 @@ export const 제목이_있는_모달: Story = {
 
 export const 상단_닫기_버튼이_있는_모달: Story = {
   args: {
-    isOpen: true,
-    position: "center",
+    ...기본.args,
     onClose: fn(),
   },
   parameters: {
@@ -115,7 +124,12 @@ export const 상단_닫기_버튼이_있는_모달: Story = {
   },
 
   render: (args) => (
-    <Modal isOpen={args.isOpen} onClose={args.onClose} position={args.position}>
+    <Modal
+      isOpen={args.isOpen}
+      onClose={args.onClose}
+      size={"M"}
+      position={args.position}
+    >
       <Modal.ModalHeader>
         <Modal.ModalTitle>올리와 썬데이</Modal.ModalTitle>
         <Modal.ModalCloseButton onClick={args.onClose}>
@@ -131,8 +145,7 @@ export const 상단_닫기_버튼이_있는_모달: Story = {
 
 export const 하단_닫기_버튼이_있는_모달: Story = {
   args: {
-    isOpen: true,
-    position: "center",
+    ...기본.args,
     onClose: fn(),
   },
   parameters: {
@@ -144,16 +157,276 @@ export const 하단_닫기_버튼이_있는_모달: Story = {
   },
 
   render: (args) => (
-    <Modal isOpen={args.isOpen} onClose={args.onClose} position={args.position}>
+    <Modal
+      isOpen={args.isOpen}
+      onClose={args.onClose}
+      size={args.size}
+      position={args.position}
+    >
       <Modal.ModalHeader>
         <Modal.ModalTitle>올리와 썬데이</Modal.ModalTitle>
       </Modal.ModalHeader>
       <Modal.ModalContent>
         <span>올리와 썬데이의 하단 닫기 버튼이 있는 모달</span>
       </Modal.ModalContent>
-      <Modal.ModalFooter>
-        <Modal.ModalLongButton>확인</Modal.ModalLongButton>
+      <Modal.ModalFooter align={"center"}>
+        <Modal.ModalButton size={"L"} onClick={args.onClose}>
+          확인
+        </Modal.ModalButton>
       </Modal.ModalFooter>
     </Modal>
   ),
+};
+
+export const S_사이즈_모달: Story = {
+  args: {
+    ...기본.args,
+    size: "S",
+    onClose: fn(),
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: "S 사이즈 모달",
+      },
+    },
+  },
+
+  render: (args) => (
+    <Modal
+      isOpen={args.isOpen}
+      onClose={args.onClose}
+      size={args.size}
+      position={args.position}
+    >
+      <Modal.ModalHeader>
+        <Modal.ModalTitle>작은 사이즈의 모달!</Modal.ModalTitle>
+      </Modal.ModalHeader>
+      <Modal.ModalContent>
+        <span>작은 모달</span>
+      </Modal.ModalContent>
+      <Modal.ModalFooter align={"center"}>
+        <Modal.ModalButton size={"L"} onClick={args.onClose}>
+          확인
+        </Modal.ModalButton>
+      </Modal.ModalFooter>
+    </Modal>
+  ),
+};
+
+export const M_사이즈_모달: Story = {
+  args: {
+    ...기본.args,
+    onClose: fn(),
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: "M 사이즈 모달",
+      },
+    },
+  },
+
+  render: (args) => (
+    <Modal
+      isOpen={args.isOpen}
+      onClose={args.onClose}
+      size={args.size}
+      position={args.position}
+    >
+      <Modal.ModalHeader>
+        <Modal.ModalTitle>보통 사이즈의 모달!</Modal.ModalTitle>
+      </Modal.ModalHeader>
+      <Modal.ModalContent>
+        <span>평범한 모달</span>
+      </Modal.ModalContent>
+      <Modal.ModalFooter align={"center"}>
+        <Modal.ModalButton size={"L"} onClick={args.onClose}>
+          확인
+        </Modal.ModalButton>
+      </Modal.ModalFooter>
+    </Modal>
+  ),
+};
+
+export const L_사이즈_모달: Story = {
+  args: {
+    ...기본.args,
+    size: "L",
+    onClose: fn(),
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: "L 사이즈 모달",
+      },
+    },
+  },
+
+  render: (args) => (
+    <Modal
+      isOpen={args.isOpen}
+      onClose={args.onClose}
+      size={args.size}
+      position={args.position}
+    >
+      <Modal.ModalHeader>
+        <Modal.ModalTitle>큰 사이즈의 모달!</Modal.ModalTitle>
+      </Modal.ModalHeader>
+      <Modal.ModalContent>
+        <span>큰 모달</span>
+      </Modal.ModalContent>
+      <Modal.ModalFooter align={"center"}>
+        <Modal.ModalButton size={"L"} onClick={args.onClose}>
+          확인
+        </Modal.ModalButton>
+      </Modal.ModalFooter>
+    </Modal>
+  ),
+};
+
+export const 알림_모달: Story = {
+  args: {
+    ...기본.args,
+    onClose: fn(),
+  },
+
+  parameters: {
+    docs: {
+      description: {
+        story: "M 사이즈 AlertModal",
+      },
+    },
+  },
+
+  render: (args) => {
+    return (
+      <AlertModal
+        isOpen={args.isOpen}
+        onClose={args.onClose}
+        title={"아이디를 입력해 주세요."}
+        content={"아이디는 필수로 입력해야 합니다."}
+        size={args.size}
+        position={args.position}
+      ></AlertModal>
+    );
+  },
+};
+
+export const 제목이_없는_알림_모달: Story = {
+  args: {
+    ...기본.args,
+    onClose: fn(),
+  },
+
+  parameters: {
+    docs: {
+      description: {
+        story: "title 없는 AlertModal",
+      },
+    },
+  },
+
+  render: (args) => {
+    return (
+      <AlertModal
+        isOpen={args.isOpen}
+        onClose={args.onClose}
+        content={"아이디는 필수로 입력해야 합니다."}
+        size={args.size}
+        position={args.position}
+      ></AlertModal>
+    );
+  },
+};
+
+export const 확인_모달: Story = {
+  args: {
+    ...기본.args,
+    onClose: fn(),
+  },
+
+  parameters: {
+    docs: {
+      description: {
+        story: "M 사이즈 ConfirmModal",
+      },
+    },
+  },
+
+  render: (args) => {
+    return (
+      <ConfirmModal
+        isOpen={args.isOpen}
+        onClose={args.onClose}
+        title={"카드를 삭제하시겠습니까?"}
+        content={"삭제하면 복구하실 수 없습니다."}
+        size={args.size}
+        position={args.position}
+        onConfirm={action("confirm-button-click")}
+      ></ConfirmModal>
+    );
+  },
+};
+
+export const 입력_모달: Story = {
+  args: {
+    ...기본.args,
+    onClose: fn(),
+  },
+
+  parameters: {
+    docs: {
+      description: {
+        story: "M 사이즈 PromptModal",
+      },
+    },
+  },
+
+  render: (args) => {
+    return (
+      <PromptModal
+        isOpen={args.isOpen}
+        onClose={args.onClose}
+        labelText={["쿠폰 번호를 입력해 주세요."]}
+        htmlFor={["coupon"]}
+        inputType={["text"]}
+        size={args.size}
+        position={args.position}
+      />
+    );
+  },
+};
+
+export const 입력이_3개인_모달: Story = {
+  args: {
+    ...기본.args,
+    onClose: fn(),
+  },
+
+  parameters: {
+    docs: {
+      description: {
+        story: "Input 필드가 3개인 PromptModal",
+      },
+    },
+  },
+
+  render: (args) => {
+    return (
+      <PromptModal
+        isOpen={args.isOpen}
+        onClose={args.onClose}
+        labelText={[
+          "아이디를 입력해 주세요.",
+          "비밀번호를 입력해 주세요.",
+          "비밀번호를 확인해주세요.",
+        ]}
+        htmlFor={["id", "pwd", "re-pwd"]}
+        inputType={["text", "password", "password"]}
+        size={args.size}
+        position={args.position}
+      />
+    );
+  },
 };
