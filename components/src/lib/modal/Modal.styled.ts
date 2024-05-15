@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { ModalProps } from './Modal';
 
 export const ModalBackdrop = styled.div`
   position: fixed;
@@ -9,24 +10,26 @@ export const ModalBackdrop = styled.div`
   align-items: center;
 `;
 
-export const ModalContentWrapper = styled.div<{
-  $position: 'top' | 'center' | 'bottom';
-}>`
+export const ModalContentWrapper = styled.div<
+  Pick<ModalProps, 'position' | 'size'>
+>`
   display: flex;
   flex-direction: column;
   gap: 16px;
   position: fixed;
   height: fit-content;
+  min-height: 10%;
   left: 50%;
   transform: translateX(-50%);
   margin: 0;
   padding: 24px 32px 24px 32px;
+  border-radius: 8px;
   background-color: white;
   box-sizing: border-box;
   border: none;
 
-  ${({ $position }) => {
-    switch ($position) {
+  ${({ position }) => {
+    switch (position) {
       case 'top':
         return `
           top: 0;
@@ -42,6 +45,32 @@ export const ModalContentWrapper = styled.div<{
           top: 50%;
           transform: translate(-50%, -50%);
         `;
+      default:
+        return `
+          top: 50%;
+          transform: translate(-50%, -50%);
+        `;
+    }
+  }}
+
+  ${({ size }) => {
+    switch (size) {
+      case 'small':
+        return `
+          width: 320px;
+        `;
+      case 'medium':
+        return `
+          width: 480px;
+        `;
+      case 'large':
+        return `
+          width: 600px;
+        `;
+      default:
+        return `
+        width: 480px;
+      `;
     }
   }}
 `;
@@ -76,23 +105,30 @@ export const ModalIconButton = styled.button<{ imgSize?: string }>`
 `;
 
 interface ModalTextButtonProps {
-  buttonSize?: string;
+  buttonWidth?: string;
+  buttonHeight?: string;
   fontSize?: string;
-  backgroudColor?: string;
-  color?: string;
+  backgroundColor?: string;
+  fontColor?: string;
 }
 
 export const ModalTextButton = styled.button<ModalTextButtonProps>`
-  width: ${({ buttonSize }) => buttonSize || '100%'};
+  width: ${({ buttonWidth }) => buttonWidth || '100%'};
+  height: ${({ buttonHeight }) => buttonHeight || '100%'};
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 10px;
   border: none;
   border-radius: 0;
   &:focus {
     outline: none;
   }
-  color: #ffffff;
-  background-color: #333333;
+  color: ${({ fontColor }) => fontColor || '#ffffff'};
+  background-color: ${({ backgroundColor }) => backgroundColor || '#333333'};
   font-size: ${({ fontSize }) => fontSize || '15px'};
+  border: 1px solid #33333340;
+  border-radius: 8px;
 `;
 
 interface ModalContentProps {
@@ -100,5 +136,25 @@ interface ModalContentProps {
 }
 
 export const ModalContent = styled.section<ModalContentProps>`
-  font-size: ${({ fontSize }) => fontSize || '15px'};
+  * {
+    box-sizing: border-box;
+  }
+  font-size: ${({ fontSize }) => fontSize || '12px'};
+`;
+
+export const ModalInput = styled.input`
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #000000;
+`;
+
+interface ModalFooterProps {
+  buttonPosition?: 'left' | 'center' | 'right';
+  buttonGap?: string;
+}
+
+export const ModalFooter = styled.div<ModalFooterProps>`
+  display: flex;
+  justify-content: ${({ buttonPosition }) => buttonPosition || 'center'};
+  gap: ${({ buttonGap }) => buttonGap || '12px'};
 `;

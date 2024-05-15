@@ -2,15 +2,17 @@ import useModalBackdropClickClose from '../hooks/useModalBackdropClickClose';
 import useModalEscClose from '../hooks/useModalEscClose';
 import useDisableBackgroundScroll from '../hooks/useDisableBackgroundScroll';
 import * as Styled from './Modal.styled';
-import React, { HTMLAttributes, CSSProperties, useRef } from 'react';
-import CloseImage from '../../assets/close.png';
+import React, { ButtonHTMLAttributes, HTMLAttributes, useRef } from 'react';
+import CloseImage from '../assets/close.png';
 
 export interface ModalProps extends React.PropsWithChildren {
   children?: React.ReactNode;
   isOpen: boolean;
   position: 'top' | 'bottom' | 'center';
-  style?: CSSProperties;
+  size?: 'small' | 'medium' | 'large';
+  style?: React.CSSProperties;
   onClose: () => void;
+  onConfirm?: () => void;
 }
 
 const Modal: React.FC<ModalProps> & {
@@ -19,8 +21,9 @@ const Modal: React.FC<ModalProps> & {
   IconButton: ModalIconButtonType;
   TextButton: ModalTextButtonType;
   Content: ModalContentType;
+  Input: ModalInputType;
   Footer: ModalFooterType;
-} = ({ children, isOpen, onClose, position, ...restProps }) => {
+} = ({ children, isOpen, onClose, position, size, ...restProps }) => {
   const modalRef = useRef(null);
 
   useModalEscClose(isOpen, onClose);
@@ -30,17 +33,16 @@ const Modal: React.FC<ModalProps> & {
   if (!isOpen) return null;
 
   return (
-    <>
-      <Styled.ModalBackdrop>
-        <Styled.ModalContentWrapper
-          ref={modalRef}
-          $position={position}
-          {...restProps}
-        >
-          {children}
-        </Styled.ModalContentWrapper>
-      </Styled.ModalBackdrop>
-    </>
+    <Styled.ModalBackdrop>
+      <Styled.ModalContentWrapper
+        ref={modalRef}
+        position={position}
+        size={size}
+        {...restProps}
+      >
+        {children}
+      </Styled.ModalContentWrapper>
+    </Styled.ModalBackdrop>
   );
 };
 
@@ -63,47 +65,54 @@ const ModalTitle: ModalTitleType = ({ children, ...restProps }) => {
 type ModalIconButtonType = React.FC<
   React.PropsWithChildren<
     {
-      onClose: () => void;
       src: string;
       imgSize?: string;
-    } & HTMLAttributes<HTMLButtonElement>
+    } & ButtonHTMLAttributes<HTMLButtonElement>
   >
 >;
 
 const ModalIconButton: ModalIconButtonType = ({
-  onClose,
-  src,
+  type = 'button',
+  src = CloseImage,
   imgSize,
   ...restProps
 }) => {
   return (
-    <Styled.ModalIconButton onClick={onClose} {...restProps}>
-      <img src={src || CloseImage} style={{ width: imgSize }} />
+    <Styled.ModalIconButton type={type} {...restProps}>
+      <img src={src} style={{ width: imgSize }} />
     </Styled.ModalIconButton>
   );
 };
 
+interface ModalTextButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  buttonWidth?: string;
+  buttonHeight?: string;
+  fontSize?: string;
+  backgroundColor?: string;
+  fontColor?: string;
+}
+
 type ModalTextButtonType = React.FC<
-  React.PropsWithChildren<
-    {
-      onClose: () => void;
-      buttonSize?: string;
-      fontSize?: string;
-    } & HTMLAttributes<HTMLButtonElement>
-  >
+  React.PropsWithChildren<ModalTextButtonProps>
 >;
 
 const ModalTextButton: ModalTextButtonType = ({
-  onClose,
-  buttonSize,
+  type = 'button',
+  buttonWidth,
+  buttonHeight,
   fontSize,
+  backgroundColor,
+  fontColor,
   ...restProps
 }) => {
   return (
     <Styled.ModalTextButton
-      onClick={onClose}
-      buttonSize={buttonSize}
+      type={type}
+      buttonWidth={buttonWidth}
+      buttonHeight={buttonHeight}
       fontSize={fontSize}
+      backgroundColor={backgroundColor}
+      fontColor={fontColor}
       {...restProps}
     ></Styled.ModalTextButton>
   );
@@ -117,12 +126,38 @@ const ModalContent: ModalContentType = ({ children, ...restProps }) => {
   return <Styled.ModalContent {...restProps}>{children}</Styled.ModalContent>;
 };
 
-type ModalFooterType = React.FC<
-  React.PropsWithChildren<HTMLAttributes<HTMLDivElement>>
+type ModalInputType = React.FC<
+  React.PropsWithChildren<HTMLAttributes<HTMLElement>>
 >;
 
-const ModalFooter: ModalFooterType = ({ children, ...restProps }) => {
-  return <footer {...restProps}>{children}</footer>;
+const ModalInput: ModalInputType = ({ ...restProps }) => {
+  return <Styled.ModalInput {...restProps}></Styled.ModalInput>;
+};
+
+type ModalFooterType = React.FC<
+  React.PropsWithChildren<
+    {
+      buttonPosition?: 'left' | 'center' | 'right';
+      buttonGap?: string;
+    } & HTMLAttributes<HTMLDivElement>
+  >
+>;
+
+const ModalFooter: ModalFooterType = ({
+  children,
+  buttonPosition,
+  buttonGap,
+  ...restProps
+}) => {
+  return (
+    <Styled.ModalFooter
+      buttonPosition={buttonPosition}
+      buttonGap={buttonGap}
+      {...restProps}
+    >
+      {children}
+    </Styled.ModalFooter>
+  );
 };
 
 Modal.Header = ModalHeader;
@@ -130,6 +165,7 @@ Modal.Title = ModalTitle;
 Modal.IconButton = ModalIconButton;
 Modal.TextButton = ModalTextButton;
 Modal.Content = ModalContent;
+Modal.Input = ModalInput;
 Modal.Footer = ModalFooter;
 
 export default Modal;
