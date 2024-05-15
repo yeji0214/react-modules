@@ -2,7 +2,7 @@ import { renderHook } from '@testing-library/react';
 import { ChangeEvent, act } from 'react';
 import useCardCompany from './useCardCompany';
 describe('useCardCompany 테스트', () => {
-  it('초기값이 정확하게 설정되어야 한다.', () => {
+  it('카드 회사 이름의 초기값 설정 시, 정확하게 설정되어야 한다.', () => {
     const initialValue = 'BC카드';
     const { result } = renderHook(() => useCardCompany(initialValue));
 
@@ -22,7 +22,7 @@ describe('useCardCompany 테스트', () => {
     expect(result.current.error.state).toBeTruthy();
   });
 
-  it('올바른 값이 입력되었을 때 유효성 상태가 true가 된다.', () => {
+  it('유효한 카드사가 입력, 선택되었을 때 유효성 상태가 true가 된다.', () => {
     const userInput = 'BC카드';
     const { result } = renderHook(() => useCardCompany());
 

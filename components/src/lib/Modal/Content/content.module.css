@@ -1,0 +1,20 @@
+:global(.content) {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: absolute;
+  padding: 24px 32px;
+  background-color: #fff;
+}
+
+.small {
+  width: 320px;
+}
+
+.medium {
+  width: 480px;
+}
+
+.large {
+  width: 600px;
+}
