@@ -1,0 +1,51 @@
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+}
+
+.modalBody {
+  margin: 16px 0px;
+  flex-grow: 1;
+  overflow-y: auto;
+  font-size: 14px;
+}
+
+.modalFooter {
+  display: flex;
+}
+
+.modalFooter.row {
+  flex-direction: row;
+  align-items: center;
+  column-gap: 8px;
+}
+
+.modalFooter.column {
+  flex-direction: column;
+  justify-content: center;
+  row-gap: 8px;
+}
+
+.modalFooter.row.left {
+  justify-content: flex-start;
+}
+
+.modalFooter.row.center {
+  justify-content: center;
+}
+
+.modalFooter.row.right {
+  justify-content: flex-end;
+}
+
+.modalFooter.column.left {
+  align-items: start;
+}
+
+.modalFooter.column.center {
+  align-items: center;
+}
+
+.modalFooter.column.right {
+  align-items: end;
+}

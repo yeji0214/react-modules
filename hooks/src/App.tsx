@@ -6,11 +6,12 @@ import {
   useCardOwnerName,
   useCardCVC,
   useCardPassword,
+  useCardExpirationDate,
 } from './lib';
 
 function App() {
-  const cardNumbers = useCardNumber(4, 4);
-  const cardNumbers2 = useCardNumber(1, 16);
+  const cardNumber = useCardNumber();
+  const cardExpirationDate = useCardExpirationDate();
   const cardCompany = useCardCompany(['신한카드', '롯데카드', 'BC카드']);
   const cardOwnerName = useCardOwnerName();
   const cardCVC = useCardCVC();
@@ -23,37 +24,29 @@ function App() {
         <h3>useCardNumber</h3>
         <input
           type="text"
-          value={cardNumbers.cardNumber[0]}
-          onChange={(e) => cardNumbers.handleCardNumberChange(e.target.value, 0)}
-        ></input>
-        <input
-          type="text"
-          value={cardNumbers.cardNumber[1]}
-          onChange={(e) => cardNumbers.handleCardNumberChange(e.target.value, 1)}
-        ></input>
-        <input
-          type="text"
-          value={cardNumbers.cardNumber[2]}
-          onChange={(e) => cardNumbers.handleCardNumberChange(e.target.value, 2)}
-        ></input>
-        <input
-          type="text"
-          value={cardNumbers.cardNumber[3]}
-          onChange={(e) => cardNumbers.handleCardNumberChange(e.target.value, 3)}
+          value={cardNumber.cardNumber}
+          onChange={(e) => cardNumber.handleCardNumberChange(e.target.value)}
         ></input>
         <div>
-          <p>{`${cardNumbers.isValidCardNumbers}`}</p>
-          <p>{cardNumbers.cardNumberErrorMessages}</p>
+          <p>{cardNumber.cardType}</p>
+          <p>{`${cardNumber.isValidCardNumber}`}</p>
+          <p>{cardNumber.cardNumberErrorMessage}</p>
         </div>
-        <h3>useCardNumber2</h3>
+        <h3>useCardExpirationDate</h3>
         <input
           type="text"
-          value={cardNumbers2.cardNumber[0]}
-          onChange={(e) => cardNumbers2.handleCardNumberChange(e.target.value, 0)}
+          value={cardExpirationDate.month}
+          onChange={(e) => cardExpirationDate.handleMonthChange(e.target.value)}
+        ></input>
+        <input
+          type="text"
+          value={cardExpirationDate.year}
+          onChange={(e) => cardExpirationDate.handleYearChange(e.target.value)}
         ></input>
         <div>
-          <p>{`${cardNumbers2.isValidCardNumbers}`}</p>
-          <p>{cardNumbers2.cardNumberErrorMessages}</p>
+          <p>{`${cardExpirationDate.isValidMonth} ${cardExpirationDate.isValidYear}`}</p>
+          <p>{cardExpirationDate.monthErrorMessages}</p>
+          <p>{cardExpirationDate.yearErrorMessages}</p>
         </div>
         <h3>useCardCompany</h3>
         <select onChange={(e) => cardCompany.handleCardCompanyChange(e.target.value)}>
@@ -79,11 +72,7 @@ function App() {
           <p>{cardOwnerName.ownerNameErrorMessage}</p>
         </div>
         <h3>useCardCVC</h3>
-        <input
-          type="text"
-          value={cardCVC.cvcNumber}
-          onChange={(e) => cardCVC.handleCVCNumberChange(e.target.value)}
-        />
+        <input type="text" value={cardCVC.cvcNumber} onChange={(e) => cardCVC.handleCVCNumberChange(e.target.value)} />
         <div>
           <p>{cardCVC.isValidCVCNumber ? 'true' : 'false'}</p>
           <p>{cardCVC.cvcNumberErrorMessage}</p>

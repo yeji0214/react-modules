@@ -1,41 +1,43 @@
 import { useState } from 'react';
+import { formatCardNumber, getCardType } from '../../utils/card/card';
 import { getNumberErrorMessage, isNotNumber } from '../../utils/validation/validation';
-import { updateArray } from '../../utils/updateArray';
+import type { CardType } from '../../utils/card/card.type';
+import { CARD_TYPE } from '../../constants/Condition';
 
-export const VALID_CARD_NUMBER_LENGTH = 16;
+const useCardNumber = (initialValue: string = '') => {
+  const [cardNumber, setCardNumber] = useState(initialValue);
+  const [isValidCardNumber, setIsValidCardNumber] = useState(false);
+  const [cardNumberErrorMessage, setCardNumberErrorMessage] = useState('');
 
-const useCardNumber = (
-  unitCount: number,
-  singleUnitLength: number,
-  initialValue: string[] | null = null
-) => {
-  const [cardNumber, setCardNumber] = useState<string[]>(
-    initialValue || new Array(unitCount).fill('')
-  );
-  const [isValidCardNumbers, setIsValidCardNumbers] = useState<boolean[]>(
-    new Array(unitCount).fill(false)
-  );
-  const [cardNumberErrorMessages, setCardNumberErrorMessages] = useState<string[]>(
-    new Array(unitCount).fill('')
-  );
+  const [cardType, setCardType] = useState(getCardType(initialValue));
 
-  const handleCardNumberChange = (number: string, index: number) => {
-    if (number.length > singleUnitLength) return;
+  const validateCardNumber = (cardType: CardType, number: string) => {
+    const errorMessage = getNumberErrorMessage(number, CARD_TYPE[cardType].VALID_LENGTH);
 
-    const errorMessage = getNumberErrorMessage(number, singleUnitLength);
-    setCardNumberErrorMessages(updateArray(cardNumberErrorMessages, errorMessage, index));
+    setCardNumberErrorMessage(errorMessage);
+    setIsValidCardNumber(!errorMessage);
+  };
 
-    if (isNotNumber(number)) return;
+  const handleCardNumberChange = (number: string) => {
+    const cleanNumber = number.replace(/\s/g, '');
+    const newCardType = getCardType(cleanNumber);
 
-    setIsValidCardNumbers(updateArray(isValidCardNumbers, !errorMessage, index));
-    setCardNumber(updateArray(cardNumber, number, index));
+    if (cleanNumber.length > CARD_TYPE[newCardType].VALID_LENGTH) return;
+
+    validateCardNumber(newCardType, cleanNumber);
+
+    if (isNotNumber(cleanNumber)) return;
+
+    setCardType(newCardType);
+    setCardNumber(formatCardNumber(newCardType, cleanNumber));
   };
 
   return {
     cardNumber,
+    cardType,
+    isValidCardNumber,
+    cardNumberErrorMessage,
     handleCardNumberChange,
-    isValidCardNumbers,
-    cardNumberErrorMessages,
   };
 };
 
