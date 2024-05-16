@@ -1,23 +1,29 @@
-import { CloseButtonImage } from './CloseButtonImage';
-import { CloseButtonProps, SubtitleProps, TitleProps } from './interfaces';
+import { CloseButtonImage } from '../CloseButtonImage';
+import { CloseButtonProps, SubtitleProps, TitleProps } from '../interfaces';
 import styles from './ModalHeader.module.css';
 
-interface ModalHeaderProps {
+export interface ModalHeaderProps {
   title?: TitleProps;
   subtitle?: SubtitleProps;
   closeButton: CloseButtonProps;
 }
 
 const ModalHeader = ({ title, subtitle, closeButton }: ModalHeaderProps) => {
+  const TitleElement = (title && title.as) || 'h3';
+  const SubtitleElement = (subtitle && subtitle.as) || 'h4';
+
   return (
     <div className={styles['header']}>
-      <span aria-label={'모달 닫기 버튼'} className={styles['button-close']} onClick={closeButton.onClose}>
-        <CloseButtonImage />
-      </span>
+      {closeButton.display && (
+        <button aria-label={'모달 닫기 버튼'} className={styles['button-close']} onClick={closeButton.onClose}>
+          <CloseButtonImage />
+        </button>
+      )}
+
       <div className={styles['title-field']}>
         {title && (
           <>
-            <h3
+            <TitleElement
               style={{
                 textAlign: `${title.position || 'center'}`,
                 fontSize: title.fontSize || '18px',
@@ -26,9 +32,9 @@ const ModalHeader = ({ title, subtitle, closeButton }: ModalHeaderProps) => {
               className={styles['title']}
             >
               {title.content}
-            </h3>
+            </TitleElement>
             {subtitle && (
-              <h4
+              <SubtitleElement
                 style={{
                   textAlign: `${title.position || 'center'}`,
                   fontSize: subtitle.fontSize || '12px',
@@ -37,7 +43,7 @@ const ModalHeader = ({ title, subtitle, closeButton }: ModalHeaderProps) => {
                 className={styles['subtitle']}
               >
                 {subtitle.content}
-              </h4>
+              </SubtitleElement>
             )}
           </>
         )}

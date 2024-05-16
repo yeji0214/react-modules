@@ -3,7 +3,8 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: flex-start;
-  margin: 15px;
+  margin-bottom: 15px;
+  width: 100%;
 }
 
 .title-field {
@@ -32,6 +33,9 @@
   width: 15px;
   height: 15px;
 
+  background-color: inherit;
   position: absolute;
-  right: 15px;
+  right: 32px;
+
+  cursor: pointer;
 }
