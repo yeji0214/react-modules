@@ -2,8 +2,14 @@ import { useState } from "react";
 import { ValidationResult } from "../../type";
 import { ERROR_MESSAGE } from "../constants/errorMessage";
 
-export function usePassword(): [string, (value: string) => void, ValidationResult] {
-  const [password, setPassword] = useState("");
+type UsePasswordResult = {
+  cardPassword: string;
+  handleCardPasswordChange: (value: string) => void;
+  cardPasswordValidation: ValidationResult;
+};
+
+export default function usePassword(): UsePasswordResult {
+  const [cardPassword, setCardPassword] = useState("");
   const [isTouched, setIsTouched] = useState(false);
 
   function validatePassword(value: string): ValidationResult {
@@ -14,7 +20,7 @@ export function usePassword(): [string, (value: string) => void, ValidationResul
 
     // 입력된 문자열이 숫자가 아니라면 에러 발생
     if (!/^\d+$/.test(value) && isTouched) {
-      return { isValid: false, errorMessage: ERROR_MESSAGE.CARD_PASSWORD.INVALID_CHARACTERS };
+      return { isValid: false, errorMessage: ERROR_MESSAGE.CARD_PASSWORD.INVALID_NUMBERS };
     }
 
     // 입력된 문자열이 1부터 99 사이의 2자리가 아니라면 에러 발생
@@ -25,10 +31,14 @@ export function usePassword(): [string, (value: string) => void, ValidationResul
     return { isValid: true };
   }
 
-  function handlePasswordChange(value: string) {
+  function handleCardPasswordChange(value: string) {
     if (!isTouched) setIsTouched(true);
-    setPassword(value);
+    setCardPassword(value);
   }
 
-  return [password, handlePasswordChange, validatePassword(password)];
+  return {
+    cardPassword,
+    handleCardPasswordChange,
+    cardPasswordValidation: validatePassword(cardPassword),
+  };
 }

@@ -1,18 +1,23 @@
-import { ButtonWrapper } from "./Button.style";
+import { StyledDarkButton, StyledLightButton } from "./Button.style";
 
 export interface ButtonProps {
-  content: string;
-  backgroundColor: string;
-  fontColor: string;
   onClick: React.MouseEventHandler<HTMLButtonElement>;
+  children: React.ReactNode;
+  style?: React.CSSProperties;
 }
 
-const Button = ({ content, backgroundColor, fontColor, onClick }: ButtonProps) => {
+export const DarkButton = ({ children, onClick, style }: ButtonProps) => {
   return (
-    <ButtonWrapper backgroundColor={backgroundColor} fontColor={fontColor} onClick={onClick}>
-      {content}
-    </ButtonWrapper>
+    <StyledDarkButton onClick={onClick} style={style}>
+      {children}
+    </StyledDarkButton>
   );
 };
 
-export default Button;
+export const LightButton = ({ children, onClick, style }: ButtonProps) => {
+  return (
+    <StyledLightButton onClick={onClick} style={style}>
+      {children}
+    </StyledLightButton>
+  );
+};

@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { ModalProps } from "./Modal";
+import { ModalProps } from "./types";
 
 interface ModalDimProps {
   isOpen: boolean;
@@ -16,7 +16,9 @@ export const ModalDim = styled.div<ModalDimProps>`
   z-index: 1000;
 `;
 
-export const ModalContainer = styled.div<Pick<ModalProps, "modalPosition" | "closeButtonPosition">>`
+export const ModalContainer = styled.div<
+  Pick<ModalProps, "modalPosition" | "closeButtonPosition" | "size">
+>`
   display: flex;
   z-index: 1001;
   flex-direction: column;
@@ -32,14 +34,20 @@ export const ModalContainer = styled.div<Pick<ModalProps, "modalPosition" | "clo
   background: rgba(255, 255, 255, 1);
   color: rgba(0, 0, 0, 1);
 
-  ${({ modalPosition }) => {
+  ${({ modalPosition, size }) => {
+    const sizeMap = {
+      small: "320px",
+      medium: "480px",
+      large: "600px",
+    };
+
     switch (modalPosition) {
       case "center":
         return `
           top: 50%;
           left: 50%;
           transform: translate(-50%, -50%);
-          width: 304px;
+          width: ${sizeMap[size] || "320px"};
         `;
       case "bottom":
         return `
@@ -73,4 +81,16 @@ export const ModalHeader = styled.div`
     overflow: hidden;
     text-overflow: ellipsis;
   }
+`;
+
+export const ModalContent = styled.div`
+  flex: 1;
+  overflow-y: auto;
+`;
+
+export const ModalButtonGroup = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 16px;
 `;

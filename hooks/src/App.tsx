@@ -1,8 +1,10 @@
 import {
+  identifyCardBrand,
   useCVC,
   useCardHolder,
   useCardIssuer,
   useCardNumber,
+  useCardNumberFormat,
   useExpiryDate,
   usePassword,
 } from "choco-payments-validation-hooks";
@@ -12,14 +14,12 @@ import "./App.css";
 const cardNames = ["현대카드", "국민카드", "신한카드", "우리카드"];
 
 function App() {
-  const [cardHolder, handleCardHolderChange, cardHolderValidation] = useCardHolder();
-  const [cardPassword, handleCardPasswordChange, cardPasswordValidation] = usePassword();
-  const [cardCVC, handleCardCVCChange, cardCVCValidation] = useCVC();
-  const [cardExpiryDate, handleCardExpiryDateChange, cardExpiryDateValidation] = useExpiryDate();
-  const [cardNumbers, handleCardNumbersChange, cardNumbersValidation] = useCardNumber();
-  const [cardIssuer, handleCardIssuerChange, cardIssuerValidation] = useCardIssuer();
-
-  const cardNumberKeys = Object.keys(cardNumbers) as Array<keyof typeof cardNumbers>;
+  const { cardCVC, handleCardCVCChange, cardCVCValidation } = useCVC();
+  const { cardHolder, handleCardHolderChange, cardHolderValidation } = useCardHolder();
+  const { cardIssuer, handleCardIssuerChange, cardIssuerValidation } = useCardIssuer();
+  const { cardNumbers, handleCardNumbersChange, cardNumbersValidation } = useCardNumber();
+  const { cardExpiryDate, handleCardExpiryDateChange, cardExpiryDateValidation } = useExpiryDate();
+  const { cardPassword, handleCardPasswordChange, cardPasswordValidation } = usePassword();
 
   return (
     <>
@@ -84,18 +84,20 @@ function App() {
 
       <div>
         <label htmlFor="cardNumber">Card Number:</label>
-        {cardNumberKeys.map((key, index) => (
-          <input
-            key={index}
-            type="text"
-            id={`cardNumber-${index}`}
-            value={cardNumbers[key]}
-            onChange={(e) => handleCardNumbersChange(key, e.target.value)}
-          />
-        ))}
+        <input
+          type="text"
+          id={"cardNumber"}
+          value={cardNumbers}
+          onChange={(e) => handleCardNumbersChange(e.target.value)}
+        />
         {!cardNumbersValidation.isValid && (
           <span style={{ color: "red" }}>{cardNumbersValidation.errorMessage}</span>
         )}
+      </div>
+
+      <div>
+        <p>Card Brand Identification: {identifyCardBrand(cardNumbers)}</p>
+        <p>Card Number Format: {useCardNumberFormat(cardNumbers)}</p>
       </div>
 
       <div>

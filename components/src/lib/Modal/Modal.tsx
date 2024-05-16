@@ -1,47 +1,43 @@
-import React from "react";
-import CloseButton from "../CloseButton/CloseButton";
-import Button from "../common/Button";
-import { ModalContainer, ModalDim, ModalHeader } from "./Modal.style";
-
-export interface ModalProps {
-  modalPosition: "center" | "bottom";
-  title: string;
-  children: React.ReactNode;
-  closeButtonPosition: "top" | "bottom";
-  isOpen: boolean;
-  onClose: (e: React.MouseEvent<HTMLDivElement | HTMLButtonElement>) => void;
-}
+import { DarkButton, LightButton } from "../common/Button";
+import { ModalContainer, ModalDim, ModalHeader, ModalContent } from "./Modal.style";
+import { ModalProps } from "./types";
+import { ButtonSet } from "./ButtonSet";
 
 export const Modal = ({
   modalPosition,
   title,
   children,
-  closeButtonPosition,
   isOpen,
   onClose,
+  onConfirm,
+  size,
+  modalType,
+  closeButtonPosition,
 }: ModalProps) => {
   if (!isOpen) return null;
 
   return (
     <ModalDim isOpen={isOpen} onClick={onClose}>
-      <ModalContainer modalPosition={modalPosition} closeButtonPosition={closeButtonPosition}>
+      <ModalContainer
+        modalPosition={modalPosition}
+        size={size}
+        onClick={(e) => e.stopPropagation()}
+      >
         <ModalHeader>
           <h1>{title}</h1>
-          {closeButtonPosition === "top" && (
-            <CloseButton onClick={(e) => onClose(e)}>
-              <img src="/public/image/closeButton.png" />
-            </CloseButton>
+          {!modalType && closeButtonPosition === "top" && (
+            <LightButton onClick={onClose} style={{ width: "26px", height: "26px", padding: "0" }}>
+              <img src="/public/image/closeButton.png" alt="Close" />
+            </LightButton>
           )}
         </ModalHeader>
-        {children}
-        {closeButtonPosition === "bottom" && (
-          <Button
-            content="닫기"
-            backgroundColor="rgba(255, 255, 255, 1)"
-            fontColor="rgba(139, 149, 161, 1)"
-            onClick={(e) => onClose(e)}
-          />
+        <ModalContent>{children}</ModalContent>
+        {!modalType && closeButtonPosition === "bottom" && (
+          <DarkButton onClick={onClose} style={{ width: "100%", height: "40px" }}>
+            닫기
+          </DarkButton>
         )}
+        <ButtonSet modalType={modalType} onClose={onClose} onConfirm={onConfirm} />
       </ModalContainer>
     </ModalDim>
   );
