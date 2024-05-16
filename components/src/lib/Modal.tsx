@@ -1,45 +1,69 @@
-import { ReactNode, MouseEvent, CSSProperties, useEffect } from "react";
+import { MouseEvent, PropsWithChildren, useEffect } from "react";
 import "./Modal.css";
+import { ModalContentProps, ModalFooterProps, ModalHeaderProps, ModalMainProps } from "./type/modal.type";
 
-interface ModalMainProps {
-  onClose: () => void;
-  isOpen: boolean;
-  position?: "center" | "bottom";
-  className?: string;
-  zIndex?: number;
-  customStyle?: CSSProperties;
-  children?: string | ReactNode;
-  portalRoot?: HTMLElement | null;
-}
+export const ModalHeader = ({ children, ...rest }: PropsWithChildren<ModalHeaderProps>) => {
+  return (
+    <header
+      {...rest}
+      className="modal-header"
+    >
+      {children}
+    </header>
+  );
+};
 
-export function ModalMain({ onClose, isOpen, position = "center", className = "", zIndex = 999, customStyle = {}, children, portalRoot = document.body }: ModalMainProps) {
-  if (!portalRoot) portalRoot = document.body;
+export const ModalContent = ({ children, ...rest }: PropsWithChildren<ModalContentProps>) => {
+  return (
+    <section
+      {...rest}
+      className="modal-content"
+    >
+      {children}
+    </section>
+  );
+};
 
+export const ModalFooter = ({ children, ...rest }: PropsWithChildren<ModalFooterProps>) => {
+  return (
+    <footer
+      {...rest}
+      className="modal-footer"
+    >
+      {children}
+    </footer>
+  );
+};
+
+export const ModalMain = ({ isOpen, onClose, size = "medium", position = "center", className = "", zIndex = 999, children, portalRoot = document.body, ...rest }: PropsWithChildren<ModalMainProps>) => {
   useEffect(() => {
-    portalRoot.style.overflow = isOpen ? "hidden" : "auto";
+    if (portalRoot) {
+      portalRoot.style.overflow = isOpen ? "hidden" : "auto";
+    }
   }, [isOpen, portalRoot]);
-
-  if (!isOpen) return null;
-
-  portalRoot.style.overflow = isOpen ? "hidden" : "auto";
 
   const handleModalContainerClick = (event: MouseEvent<HTMLDivElement>) => {
     event.stopPropagation();
   };
 
+  if (!isOpen) return null;
+
   return (
-    <div className="modal-container">
+    <div
+      className="modal-container"
+      {...rest}
+    >
       <div
         className="back-drop"
         onClick={onClose}
       ></div>
       <div
-        className={`modal-content-container ${position} ${className}`}
-        style={{ zIndex, ...customStyle }}
+        className={`modal-content-container ${position} ${size} ${className}`}
+        style={{ zIndex }}
         onClick={handleModalContainerClick}
       >
         {children}
       </div>
     </div>
   );
-}
+};

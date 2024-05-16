@@ -3,9 +3,8 @@ const ERROR_MESSAGE = Object.freeze({
   ONLY_NUMBER: "숫자만 입력해주세요.",
   ONLY_ENGLISH: "영어만 입력해주세요.",
 
-  INVALID_CARD_NUMBER_LENGTH: "숫자 4자리를 입력해주세요.",
-  INVALID_MONTH_LENGTH: "월은 숫자 2자리입니다.",
-  INVALID_YEAR_LENGTH: "연도는 숫자 2자리입니다.",
+  INVALID_CARD_NUMBER_LENGTH: (name: string, matchedLength: number) => `${name} 카드 번호 ${matchedLength}자리를 입력해주세요.`,
+  INVALID_DATE_LENGTH: "월과 년도는 숫자 2자리입니다.",
   INVALID_CVC_LENGTH: "CVC는 숫자 3자리입니다.",
   INVALID_PASSWORD_LENGTH: "비밀번호는 숫자 2자리입니다.",
   INVALID_HOLDER_LENGTH: "사용자 이름은 최대 21자까지 입력할 수 있습니다.",

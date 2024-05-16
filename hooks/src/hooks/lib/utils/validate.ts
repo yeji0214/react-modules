@@ -4,11 +4,11 @@ const validator = {
   },
 
   isValidDigit: (value: string) => {
-    return /^\d+$/.test(value);
+    return /^[\d\s]+$/.test(value);
   },
 
   isEnglish: (value: string) => {
-    return /^[a-zA-Z\s]+$/.test(value);
+    return /^[a-zA-Z]+(\s[a-zA-Z]+)*\s?$/.test(value);
   },
 
   isValidLength: ({ value, matchedLength }: { value: string; matchedLength: number }) => {
