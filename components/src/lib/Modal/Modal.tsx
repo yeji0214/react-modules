@@ -1,30 +1,30 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
-import ModalContent from "./ModalContent";
 import ModalBackDrop from "./ModalBackDrop";
+import ModalContent from "./ModalContent";
 import ModalHeader from "./ModalHeader";
 import ModalTitle from "./ModalTitle";
 import ModalCloseButton from "./ModalCloseButton";
+import ModalForm from "./ModalForm";
+import ModalInput from "./ModalInput";
 import ModalFooter from "./ModalFooter";
 import ModalButton from "./ModalButton";
 
 import useBlockScroll from "../hooks/useBlockScroll";
 import useKeyDown from "../hooks/useKeyDown";
 
-export interface ModalProps extends React.HTMLAttributes<HTMLElement> {
-  children: React.ReactNode;
-  isOpen: boolean;
-  onClose: () => void;
-}
+import { DEVICE_WIDTH, MODAL_BORDER_RADIUS, MODAL_POSITION } from "../constants/modal";
 
-const Modal = ({ children, isOpen, onClose }: ModalProps) => {
+import { Device, ModalPosition, ModalProps } from "../types/modal";
+
+const Modal = ({ children, isOpen, position = "center", device, onClose }: ModalProps) => {
   useKeyDown("Escape", onClose);
 
   useBlockScroll(isOpen);
 
   return (
     isOpen && (
-      <StyledModal>
+      <StyledModal $position={position} $device={device}>
         <ModalBackDrop onClose={onClose} />
         {children}
       </StyledModal>
@@ -32,17 +32,46 @@ const Modal = ({ children, isOpen, onClose }: ModalProps) => {
   );
 };
 
-Modal.ModalContent = ModalContent;
 Modal.ModalHeader = ModalHeader;
 Modal.ModalTitle = ModalTitle;
 Modal.ModalCloseButton = ModalCloseButton;
+Modal.ModalContent = ModalContent;
+Modal.ModalForm = ModalForm;
+Modal.ModalInput = ModalInput;
 Modal.ModalFooter = ModalFooter;
 Modal.ModalButton = ModalButton;
 
 export default Modal;
 
-const StyledModal = styled.section`
-  position: relative;
-
+const StyledModal = styled.section<{ $position: ModalPosition; $device?: Device }>`
   height: 100vh;
+  width: 100%;
+  position: fixed;
+  inset: 0;
+
+  display: flex;
+  justify-content: center;
+  align-items: ${({ $position }) => MODAL_POSITION[$position]};
+  margin: auto;
+
+  & > div:nth-child(2) {
+    border-radius: ${({ $position }) => MODAL_BORDER_RADIUS[$position]};
+  }
+
+  ${({ $device }) =>
+    $device
+      ? css`
+          max-width: ${DEVICE_WIDTH[$device]};
+        `
+      : css`
+          @media (min-width: 375px) {
+            max-width: 375px;
+          }
+          @media (min-width: 768px) {
+            max-width: 768px;
+          }
+          @media (min-width: 1024px) {
+            max-width: 100%;
+          }
+        `};
 `;
