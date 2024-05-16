@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import Modal from './Modal';
-import ModalButton from './ModalButton/ModalButton';
 
 const meta = {
   title: 'Modal',
@@ -17,23 +16,6 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     isOpen: true,
-    title: '모달 테스트',
-    position: 'center',
-    hasCloseButton: true,
-    footerButtons: [
-      <ModalButton
-        key="primary-button"
-        text="Primary Button"
-        style="primary"
-        onClick={() => alert('Clicked primary button!')}
-      />,
-      <ModalButton
-        key="secondary-button"
-        text="Secondary Button"
-        style="secondary"
-        onClick={() => alert('Clicked secondary button!')}
-      />,
-    ],
     onClose: () => alert('"onClose" method called!'),
     children: null,
   },
@@ -44,7 +26,27 @@ export const CenterModal: Story = {
   render: (args) => {
     return (
       <Modal {...args}>
-        <div>contents</div>
+        <Modal.Header
+          title="Center Modal"
+          onClose={() => alert('close!')}
+        />
+        <Modal.Content>
+          <div>contents</div>
+        </Modal.Content>
+        <Modal.Footer>
+          <Modal.Footer.Button
+            style="primary"
+            onClick={() => alert('Clicked primary button!')}
+          >
+            Primary Button
+          </Modal.Footer.Button>
+          <Modal.Footer.Button
+            style="secondary"
+            onClick={() => alert('Clicked secondary button!')}
+          >
+            Secondary Button
+          </Modal.Footer.Button>
+        </Modal.Footer>
       </Modal>
     );
   },
@@ -55,7 +57,120 @@ export const BottomModal: Story = {
   render: (args) => {
     return (
       <Modal {...args}>
-        <div>contents</div>
+        <Modal.Header
+          title="Center Modal"
+          onClose={() => alert('close!')}
+        />
+        <Modal.Content>
+          <div>contents</div>
+        </Modal.Content>
+        <Modal.Footer>
+          <Modal.Footer.Button
+            style="primary"
+            onClick={() => alert('Clicked primary button!')}
+          >
+            Primary Button
+          </Modal.Footer.Button>
+          <Modal.Footer.Button
+            style="secondary"
+            onClick={() => alert('Clicked secondary button!')}
+          >
+            Secondary Button
+          </Modal.Footer.Button>
+        </Modal.Footer>
+      </Modal>
+    );
+  },
+};
+
+export const SmallModal: Story = {
+  args: { ...Default.args, size: 'small' },
+  render: (args) => {
+    return (
+      <Modal {...args}>
+        <Modal.Header
+          title="Small Modal"
+          onClose={() => alert('close!')}
+        />
+        <Modal.Content>
+          <div>contents</div>
+        </Modal.Content>
+        <Modal.Footer>
+          <Modal.Footer.Button
+            style="primary"
+            onClick={() => alert('Clicked primary button!')}
+          >
+            Primary Button
+          </Modal.Footer.Button>
+          <Modal.Footer.Button
+            style="secondary"
+            onClick={() => alert('Clicked secondary button!')}
+          >
+            Secondary Button
+          </Modal.Footer.Button>
+        </Modal.Footer>
+      </Modal>
+    );
+  },
+};
+
+export const MediumModal: Story = {
+  args: { ...Default.args, size: 'medium' },
+  render: (args) => {
+    return (
+      <Modal {...args}>
+        <Modal.Header
+          title="Medium Modal"
+          onClose={() => alert('close!')}
+        />
+        <Modal.Content>
+          <div>contents</div>
+        </Modal.Content>
+        <Modal.Footer>
+          <Modal.Footer.Button
+            style="primary"
+            onClick={() => alert('Clicked primary button!')}
+          >
+            Primary Button
+          </Modal.Footer.Button>
+          <Modal.Footer.Button
+            style="secondary"
+            onClick={() => alert('Clicked secondary button!')}
+          >
+            Secondary Button
+          </Modal.Footer.Button>
+        </Modal.Footer>
+      </Modal>
+    );
+  },
+};
+
+export const LargeModal: Story = {
+  args: { ...Default.args, size: 'large' },
+  render: (args) => {
+    return (
+      <Modal {...args}>
+        <Modal.Header
+          title="Large Modal"
+          onClose={() => alert('close!')}
+        />
+        <Modal.Content>
+          <div>contents</div>
+        </Modal.Content>
+        <Modal.Footer>
+          <Modal.Footer.Button
+            style="primary"
+            onClick={() => alert('Clicked primary button!')}
+          >
+            Primary Button
+          </Modal.Footer.Button>
+          <Modal.Footer.Button
+            style="secondary"
+            onClick={() => alert('Clicked secondary button!')}
+          >
+            Secondary Button
+          </Modal.Footer.Button>
+        </Modal.Footer>
       </Modal>
     );
   },

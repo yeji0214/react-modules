@@ -1,35 +1,43 @@
-import {
-  CloseButton,
-  Footer,
-  Header,
-  Main,
-  ModalOverlay,
-  ModalWrapper,
-  Title,
-} from './Modal.style';
+import { ModalOverlay, ModalWrapper } from './Modal.style';
 import React, { useEffect, useRef } from 'react';
 
+import ModalContent from './ModalContent';
+import ModalFooter from './ModalFooter/ModalFooter';
+import ModalHeader from './ModalHeader';
+import { ModalZIndex } from './constants';
+
 export type ModalPositionType = 'center' | 'bottom';
+export type ModalSizeType = 'small' | 'medium' | 'large';
+type ModalConfig =
+  | { position: ModalPositionType }
+  | { size: ModalSizeType }
+  | { position: 'center'; size: ModalSizeType };
 
 export interface ModalProps {
   isOpen: boolean;
-  position?: ModalPositionType;
-  title: string;
-  hasCloseButton?: boolean;
+  config?: ModalConfig;
+  zIndex?: ModalZIndex | number;
   children: React.ReactNode;
-  footerButtons?: React.ReactNode[];
   onClose: () => void;
 }
 
-export default function Modal({
-  isOpen,
-  position = 'center',
-  title,
-  hasCloseButton = true,
-  children,
-  footerButtons,
-  onClose,
-}: ModalProps) {
+const getDefaultModalConfig = (
+  config?: ModalConfig,
+): { position: ModalPositionType; size: ModalSizeType } => {
+  if (!config) {
+    return { position: 'center', size: 'medium' };
+  }
+  if ('position' in config && !('size' in config)) {
+    return { position: config.position, size: 'medium' };
+  }
+  if (!('position' in config) && 'size' in config) {
+    return { position: 'center', size: config.size };
+  }
+  return config;
+};
+
+function Modal({ isOpen, config, zIndex = ModalZIndex.High, children, onClose }: ModalProps) {
+  const { position, size } = getDefaultModalConfig(config);
   const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -49,38 +57,27 @@ export default function Modal({
   };
 
   return (
-    <ModalOverlay onClick={onClose}>
+    <ModalOverlay
+      onClick={onClose}
+      $zIndex={zIndex - 1}
+    >
       <ModalWrapper
+        $zIndex={zIndex}
         ref={modalRef}
         $position={position}
+        $size={size}
         onKeyDown={handleKeyDown}
         onClick={(event) => event.stopPropagation()}
         tabIndex={-1}
       >
-        <Header>
-          <Title>{title}</Title>
-          {hasCloseButton && (
-            <CloseButton onClick={onClose}>
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 14 14"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M14 1.41L12.59 0L7 5.59L1.41 0L0 1.41L5.59 7L0 12.59L1.41 14L7 8.41L12.59 14L14 12.59L8.41 7L14 1.41Z"
-                  fill="black"
-                />
-              </svg>
-            </CloseButton>
-          )}
-        </Header>
-
-        <Main>{children}</Main>
-
-        {footerButtons && <Footer>{footerButtons}</Footer>}
+        {children}
       </ModalWrapper>
     </ModalOverlay>
   );
 }
+
+Modal.Header = ModalHeader;
+Modal.Content = ModalContent;
+Modal.Footer = ModalFooter;
+
+export default Modal;

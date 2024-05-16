@@ -5,21 +5,25 @@ import {
   useCardCVC,
   useCardExpiryDate,
   useCardHolder,
-  useCardNumbers,
+  useCardNumber,
   useCardPassword,
 } from "@cys4585/card-validation";
 
 import React from "react";
 
+// import useCardNumber from "./lib/useCardNumbers/useCardNumbers";
+
 const cardBrands = ["신한카드", "현대카드", "카카오뱅크"];
 
 function App() {
   const {
-    cardNumbers,
-    validationResult: cardNumbersValidationResult,
-    validStates,
-    handleUpdateCardNumbers,
-  } = useCardNumbers(["", "", "", ""]);
+    cardNumber,
+    validationResult: cardNumberValidationResult,
+    cardGlobalBrand,
+    maxLength,
+    formattedCardNumber,
+    handleUpdateCardNumber,
+  } = useCardNumber();
   const {
     brand,
     validationResult: brandValidationResult,
@@ -52,42 +56,25 @@ function App() {
         <h2>useCardNumbers</h2>
         <div className="input-container">
           <input
+            value={cardNumber}
             type="text"
             onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-              handleUpdateCardNumbers(0, event.target.value)
-            }
-            placeholder="1234"
-          />
-          <input
-            type="text"
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-              handleUpdateCardNumbers(1, event.target.value)
-            }
-            placeholder="1234"
-          />
-          <input
-            type="text"
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-              handleUpdateCardNumbers(2, event.target.value)
-            }
-            placeholder="1234"
-          />
-          <input
-            type="text"
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-              handleUpdateCardNumbers(3, event.target.value)
+              handleUpdateCardNumber(event.target.value)
             }
             placeholder="1234"
           />
         </div>
         <div className="output-container">
-          <p>cardNumbers: {cardNumbers.join(" ")}</p>
-          <p>validStates: {validStates.join(" ")}</p>
-          <p>isValid: {cardNumbersValidationResult.isValid.toString()}</p>
+          <p>cardNumber: {cardNumber}</p>
+          <p>cardGlobalBrand: {cardGlobalBrand}</p>
+          <p>maxLength: {maxLength}</p>
           <p>
-            errorMessage:{" "}
-            {cardNumbersValidationResult.isValid ||
-              cardNumbersValidationResult.errorMessage}
+            formattedCardNumber:{" "}
+            {formattedCardNumber && formattedCardNumber.join(" ")}
+          </p>
+          <p>
+            cardNumberValidationResult:{" "}
+            {JSON.stringify(cardNumberValidationResult)}
           </p>
         </div>
       </section>

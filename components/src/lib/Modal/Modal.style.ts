@@ -1,4 +1,5 @@
-import { ModalPositionType } from './Modal';
+import { ModalPositionType, ModalSizeType } from './Modal';
+
 import styled from 'styled-components';
 
 export const colors = {
@@ -9,14 +10,14 @@ export const colors = {
   grey500: '#000000',
 };
 
-export const ModalOverlay = styled.div`
+export const ModalOverlay = styled.div<{ $zIndex: number }>`
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
-  z-index: 10;
+  z-index: ${(props) => props.$zIndex};
 
   display: flex;
   flex-direction: column;
@@ -24,16 +25,23 @@ export const ModalOverlay = styled.div`
   align-items: center;
 `;
 
-export const ModalWrapper = styled.div<{ $position: ModalPositionType }>`
+interface ModalWrapperProps {
+  $position: ModalPositionType;
+  $size: ModalSizeType;
+  $zIndex: number;
+}
+export const ModalWrapper = styled.div<ModalWrapperProps>`
   background: ${colors.grey100};
   min-width: 300px;
   color: ${colors.grey500};
   padding: 24px 32px;
-  z-index: 100;
+  z-index: ${(props) => props.$zIndex};
 
   display: flex;
   flex-direction: column;
   gap: 16px;
+
+  max-width: 100%;
 
   ${(props) => {
     if (props.$position === 'center') {
@@ -53,37 +61,20 @@ export const ModalWrapper = styled.div<{ $position: ModalPositionType }>`
       `;
     }
   }}
-`;
 
-export const Header = styled.header`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-export const Title = styled.h2`
-  font-size: 18px;
-  font-weight: 700;
-`;
-
-export const CloseButton = styled.button`
-  display: inline-block;
-  width: 14px;
-  height: 100%;
-  background: ${colors.grey100};
-  border: 0;
-  padding: 0;
-`;
-
-export const Main = styled.main`
-  max-width: 100vw;
-  max-height: 70vh;
-  overflow-y: auto;
-`;
-
-export const Footer = styled.footer`
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+  ${(props) => {
+    if (props.$position === 'center' && props.$size === 'small') {
+      return `
+        width: 320px`;
+    }
+    if (props.$position === 'center' && props.$size === 'medium') {
+      return `
+        width: 480px`;
+    }
+    if (props.$position === 'center' && props.$size === 'large') {
+      return `
+        width: 600px;
+      `;
+    }
+  }}
 `;

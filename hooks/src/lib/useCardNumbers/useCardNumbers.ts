@@ -1,73 +1,71 @@
-import type {
-  CardNumbersType,
-  CardNumbersValidStatesType,
-} from "../types/CardNumberTypes";
+import ValidationResult, { ValidationError } from "../types/ValidationResult";
+import formatCardNumber, {
+  calculateValidCardNumberLength,
+} from "./utils/formatCardNumber";
+import identifyCardGlobalBrand, {
+  CardGlobalBrand,
+} from "./utils/identifyCardGLobalBrand";
+import { useMemo, useState } from "react";
+import {
+  validateAfterUpdate,
+  validateBeforeUpdate,
+} from "./utils/validateCardNumber";
 
-import Validation from "../utils/Validation";
-import ValidationResult from "../types/ValidationResult";
-import { useState } from "react";
-
-interface CardNumbersValidationResult {
-  cardNumbers: CardNumbersType;
-  validStates: CardNumbersValidStatesType;
-  validationResult: ValidationResult;
-  handleUpdateCardNumbers: (inputIndex: number, value: string) => void;
+interface CardNumberValidationResult {
+  cardNumber: string;
+  validationResult?: ValidationResult;
+  cardGlobalBrand?: CardGlobalBrand;
+  maxLength?: number;
+  formattedCardNumber?: string[];
+  handleUpdateCardNumber: (value: string) => void;
 }
 
-export default function useCardNumbers(
-  initialValues: CardNumbersType = ["", "", "", ""]
-): CardNumbersValidationResult {
-  const [cardNumbers, setCardNumbers] =
-    useState<CardNumbersType>(initialValues);
-  const [validStates, setValidStates] = useState<CardNumbersValidStatesType>([
-    true,
-    true,
-    true,
-    true,
-  ]);
-  const [validationResult, setValidationResult] = useState<ValidationResult>({
-    isValid: true,
-  });
+export default function useCardNumber(
+  initialValues: string = ""
+): CardNumberValidationResult {
+  const [cardNumber, setCardNumber] = useState(initialValues);
 
-  const updateCardNumbers = (inputIndex: number, value: string) => {
-    setCardNumbers((prev) => {
-      const newCardNumbers = [...prev];
-      newCardNumbers[inputIndex] = value;
-      return newCardNumbers as CardNumbersType;
-    });
-  };
+  const [validationResult, setValidationResult] = useState<ValidationResult>();
 
-  const handleUpdateCardNumbers = (inputIndex: number, value: string) => {
-    updateCardNumbers(inputIndex, value);
+  const { cardGlobalBrand, validCardNumberLength, formattedCardNumber } =
+    useMemo(() => {
+      const cardGlobalBrand = identifyCardGlobalBrand(cardNumber);
+      const validCardNumberLength =
+        calculateValidCardNumberLength(cardGlobalBrand);
+      const formattedCardNumber = formatCardNumber(cardNumber, cardGlobalBrand);
 
-    const isNewInputValid = validateCardNumber(value);
+      return { cardGlobalBrand, validCardNumberLength, formattedCardNumber };
+    }, [cardNumber]);
 
-    const newValidStates = validStates.map((prevState, index) =>
-      index === inputIndex ? isNewInputValid : prevState
-    ) as CardNumbersValidStatesType;
-    setValidStates(newValidStates);
+  const handleUpdateCardNumber = (cardNumber: string) => {
+    const cardGlobalBrand = identifyCardGlobalBrand(cardNumber);
+    const validCardNumberLength =
+      calculateValidCardNumberLength(cardGlobalBrand);
 
-    const isAllInputValid = newValidStates.every((isValid) => isValid === true);
+    try {
+      validateBeforeUpdate(cardNumber, validCardNumberLength);
 
-    const validationResult: ValidationResult = isAllInputValid
-      ? { isValid: true }
-      : {
+      setCardNumber(cardNumber);
+      setValidationResult({ isValid: true });
+
+      validateAfterUpdate(cardNumber, validCardNumberLength);
+    } catch (error) {
+      if (error instanceof ValidationError) {
+        setValidationResult({
           isValid: false,
-          errorMessage:
-            "카드 번호는 4자리의 숫자여야 합니다. 확인 후 다시 입력해주세요.",
-        };
-
-    setValidationResult(validationResult);
+          errorType: error.errorType,
+          errorMessage: error.errorMessage,
+        });
+      }
+    }
   };
 
   return {
-    cardNumbers,
-    validStates,
+    cardNumber,
     validationResult,
-    handleUpdateCardNumbers,
+    cardGlobalBrand,
+    maxLength: validCardNumberLength,
+    formattedCardNumber,
+    handleUpdateCardNumber,
   };
-}
-
-function validateCardNumber(value: string) {
-  return Validation.isNumeric(value) && Validation.hasLength(value, 4);
 }
