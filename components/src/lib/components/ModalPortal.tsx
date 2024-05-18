@@ -1,7 +1,8 @@
-import { ReactNode, useEffect } from 'react';
+import { ReactNode, useEffect, useLayoutEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
-import '../styles/reset.css';
 import styled from 'styled-components';
+
+import '@/lib/styles/reset.css';
 
 export interface ModalPortalProps {
   children: ReactNode;
@@ -16,22 +17,36 @@ const ModalPortalWrapper = styled.div`
 
 export default function ModalPortal(props: ModalPortalProps) {
   const { children } = props;
-  const $modalRoot = document.getElementById('modal-root') || document.body;
-
+  const [modalRoot, setModalRoot] = useState<HTMLElement | null>(null);
   const stopModalPropagation = (e: globalThis.MouseEvent) => {
     e.stopPropagation();
   };
 
-  useEffect(() => {
-    document.getElementsByTagName('body')[0].addEventListener('click', stopModalPropagation);
-    return () => {
-      document.getElementsByTagName('body')[0].removeEventListener('click', stopModalPropagation);
-    };
+  const createModalRoot = () => {
+    if (document.getElementById('modal-root')) return;
+
+    const body = document.body;
+    const $modalRoot = document.createElement('div');
+    $modalRoot.id = 'modal-root';
+    body.appendChild($modalRoot);
+    setModalRoot($modalRoot);
+  };
+
+  useLayoutEffect(() => {
+    createModalRoot();
   }, []);
+
+  useEffect(() => {
+    document.body.addEventListener('click', stopModalPropagation);
+    return () => {
+      document.body.removeEventListener('click', stopModalPropagation);
+      if (modalRoot) document.body.removeChild(modalRoot);
+    };
+  }, [modalRoot]);
 
   return createPortal(
     <ModalPortalWrapper className="modal-portal">{children}</ModalPortalWrapper>,
-    $modalRoot,
+    modalRoot || document.body,
     'modal-portal',
   );
 }

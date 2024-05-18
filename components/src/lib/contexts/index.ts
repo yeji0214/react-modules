@@ -1,2 +1,2 @@
-export { default as BottomModalContext } from './bottomModalContext';
-export { default as ModalContext } from './modalContext';
+export { default as BottomModalContext } from './BottomModalContext';
+export { default as ModalContainerContext } from './ModalContainerContext';

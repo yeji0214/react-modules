@@ -1,4 +1,4 @@
-import React, { Dispatch, ReactNode, SetStateAction } from 'react';
+import { Dispatch, ReactElement, ReactNode, SetStateAction } from 'react';
 
 export type ModalType = 'center' | 'bottom' | 'toast';
 
@@ -11,34 +11,57 @@ export interface ModalPosition {
   right?: number | string;
   bottom?: number | string;
 }
-
-export interface ModalOptions {
-  type: ModalType;
-  animationDuration?: number; //단위:ms
-  isNeedAnimation?: boolean;
-  isCloseOnEsc?: boolean;
-  isCloseOnBackdrop?: boolean;
-  position?: ModalPosition;
-  toastDuration?: number; //단위:ms
-  contentsPadding?: string;
-  borderRadius?: string;
-  backgroundColor?: {
-    modal?: string;
-    backdrop?: string;
-  };
+export interface Background {
+  modal?: string;
+  backdrop?: string;
 }
-export interface ModalProps extends React.HTMLAttributes<HTMLDivElement>, ModalOptions {
-  children: ReactNode;
+export interface ModalCommonProps {
+  modalTargetEl: HTMLElement | null;
   openModal: boolean;
   setOpenModal: Dispatch<SetStateAction<boolean>>;
-}
-
-export interface ModalComposedProps<T> extends React.HTMLAttributes<T> {
+  isCloseOnEsc?: boolean;
+  isCloseOnBackdrop?: boolean;
+  contentsPadding?: string;
+  borderRadius?: string;
+  backgroundColor?: Background;
   children: ReactNode;
 }
 
-export interface ModalButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
-  children: ReactNode;
-  isCloseModal: boolean;
-  handleCloseModal?: () => void;
+export interface ModalContainerProps extends Omit<ModalCommonProps, 'setOpenModal'>, AnimationProps {
+  closeModal: () => void;
+}
+
+export interface AnimationProps {
+  animationDuration?: number; //단위:ms
+  isNeedAnimation?: boolean;
+}
+export interface BottomModalProps extends ModalCommonProps, AnimationProps {}
+export interface ToastModalProps extends ModalCommonProps, AnimationProps {
+  position?: ModalPosition;
+  toastDuration?: number; //단위:ms
+}
+export type ButtonContainerJustifyContent =
+  | 'center'
+  | 'right'
+  | 'left'
+  | 'space-around'
+  | 'space-between'
+  | 'space-evenly';
+
+export interface AlertModalProps extends Omit<ModalCommonProps, 'children'> {
+  title?: ReactNode;
+  contents: ReactNode;
+  buttonContainerJustifyContent?: ButtonContainerJustifyContent;
+  button: ReactNode;
+}
+
+export interface ConfirmModalProps extends ModalCommonProps {
+  title?: ReactNode;
+  contents: ReactNode;
+  buttonContainerJustifyContent?: ButtonContainerJustifyContent;
+}
+
+export interface PromptModalProps extends Omit<ConfirmModalProps, 'contents'> {
+  label: string;
+  input: ReactElement<HTMLInputElement>;
 }

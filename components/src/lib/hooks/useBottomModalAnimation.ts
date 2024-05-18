@@ -1,21 +1,23 @@
 import { useLayoutEffect, useState } from 'react';
 
+import { BASIC_BOTTOM_FADE_IN_TIME } from '../constants/modal';
 import calculateTimeout from '../utils/timeoutCalculator';
 
 export interface UseBottomModalAnimationProps {
+  openModal: boolean;
   isNeedAnimation: boolean | undefined;
-  animationDuration: number | undefined;
+  animationDuration: number;
   closeModal: () => void;
 }
 
 export default function useBottomModalAnimation({
+  openModal,
+  closeModal,
   isNeedAnimation,
   animationDuration,
-  closeModal,
 }: UseBottomModalAnimationProps) {
-  const timeout = calculateTimeout({ isNeedAnimation, animationDuration, type: 'bottom' });
-
   const [isOn, setIsOn] = useState(false);
+  const timeout = calculateTimeout({ isNeedAnimation, animationDuration });
 
   const fadeOutModal = () => {
     setIsOn(false);
@@ -24,17 +26,16 @@ export default function useBottomModalAnimation({
     }, timeout);
   };
 
-  const fadeInModal = () =>
-    setTimeout(() => {
-      setIsOn(true);
-    }, timeout);
-
   useLayoutEffect(() => {
-    const timer = fadeInModal();
+    const fadeIn = setTimeout(() => {
+      setIsOn(true);
+    }, BASIC_BOTTOM_FADE_IN_TIME);
+
     return () => {
-      clearTimeout(timer);
+      clearTimeout(fadeIn);
+      setIsOn(false);
     };
-  }, []);
+  }, [openModal]);
 
   return { isOn, fadeOutModal, timeout };
 }
