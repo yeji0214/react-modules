@@ -1,49 +1,92 @@
 import React from "react";
-import CloseButton from "../CloseButton/CloseButton";
-import Button from "../common/Button";
-import { useModalContext } from "../hooks/useModalContext";
-import { ModalContainer, ModalDimmer, ModalHeader } from "./Modal.style";
+import x_img from "../assets/images/x_img.png";
+import { ModalContextProvider, useModalContext } from "../hooks/useModalContext";
+import { ModalProps } from "../type";
+import {
+  StyledModalBody,
+  StyledModalContainer,
+  StyledModalDimmer,
+  StyledModalFooter,
+  StyledModalHeader,
+} from "./Modal.style";
+import CloseButton from "./components/CloseButton/CloseButton";
 
-export interface ModalProps {
-  modalPosition?: "center" | "bottom";
-  title?: string;
-  closeButtonPosition?: "top" | "bottom";
-  isOpenValue?: boolean;
-}
+export const ModalProvider: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
+  return <ModalContextProvider>{children}</ModalContextProvider>;
+};
 
-export const Modal: React.FC<React.PropsWithChildren<ModalProps>> = ({
-  modalPosition = "center",
-  title = "",
-  children,
-  closeButtonPosition = "top",
-  isOpenValue,
-}) => {
+export const ModalContent: React.FC<
+  React.PropsWithChildren<ModalProps & { size?: "small" | "medium" | "large" }>
+> = ({ children, modalPosition, closeButtonPosition, size }) => {
   const { isOpen, closeModal } = useModalContext();
 
   return (
-    (isOpenValue || isOpen) && (
+    isOpen && (
       <>
-        <ModalDimmer onClick={closeModal} />
-        <ModalContainer modalPosition={modalPosition} closeButtonPosition={closeButtonPosition}>
-          <ModalHeader>
-            <h1>{title}</h1>
-            {closeButtonPosition === "top" && (
-              <CloseButton>
-                <img src="/public/image/closeButton.png" />
-              </CloseButton>
-            )}
-          </ModalHeader>
+        <StyledModalDimmer onClick={closeModal} />
+        <StyledModalContainer
+          modalPosition={modalPosition}
+          closeButtonPosition={closeButtonPosition}
+          size={size || "medium"}
+        >
           {children}
-          {closeButtonPosition === "bottom" && (
-            <Button
-              content="닫기"
-              backgroundColor="rgba(255, 255, 255, 1)"
-              fontColor="rgba(139, 149, 161, 1)"
-              onClick={closeModal}
-            />
-          )}
-        </ModalContainer>
+        </StyledModalContainer>
       </>
     )
   );
+};
+
+export const ModalTrigger: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
+  const { openModal } = useModalContext();
+  return <button onClick={openModal}>{children}</button>;
+};
+
+export const ModalClose: React.FC<React.PropsWithChildren<{ onClick?: () => void }>> = ({
+  children,
+  onClick,
+}) => {
+  const { closeModal } = useModalContext();
+  const handleClick = () => {
+    onClick && onClick();
+    closeModal();
+  };
+
+  return <div onClick={handleClick}>{children}</div>;
+};
+
+export const ModalHeader: React.FC<{ title?: string; containClose: boolean }> = ({
+  title,
+  containClose,
+}) => {
+  return (
+    <StyledModalHeader>
+      <h2>{title}</h2>
+      {containClose && (
+        <CloseButton>
+          <img src={x_img} />
+        </CloseButton>
+      )}
+    </StyledModalHeader>
+  );
+};
+
+export const ModalBody: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
+  return <StyledModalBody>{children}</StyledModalBody>;
+};
+
+export const ModalFooter: React.FC<React.PropsWithChildren<{ align: "center" | "end" }>> = ({
+  children,
+  align,
+}) => {
+  return <StyledModalFooter align={align}>{children}</StyledModalFooter>;
+};
+
+export const Modal = {
+  Provider: ModalProvider,
+  Trigger: ModalTrigger,
+  Close: ModalClose,
+  Header: ModalHeader,
+  Body: ModalBody,
+  Footer: ModalFooter,
+  Content: ModalContent,
 };

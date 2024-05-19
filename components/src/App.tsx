@@ -1,36 +1,53 @@
-import { ThemeProvider } from "@emotion/react";
 import React from "react";
 import { Modal } from "../../components/src/lib/Modal/Modal";
-import { theme } from "../styles/theme";
 import "./App.css";
-import { ModalProvider, useModalContext } from "./lib/hooks/useModalContext";
+import { AlertModal } from "./lib/AlarmModal/AlarmModal";
+import { ConfirmModal } from "./lib/ConfirmModal/ConfirmModal";
+import { PromptModal } from "./lib/PromptModal/PromptModal";
 
 function App() {
   return (
-    <ThemeProvider theme={theme}>
-      <ModalProvider>
-        <ModalOpener />
-        <Modal
-          modalPosition="bottom"
-          title="컴포넌트를 어느정도까지 분리 해야할까요? 또 어떤 경우 컴포넌트를 그룹화해서 하나의 컴포넌트처럼 보이게 하는 것이 좋을까요?"
-          closeButtonPosition="top"
-        >
-          <div>컴포넌트 내용</div>
-          <ModalButton />
-        </Modal>
-      </ModalProvider>
-    </ThemeProvider>
+    <>
+      <h1>Modal Test</h1>
+      <Modal.Provider>
+        <Modal.Trigger>Modal 열기</Modal.Trigger>
+        <Modal.Content modalPosition="center" closeButtonPosition="bottom" size="small">
+          <Modal.Header title="모달창 타이틀" containClose />
+          <Modal.Body>내용</Modal.Body>
+          <Modal.Footer align="center">
+            <Modal.Close>닫기</Modal.Close>
+          </Modal.Footer>
+        </Modal.Content>
+      </Modal.Provider>
+
+      {/* AlertModal */}
+      <Modal.Provider>
+        <Modal.Trigger>AlertModal 열기</Modal.Trigger>
+
+        <AlertModal title="Alert" size="small" modalPosition="center" closeButtonPosition="top">
+          AlertModal 내용
+        </AlertModal>
+      </Modal.Provider>
+
+      {/* PromptModal */}
+      <Modal.Provider>
+        <Modal.Trigger>PromptModal 열기</Modal.Trigger>
+
+        <PromptModal title="Prompt" size="medium" modalPosition="center" closeButtonPosition="top">
+          PromptModal 내용
+        </PromptModal>
+      </Modal.Provider>
+
+      {/* ConfirmModal */}
+      <Modal.Provider>
+        <Modal.Trigger>ConfirmModal 열기</Modal.Trigger>
+
+        <ConfirmModal title="Confirm" size="small" modalPosition="center" closeButtonPosition="top">
+          ConfirmModal 내용
+        </ConfirmModal>
+      </Modal.Provider>
+    </>
   );
 }
-
-const ModalOpener = () => {
-  const { openModal } = useModalContext();
-  return <button onClick={openModal}>열기</button>;
-};
-
-const ModalButton = () => {
-  const { closeModal } = useModalContext();
-  return <button onClick={closeModal}>닫기</button>;
-};
 
 export default App;

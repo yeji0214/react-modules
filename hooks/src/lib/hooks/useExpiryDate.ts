@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { ERROR_MESSAGE } from "../constants/errorMessage";
 import { ValidationResult } from "./../../type.d";
 
@@ -7,11 +7,7 @@ type ExpiryDate = {
   year: string;
 };
 
-export function useExpiryDate(): [
-  ExpiryDate,
-  (option: "year" | "month", value: string) => void,
-  ValidationResult
-] {
+export function useExpiryDate() {
   const [expiryDate, setExpiryDate] = useState<ExpiryDate>({ month: "", year: "" });
   const [isTouched, setIsTouched] = useState({ month: false, year: false });
 
@@ -69,5 +65,10 @@ export function useExpiryDate(): [
     setExpiryDate((prev) => ({ ...prev, [option]: value }));
   }
 
-  return [expiryDate, handleExpiryDateChange, validateExpiryDate(expiryDate)];
+  const cardExpiryDateValidationResult = useMemo(
+    () => validateExpiryDate(expiryDate),
+    [expiryDate, isTouched]
+  );
+
+  return { expiryDate, handleExpiryDateChange, cardExpiryDateValidationResult };
 }

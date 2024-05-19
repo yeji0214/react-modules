@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { ValidationResult } from "../../type";
 import { ERROR_MESSAGE } from "../constants/errorMessage";
 
-export function useCardIssuer(): [string, (value: string) => void, ValidationResult] {
+export function useCardIssuer() {
   const [cardIssuer, setCardIssuer] = useState("");
   const [isTouched, setIsTouched] = useState(false);
 
@@ -12,7 +12,7 @@ export function useCardIssuer(): [string, (value: string) => void, ValidationRes
       return { isValid: false, errorMessage: ERROR_MESSAGE.NO_INPUT };
     }
 
-    return { isValid: true };
+    return { isValid: true, errorMessage: "" };
   }
 
   function handleCardIssuerChange(value: string) {
@@ -20,5 +20,10 @@ export function useCardIssuer(): [string, (value: string) => void, ValidationRes
     setCardIssuer(value);
   }
 
-  return [cardIssuer, handleCardIssuerChange, validateCardIssuer(cardIssuer)];
+  const cardIssuerValidationResult = useMemo(
+    () => validateCardIssuer(cardIssuer),
+    [cardIssuer, isTouched]
+  );
+
+  return { cardIssuer, handleCardIssuerChange, cardIssuerValidationResult };
 }

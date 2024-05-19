@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { ValidationResult } from "../../type";
 import { ERROR_MESSAGE } from "../constants/errorMessage";
 
-export function useCardHolder(): [string, (value: string) => void, ValidationResult] {
+export function useCardHolder() {
   const [cardHolder, setCardHolder] = useState("");
   const [isTouched, setIsTouched] = useState(false);
 
@@ -13,7 +13,7 @@ export function useCardHolder(): [string, (value: string) => void, ValidationRes
     }
 
     // 입력된 문자열이 영어 대문자와 공백이 아니라면 에러 발생
-    if (!/^[A-Z\s]$/.test(value) && isTouched) {
+    if (!/^[A-Z\s]+$/.test(value) && isTouched) {
       return {
         isValid: false,
         errorMessage: ERROR_MESSAGE.CARD_HOLDER.INVALID_CHARACTERS,
@@ -28,7 +28,7 @@ export function useCardHolder(): [string, (value: string) => void, ValidationRes
       };
     }
 
-    return { isValid: true };
+    return { isValid: true, errorMessage: "" };
   }
 
   function handleCardHolderChange(value: string) {
@@ -36,5 +36,10 @@ export function useCardHolder(): [string, (value: string) => void, ValidationRes
     setCardHolder(value);
   }
 
-  return [cardHolder, handleCardHolderChange, validateCardHolder(cardHolder)];
+  const cardHolderValidationResult = useMemo(
+    () => validateCardHolder(cardHolder),
+    [cardHolder, isTouched]
+  );
+
+  return { cardHolder, handleCardHolderChange, cardHolderValidationResult };
 }

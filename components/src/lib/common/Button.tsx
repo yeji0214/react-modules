@@ -1,16 +1,27 @@
 import { ButtonWrapper } from "./Button.style";
 
 export interface ButtonProps {
-  content: string;
   backgroundColor: string;
   fontColor: string;
-  onClick: React.MouseEventHandler<HTMLButtonElement>;
+  borderColor?: string;
+  onClick?: () => string | void;
 }
 
-const Button: React.FC<ButtonProps> = ({ content, backgroundColor, fontColor, onClick }) => {
+const Button: React.FC<React.PropsWithChildren<ButtonProps>> = ({
+  children,
+  backgroundColor,
+  fontColor,
+  borderColor,
+  onClick,
+}) => {
   return (
-    <ButtonWrapper backgroundColor={backgroundColor} fontColor={fontColor} onClick={onClick}>
-      {content}
+    <ButtonWrapper
+      backgroundColor={backgroundColor}
+      fontColor={fontColor}
+      borderColor={borderColor}
+      onClick={onClick}
+    >
+      {children}
     </ButtonWrapper>
   );
 };
