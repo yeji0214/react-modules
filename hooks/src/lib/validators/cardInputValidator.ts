@@ -1,4 +1,4 @@
-import { INPUT_RULES } from "../constants/cardCustomHook";
+import { INPUT_RULES, VALIDATION_MESSAGES } from "../constants/cardCustomHook";
 
 const cardInputValidator = {
   validateNumericInput(value: string) {
@@ -17,20 +17,98 @@ const cardInputValidator = {
     return number >= min && number <= max;
   },
 
+  validateDinersCardNumber(value: string) {
+    return value.slice(0, 2) === INPUT_RULES.validDinersCardNumber;
+  },
+
+  validateAMEXCardNumber(value: string) {
+    return INPUT_RULES.validAMEXCardNumbers.includes(value.slice(0, 2));
+  },
+
+  validateUnionPayCardNumber(value: string) {
+    return (
+      this.validateNumberInRange(
+        Number(value.slice(0, 3)),
+        INPUT_RULES.validUnionPayCardNumber.lengthThree.first,
+        INPUT_RULES.validUnionPayCardNumber.lengthThree.last
+      ) ||
+      this.validateNumberInRange(
+        Number(value.slice(0, 4)),
+        INPUT_RULES.validUnionPayCardNumber.lengthFour.first,
+        INPUT_RULES.validUnionPayCardNumber.lengthFour.last
+      ) ||
+      this.validateNumberInRange(
+        Number(value.slice(0, 6)),
+        INPUT_RULES.validUnionPayCardNumber.lengthSix.first,
+        INPUT_RULES.validUnionPayCardNumber.lengthSix.last
+      )
+    );
+  },
+
+  validateMasterCardNumber(value: string) {
+    return this.validateNumberInRange(
+      Number(value.slice(0, 2)),
+      INPUT_RULES.validMasterCardNumber.first,
+      INPUT_RULES.validMasterCardNumber.last
+    );
+  },
+
+  validateVisaCardNumber(value: string) {
+    return value.slice(0, 1) === INPUT_RULES.validVisaCardNumber;
+  },
+
+  validateCardNumberExactLength(value: string) {
+    return this.validateInputLength(value, this.validCardNumberLength(value));
+  },
+
   validateCardNumberLength(value: string) {
-    return value.length === INPUT_RULES.validCardNumberLength;
+    const isOverDinersCardNumberLength =
+      value.length <= this.validCardNumberLength(value);
+
+    return isOverDinersCardNumberLength;
+  },
+
+  validCardNumberLength: (value: string) => {
+    if (cardInputValidator.validateDinersCardNumber(value))
+      return INPUT_RULES.validDinersCardNumberLength;
+    if (cardInputValidator.validateAMEXCardNumber(value))
+      return INPUT_RULES.validAMEXCardNumberLength;
+    return INPUT_RULES.validOtherCardNumberLength;
+  },
+
+  validateCardBrand: (value: string) => {
+    if (cardInputValidator.validateDinersCardNumber(value))
+      return INPUT_RULES.validDiners;
+    if (cardInputValidator.validateAMEXCardNumber(value))
+      return INPUT_RULES.validAMEX;
+    if (cardInputValidator.validateUnionPayCardNumber(value))
+      return INPUT_RULES.validUnionPay;
+    if (cardInputValidator.validateMasterCardNumber(value))
+      return INPUT_RULES.validMasterCard;
+    if (cardInputValidator.validateVisaCardNumber(value))
+      return INPUT_RULES.validVisa;
+    return INPUT_RULES.validOther;
+  },
+
+  invalidCardNumberLengthMessage: (value: string) => {
+    if (cardInputValidator.validateDinersCardNumber(value))
+      return VALIDATION_MESSAGES.invalidDinersCardNumberLength;
+    if (cardInputValidator.validateAMEXCardNumber(value))
+      return VALIDATION_MESSAGES.invalidAMEXCardNumberLength;
+
+    return VALIDATION_MESSAGES.invalidOtherCardNumberLength;
   },
 
   validatePastYear(year: string) {
     const currentYear = new Date().getFullYear() % 100;
 
-    return parseInt(year, 10) <= currentYear;
+    return Number(year) <= currentYear;
   },
 
   validateMonth(month: string) {
     if (month.length !== INPUT_RULES.validExpiryDateLength) return false;
 
-    return this.validateNumberInRange(parseInt(month, 10), 1, 12);
+    return this.validateNumberInRange(Number(month), 1, 12);
   },
 
   validateYear(year: string) {
@@ -58,7 +136,7 @@ const cardInputValidator = {
     )
       return true;
 
-    return this.validateFutureDate(parseInt(month), parseInt(year));
+    return this.validateFutureDate(Number(month), Number(year));
   },
 };
 
