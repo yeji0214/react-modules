@@ -1,0 +1,14 @@
+.footerContainer {
+  display: flex;
+}
+
+.modalFooter.footerContainer {
+  flex-direction: column;
+}
+
+.alertModalFooter.footerContainer,
+.confirmModalFooter.footerContainer,
+.promptModalFooter.footerContainer {
+  justify-content: flex-end;
+  gap: 12px;
+}

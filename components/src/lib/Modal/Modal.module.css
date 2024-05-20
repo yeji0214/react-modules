@@ -1,0 +1,74 @@
+.container {
+  position: fixed;
+  inset: 0;
+}
+
+.backDrop {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.35);
+}
+
+/* modal-postion */
+.top {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.bottom {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.modalSection {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: fixed;
+  padding: 24px 32px;
+  background-color: #fff;
+}
+
+.top > .modalSection {
+  width: 100%;
+  border-radius: 0 0 8px 8px;
+}
+
+.center > .modalSection {
+  width: 80vw;
+  border-radius: 8px;
+}
+
+.bottom > .modalSection {
+  width: 100%;
+  border-radius: 8px 8px 0 0;
+}
+
+/* modal-size */
+.center > .modalSection.small {
+  width: 30%;
+}
+
+.center > .modalSection.medium {
+  width: 60%;
+}
+
+.center > .modalSection.large {
+  width: 90%;
+}
+
+/* Prompt Modal */
+.promptModalInput {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid rgba(0, 0, 0, 1);
+  border-radius: 5px;
+}
