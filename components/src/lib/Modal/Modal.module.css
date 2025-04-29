@@ -29,3 +29,7 @@
   font-size: 18px;
   font-weight: 700;
 }
+
+.close-button-wrapper {
+  cursor: pointer;
+}

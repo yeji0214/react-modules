@@ -8,10 +8,14 @@ function App() {
     setIsOpen(true);
   }
 
+  const handleCloseModal = () => {
+    setIsOpen(false);
+  }
+
   return (
     <>
     <button onClick={handleOpenModal}>모달 열기</button>
-      {isOpen && <Modal title="제목"/>}
+      {isOpen && <Modal onClose={handleCloseModal} title="제목"/>}
     </>
   );
 }
