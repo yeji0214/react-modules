@@ -29,6 +29,7 @@ function App() {
           content="내용"
           hasCloseButton={true}
           handleBackdropClick={handleBackdropClick}
+          confirmText="확인"
         />
       )}
     </>

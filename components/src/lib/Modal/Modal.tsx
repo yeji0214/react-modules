@@ -1,4 +1,5 @@
-import CloseButton from "../../components/CloseButton";
+import CloseButton from "../../components/CloseButton/CloseButton";
+import ConfirmButton from "../../components/ConfirmButton/ConfirmButton";
 import styles from "./Modal.module.css";
 
 type ModalProps = {
@@ -8,6 +9,8 @@ type ModalProps = {
   hasCloseButton: boolean;
   onClose: () => void;
   handleBackdropClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
+  confirmText?: string;
+  // onConfirm, 
 };
 
 const Modal = ({
@@ -16,7 +19,8 @@ const Modal = ({
   content,
   hasCloseButton,
   onClose,
-  handleBackdropClick
+  handleBackdropClick,
+  confirmText = "확인"
 }: ModalProps) => {
   return (
     <div className={styles.overlay}>
@@ -32,6 +36,9 @@ const Modal = ({
             </div>
           </div>
           <div className={styles["modal-content"]}>{content}</div>
+          <div className={styles["modal-footer"]}>
+            <ConfirmButton confirmText={confirmText}/>
+          </div>
         </div>
       </div>
     </div>
