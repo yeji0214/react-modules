@@ -5,6 +5,7 @@ type ModalProps = {
   position: "center" | "bottom" | "top";
   title: string;
   content: React.ReactNode;
+  hasCloseButton: boolean;
   onClose: () => void;
   handleBackdropClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
 };
@@ -13,8 +14,9 @@ const Modal = ({
   position,
   title,
   content,
+  hasCloseButton,
   onClose,
-  handleBackdropClick,
+  handleBackdropClick
 }: ModalProps) => {
   return (
     <div className={styles.overlay}>
@@ -26,7 +28,7 @@ const Modal = ({
           <div className={styles["modal-header"]}>
             <h2 className={styles["modal-title"]}>{title}</h2>
             <div className={styles["close-button-wrapper"]}>
-              <CloseButton onClose={onClose} />
+              {hasCloseButton && <CloseButton onClose={onClose} />}
             </div>
           </div>
           <div className={styles["modal-content"]}>{content}</div>
