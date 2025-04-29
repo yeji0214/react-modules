@@ -10,7 +10,7 @@ type ModalProps = {
   onClose: () => void;
   handleBackdropClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
   confirmText?: string;
-  // onConfirm, 
+  onConfirm?: () => void;
 };
 
 const Modal = ({
@@ -20,7 +20,8 @@ const Modal = ({
   hasCloseButton,
   onClose,
   handleBackdropClick,
-  confirmText = "확인"
+  confirmText = "확인",
+  onConfirm,
 }: ModalProps) => {
   return (
     <div className={styles.overlay}>
@@ -37,7 +38,7 @@ const Modal = ({
           </div>
           <div className={styles["modal-content"]}>{content}</div>
           <div className={styles["modal-footer"]}>
-            <ConfirmButton confirmText={confirmText}/>
+            {onConfirm && <ConfirmButton confirmText={confirmText} onClick={onConfirm}/>}
           </div>
         </div>
       </div>
