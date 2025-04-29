@@ -11,7 +11,7 @@ function App() {
   return (
     <>
     <button onClick={handleOpenModal}>모달 열기</button>
-      {isOpen && <Modal />}
+      {isOpen && <Modal title="제목"/>}
     </>
   );
 }
