@@ -4,10 +4,11 @@ import styles from "./Modal.module.css";
 type ModalProps = {
   position: "center" | "bottom" | "top";
   title: string;
+  content: React.ReactNode;
   onClose: () => void;
 };
 
-const Modal = ({ title, onClose, position }: ModalProps) => {
+const Modal = ({ position, title, content, onClose }: ModalProps) => {
   return (
     <div className={styles.overlay}>
       <div className={`${styles.wrapper} ${styles[position]}`}>
@@ -18,6 +19,7 @@ const Modal = ({ title, onClose, position }: ModalProps) => {
               <CloseButton onClose={onClose} />
             </div>
           </div>
+          <div className={styles["modal-content"]}>{content}</div>
         </div>
       </div>
     </div>

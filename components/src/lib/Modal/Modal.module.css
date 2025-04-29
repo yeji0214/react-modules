@@ -23,7 +23,7 @@
   background-color: white;
   border-radius: 8px;
   width: 304px;
-  height: 216px;
+  min-height: 216px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   padding: 24px 32px;
 }
@@ -62,5 +62,9 @@
 }
 
 .top .modal-container {
-  border-radius: 0 0 8px 8px; 
+  border-radius: 0 0 8px 8px;
+}
+
+.modal-content {
+  margin-top: 24px;
 }
