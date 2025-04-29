@@ -6,12 +6,22 @@ type ModalProps = {
   title: string;
   content: React.ReactNode;
   onClose: () => void;
+  handleBackdropClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
 };
 
-const Modal = ({ position, title, content, onClose }: ModalProps) => {
+const Modal = ({
+  position,
+  title,
+  content,
+  onClose,
+  handleBackdropClick,
+}: ModalProps) => {
   return (
     <div className={styles.overlay}>
-      <div className={`${styles.wrapper} ${styles[position]}`}>
+      <div
+        className={`${styles.wrapper} ${styles[position]}`}
+        onClick={handleBackdropClick}
+      >
         <div className={styles["modal-container"]}>
           <div className={styles["modal-header"]}>
             <h2 className={styles["modal-title"]}>{title}</h2>
