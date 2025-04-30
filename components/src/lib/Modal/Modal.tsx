@@ -1,5 +1,5 @@
-import CloseButton from "../../components/CloseButton/CloseButton";
-import ConfirmButton from "../../components/ConfirmButton/ConfirmButton";
+import CloseButton from "../components/CloseButton/CloseButton";
+import ConfirmButton from "../components/ConfirmButton/ConfirmButton";
 import styles from "./Modal.module.css";
 
 type ModalProps = {
