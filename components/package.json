@@ -1,6 +1,6 @@
 {
   "name": "@yeji0214/modal",
-  "version": "0.0.16",
+  "version": "0.0.18",
   "description": "모달 컴포넌트",
   "type": "module",
   "types": "dist/index.d.ts",
