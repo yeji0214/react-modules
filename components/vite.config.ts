@@ -29,6 +29,6 @@ export default defineConfig({
       jsxImportSource: "@emotion/react",
       plugins: [["@swc/plugin-emotion", {}]],
     }),
-    dts(),
+    dts({ include: ["src/lib"], tsconfigPath: "tsconfig.app.json" }),
   ],
 });
