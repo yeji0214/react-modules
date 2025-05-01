@@ -1,7 +1,9 @@
 import { useState } from "react";
 import validator from "../utils/validate";
+import { CARD_INPUT } from "../constants/cardValidationInfo";
+import ERROR_MESSAGE from "../constants/errorMessage";
 
-export type CardNumberState = {
+type CardNumberState = {
   value: string;
   isValid: boolean;
 };
@@ -15,12 +17,12 @@ interface Props {
   ) => void;
 }
 
-const INPUT_COUNT = 4;
-const MAX_LENGTH = 4;
-
 const useCardNumberInput = (): Props => {
   const [cardNumberState, setCardNumberState] = useState<CardNumberState[]>(
-    Array.from({ length: INPUT_COUNT }, () => ({ value: "", isValid: true }))
+    Array.from({ length: CARD_INPUT.NUMBER_INPUTS }, () => ({
+      value: "",
+      isValid: true,
+    }))
   );
 
   const [errorMessage, setErrorMessage] = useState("");
@@ -36,10 +38,12 @@ const useCardNumberInput = (): Props => {
 
     if (validator.hasNonNumericValue(inputValue)) {
       isValid = false;
-      errorMessage = "숫자가 아닌 값이 있습니다.";
-    } else if (validator.hasIncorrectLength(inputValue, MAX_LENGTH)) {
+      errorMessage = ERROR_MESSAGE.REQUIRE.NUMBER;
+    } else if (
+      validator.hasIncorrectLength(inputValue, CARD_INPUT.MAX_LENGTH.CARD)
+    ) {
       isValid = false;
-      errorMessage = `숫자 ${MAX_LENGTH}자를 입력해주세요.`;
+      errorMessage = `숫자 ${CARD_INPUT.MAX_LENGTH.CARD}${ERROR_MESSAGE.REQUIRE.SPECIFIC_LENGTH}`;
     }
 
     const updatedState = cardNumberState.map((item, i) =>
