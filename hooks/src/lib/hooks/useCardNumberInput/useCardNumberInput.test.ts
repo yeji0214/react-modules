@@ -1,5 +1,7 @@
 import { renderHook, act } from "@testing-library/react";
-import useCardNumberInput from "../lib/hooks/useCardNumberInput/useCardNumber";
+import useCardNumberInput from "./useCardNumberInput";
+import ERROR_MESSAGE from "../constants/errorMessage";
+import { CARD_INPUT } from "../constants/cardValidationInfo";
 
 describe("useCardNumberInput", () => {
   it("초기 상태는 빈 문자열 배열이며 유효하지 않음", () => {
@@ -19,16 +21,28 @@ describe("useCardNumberInput", () => {
     const { result } = renderHook(() => useCardNumberInput());
 
     act(() => {
-      result.current.handleInputChange({ target: { value: "1234" } } as React.ChangeEvent<HTMLInputElement>, 0);
+      result.current.handleInputChange(
+        { target: { value: "1234" } } as React.ChangeEvent<HTMLInputElement>,
+        0
+      );
     });
     act(() => {
-      result.current.handleInputChange({ target: { value: "5678" } } as React.ChangeEvent<HTMLInputElement>, 1);
+      result.current.handleInputChange(
+        { target: { value: "5678" } } as React.ChangeEvent<HTMLInputElement>,
+        1
+      );
     });
     act(() => {
-      result.current.handleInputChange({ target: { value: "9012" } } as React.ChangeEvent<HTMLInputElement>, 2);
+      result.current.handleInputChange(
+        { target: { value: "9012" } } as React.ChangeEvent<HTMLInputElement>,
+        2
+      );
     });
     act(() => {
-      result.current.handleInputChange({ target: { value: "3456" } } as React.ChangeEvent<HTMLInputElement>, 3);
+      result.current.handleInputChange(
+        { target: { value: "3456" } } as React.ChangeEvent<HTMLInputElement>,
+        3
+      );
     });
 
     expect(result.current.cardNumberState).toEqual([
@@ -45,20 +59,28 @@ it("숫자가 아닌 값이 포함되면 유효하지 않음", () => {
   const { result } = renderHook(() => useCardNumberInput());
 
   act(() => {
-    result.current.handleInputChange({ target: { value: "12a4" } } as React.ChangeEvent<HTMLInputElement>, 0);
+    result.current.handleInputChange(
+      { target: { value: "12a4" } } as React.ChangeEvent<HTMLInputElement>,
+      0
+    );
   });
 
   expect(result.current.cardNumberState[0].isValid).toBe(false);
-  expect(result.current.errorMessage).toBe("숫자가 아닌 값이 있습니다.");
+  expect(result.current.errorMessage).toBe(ERROR_MESSAGE.REQUIRE.NUMBER);
 });
 
 it("길이가 부족한 값이 포함되면 유효하지 않음", () => {
   const { result } = renderHook(() => useCardNumberInput());
 
   act(() => {
-    result.current.handleInputChange({ target: { value: "123" } } as React.ChangeEvent<HTMLInputElement>, 0);
+    result.current.handleInputChange(
+      { target: { value: "123" } } as React.ChangeEvent<HTMLInputElement>,
+      0
+    );
   });
 
   expect(result.current.cardNumberState[0].isValid).toBe(false);
-  expect(result.current.errorMessage).toBe("숫자 4자를 입력해주세요.");
+  expect(result.current.errorMessage).toBe(
+    `숫자 ${CARD_INPUT.MAX_LENGTH.CARD}${ERROR_MESSAGE.REQUIRE.SPECIFIC_LENGTH}`
+  );
 });
