@@ -1,21 +1,20 @@
 import { useState } from "react";
 import validator from "../utils/validate";
-import { CARD_INPUT } from "../constants/cardValidationInfo";
 import ERROR_MESSAGE from "../constants/errorMessage";
 
-type cvcState = {
+type singleState = {
   value: string;
   isValid: boolean;
 };
 
 interface Props {
-  cvcState: cvcState;
+  singleState: singleState;
   errorMessage: string;
   handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const useCVCInput = (): Props => {
-  const [cvcState, setCVCState] = useState<cvcState>({
+const useSingleInput = (maxLength: number): Props => {
+  const [singleState, setSingleState] = useState<singleState>({
     value: "",
     isValid: true,
   });
@@ -31,24 +30,22 @@ const useCVCInput = (): Props => {
     if (validator.hasNonNumericValue(inputValue)) {
       isValid = false;
       errorMessage = ERROR_MESSAGE.REQUIRE.NUMBER;
-    } else if (
-      validator.hasIncorrectLength(inputValue, CARD_INPUT.MAX_LENGTH.CVC)
-    ) {
+    } else if (validator.hasIncorrectLength(inputValue, maxLength)) {
       isValid = false;
-      errorMessage = `숫자 ${CARD_INPUT.MAX_LENGTH.CVC}${ERROR_MESSAGE.REQUIRE.SPECIFIC_LENGTH}`;
+      errorMessage = `숫자 ${maxLength}${ERROR_MESSAGE.REQUIRE.SPECIFIC_LENGTH}`;
     }
 
     const updatedState = { value: inputValue, isValid };
 
-    setCVCState(updatedState);
+    setSingleState(updatedState);
     setErrorMessage(errorMessage);
   };
 
   return {
-    cvcState,
+    singleState,
     errorMessage,
     handleInputChange,
   };
 };
 
-export default useCVCInput;
+export default useSingleInput;
