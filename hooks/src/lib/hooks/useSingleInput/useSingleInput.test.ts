@@ -49,6 +49,6 @@ it("길이가 부족한 값이 포함되면 유효하지 않음", () => {
 
   expect(result.current.singleState.isValid).toBe(false);
   expect(result.current.errorMessage).toBe(
-    `숫자 ${CARD_INPUT.MAX_LENGTH.CVC}${ERROR_MESSAGE.REQUIRE.SPECIFIC_LENGTH}`
+    `숫자 ${CARD_INPUT.MAX_LENGTH.CVC}${ERROR_MESSAGE.REQUIRE.SPECIFIC_LENGTH}`,
   );
 });

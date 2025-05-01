@@ -70,8 +70,8 @@ const Wrapper = styled.div<{ position: "center" | "bottom" | "top" }>`
     position === "bottom"
       ? "flex-end"
       : position === "top"
-      ? "flex-start"
-      : "center"};
+        ? "flex-start"
+        : "center"};
   width: 100%;
   height: 100%;
 `;
@@ -84,8 +84,8 @@ const ModalContainer = styled.div<{ position: "center" | "bottom" | "top" }>`
     position === "bottom"
       ? "8px 8px 0 0"
       : position === "top"
-      ? "0 0 8px 8px"
-      : "8px"};
+        ? "0 0 8px 8px"
+        : "8px"};
   width: 304px;
   min-height: 216px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);

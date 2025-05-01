@@ -19,7 +19,7 @@ function App() {
   };
 
   const handleConfirm = () => {
-    console.log('확인 버튼이 클릭되었습니다.')
+    console.log("확인 버튼이 클릭되었습니다.");
   };
 
   return (
@@ -27,8 +27,8 @@ function App() {
       <button onClick={handleOpenModal}>모달 열기</button>
       {isOpen && (
         <Modal
-        position="center"
-        title="제목"
+          position="center"
+          title="제목"
           content="내용"
           handleBackdropClick={handleBackdropClick}
           hasCloseButton={true}

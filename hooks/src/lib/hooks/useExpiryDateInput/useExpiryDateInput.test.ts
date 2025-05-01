@@ -21,13 +21,13 @@ describe("useExpiryDateInput", () => {
     act(() => {
       result.current.handleInputChange(
         { target: { value: "12" } } as React.ChangeEvent<HTMLInputElement>,
-        0
+        0,
       );
     });
     act(() => {
       result.current.handleInputChange(
         { target: { value: "27" } } as React.ChangeEvent<HTMLInputElement>,
-        1
+        1,
       );
     });
 
@@ -45,7 +45,7 @@ it("숫자가 아닌 값이 포함되면 유효하지 않음", () => {
   act(() => {
     result.current.handleInputChange(
       { target: { value: "ab" } } as React.ChangeEvent<HTMLInputElement>,
-      0
+      0,
     );
   });
 
@@ -59,12 +59,12 @@ it("길이가 부족한 값이 포함되면 유효하지 않음", () => {
   act(() => {
     result.current.handleInputChange(
       { target: { value: "1" } } as React.ChangeEvent<HTMLInputElement>,
-      0
+      0,
     );
   });
 
   expect(result.current.expiryDateState[0].isValid).toBe(false);
   expect(result.current.errorMessage).toBe(
-    `숫자 ${CARD_INPUT.MAX_LENGTH.EXPIRE_DATE}${ERROR_MESSAGE.REQUIRE.SPECIFIC_LENGTH}`
+    `숫자 ${CARD_INPUT.MAX_LENGTH.EXPIRE_DATE}${ERROR_MESSAGE.REQUIRE.SPECIFIC_LENGTH}`,
   );
 });

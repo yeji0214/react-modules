@@ -21,9 +21,7 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
-    "declaration": true,
+    "declaration": true
   },
   "include": ["src/lib", "src"]
 }
-
-

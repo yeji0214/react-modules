@@ -13,7 +13,7 @@ interface Props {
   errorMessage: string;
   handleInputChange: (
     e: React.ChangeEvent<HTMLInputElement>,
-    index: number
+    index: number,
   ) => void;
 }
 
@@ -22,14 +22,14 @@ const useCardNumberInput = (): Props => {
     Array.from({ length: CARD_INPUT.NUMBER_INPUTS }, () => ({
       value: "",
       isValid: true,
-    }))
+    })),
   );
 
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement>,
-    index: number
+    index: number,
   ) => {
     const inputValue = e.target.value;
 
@@ -47,7 +47,7 @@ const useCardNumberInput = (): Props => {
     }
 
     const updatedState = cardNumberState.map((item, i) =>
-      i === index ? { value: inputValue, isValid } : item
+      i === index ? { value: inputValue, isValid } : item,
     );
 
     setCardNumberState(updatedState);
