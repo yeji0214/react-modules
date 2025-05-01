@@ -1,10 +1,12 @@
 const validator = {
-  hasIncorrectLength(numbers: string[], maxLength: number) {
-    return numbers.some((number) => number.length !== maxLength);
+  hasNonNumericValue(number: string) {
+    if (isNaN(Number(number))) return true;
+    return false;
   },
 
-  hasNonNumericValue(numbers: string[]) {
-    return numbers.some((number) => isNaN(Number(number)));
+  hasIncorrectLength(number: string, length: number) {
+    if (number.length !== length) return true;
+    return false;
   },
 };
 
