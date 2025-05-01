@@ -27,14 +27,14 @@ function App() {
       <button onClick={handleOpenModal}>모달 열기</button>
       {isOpen && (
         <Modal
-          onClose={handleCloseModal}
-          title="제목"
-          position="center"
+        position="center"
+        title="제목"
           content="내용"
-          hasCloseButton={true}
           handleBackdropClick={handleBackdropClick}
-          confirmText="확인"
+          hasCloseButton={true}
+          onClose={handleCloseModal}
           onConfirm={handleConfirm}
+          confirmText="확인"
         />
       )}
     </>

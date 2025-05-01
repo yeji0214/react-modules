@@ -6,22 +6,22 @@ type ModalProps = {
   position: "center" | "bottom" | "top";
   title: string;
   content: React.ReactNode;
+  handleBackdropClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
   hasCloseButton: boolean;
   onClose: () => void;
-  handleBackdropClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
-  confirmText?: string;
   onConfirm?: () => void;
+  confirmText?: string;
 };
 
 const Modal = ({
   position,
   title,
   content,
+  handleBackdropClick,
   hasCloseButton,
   onClose,
-  handleBackdropClick,
-  confirmText = "확인",
   onConfirm,
+  confirmText = "확인",
 }: ModalProps) => {
   return (
     <Overlay>
