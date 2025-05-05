@@ -55,8 +55,8 @@ function App() {
 |-----------------------|-------------------------------------------------------|----------|-------------|
 | `position`            | `"center"` \| `"bottom"` \| `"top"`                   | ✅       | 모달이 화면 어디에 위치할지 설정합니다. |
 | `title`               | `string`                                              | ✅       | 모달 상단에 표시할 제목입니다. |
-| `content`             | `React.ReactNode`                                     | ✅       | 모달 본문에 들어갈 내용입니다. |
-| `hasCloseButton`      | `boolean`                                             | ✅       | 우측 상단에 닫기 버튼을 표시할지 여부입니다. |
+| `content`             | `React.ReactNode`                                     | ✅       | 모달 본문에 들어갈 내용을 JSX 형태로 전달합니다. |
+| `hasCloseButton`      | `boolean`                                             | ❌       | 우측 상단에 닫기 버튼을 표시할지 여부입니다. 기본값은 `true`입니다. |
 | `onClose`             | `() => void`                                          | ✅       | 모달을 닫을 때 실행되는 콜백 함수입니다. (닫기 버튼, 백드롭 클릭 시 호출) |
 | `handleBackdropClick` | `(e: React.MouseEvent<HTMLDivElement>) => void`       | ❌       | 백드롭을 클릭했을 때 실행할 커스텀 함수입니다. 기본 `onClose`와는 별개로 작동합니다. |
 | `confirmText`         | `string`                                              | ❌       | 하단에 표시할 확인 버튼의 텍스트입니다. (ex: "확인", "제출") |

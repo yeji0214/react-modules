@@ -31,7 +31,6 @@ function App() {
           title="제목"
           content="내용"
           handleBackdropClick={handleBackdropClick}
-          hasCloseButton={true}
           onClose={handleCloseModal}
           onConfirm={handleConfirm}
           confirmText="확인"

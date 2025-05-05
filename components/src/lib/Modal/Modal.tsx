@@ -7,7 +7,7 @@ type ModalProps = {
   title: string;
   content: React.ReactNode;
   handleBackdropClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
-  hasCloseButton: boolean;
+  hasCloseButton?: boolean;
   onClose: () => void;
   onConfirm?: () => void;
   confirmText?: string;
@@ -18,7 +18,7 @@ const Modal = ({
   title,
   content,
   handleBackdropClick,
-  hasCloseButton,
+  hasCloseButton = true,
   onClose,
   onConfirm,
   confirmText = "확인",
