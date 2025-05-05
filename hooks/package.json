@@ -1,6 +1,10 @@
 {
   "name": "@yeji0214/hooks",
   "version": "0.0.1",
+  "author": "정예지 <yjyjyj0214@gmail.com> (https://github.com/yeji0214)",
+  "license": "MIT",
+  "keywords": ["react", "hooks", "card", "payment"],
+  "sideEffects": false,
   "description": "카드 정보 커스텀 훅",
   "type": "module",
   "types": "dist/index.d.ts",
