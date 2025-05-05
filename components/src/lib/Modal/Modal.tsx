@@ -76,16 +76,17 @@ const Wrapper = styled.div<{ position: "center" | "bottom" | "top" }>`
   height: 100%;
 `;
 
+const borderRadiusMap: Record<"center" | "bottom" | "top", string> = {
+  center: "8px",
+  bottom: "8px 8px 0 0",
+  top: "0 0 8px 8px",
+};
+
 const ModalContainer = styled.div<{ position: "center" | "bottom" | "top" }>`
   display: flex;
   flex-direction: column;
   background-color: white;
-  border-radius: ${({ position }) =>
-    position === "bottom"
-      ? "8px 8px 0 0"
-      : position === "top"
-        ? "0 0 8px 8px"
-        : "8px"};
+  border-radius: ${({ position }) => borderRadiusMap[position]};
   width: 304px;
   min-height: 216px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
