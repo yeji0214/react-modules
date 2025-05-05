@@ -13,7 +13,7 @@ interface Props {
   errorMessage: string;
   handleInputChange: (
     e: React.ChangeEvent<HTMLInputElement>,
-    index: number
+    index: number,
   ) => void;
 }
 
@@ -29,7 +29,7 @@ const useExpiryDateInput = (): Props => {
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement>,
-    index: number
+    index: number,
   ) => {
     const inputValue = e.target.value;
 
@@ -52,8 +52,8 @@ const useExpiryDateInput = (): Props => {
 
     setExpiryDateState((prev) =>
       prev.map((item, i) =>
-        i === index ? { value: inputValue, isValid } : item
-      )
+        i === index ? { value: inputValue, isValid } : item,
+      ),
     );
     setErrorMessage(errorMessage);
   };

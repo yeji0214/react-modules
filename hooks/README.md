@@ -9,10 +9,10 @@
 
 ## ✨ 제공 훅 목록
 
-| 훅 이름 | 사용 목적 |
-|--------|-----------|
-| `useCardNumberInput` | 4칸 카드 번호 입력 상태 관리 |
-| `useExpiryDateInput` | 유효 기간(MM/YY) 입력 관리 |
+| 훅 이름              | 사용 목적                       |
+| -------------------- | ------------------------------- |
+| `useCardNumberInput` | 4칸 카드 번호 입력 상태 관리    |
+| `useExpiryDateInput` | 유효 기간(MM/YY) 입력 관리      |
 | `useSingleInput`     | CVC, 비밀번호 등 단일 인풋 처리 |
 
 ---
@@ -35,7 +35,8 @@ npm install @yeji0214/hooks
 import { useCardNumberInput } from "@yeji0214/hooks";
 
 const CardNumberInput = () => {
-  const { cardNumberState, errorMessage, handleInputChange } = useCardNumberInput();
+  const { cardNumberState, errorMessage, handleInputChange } =
+    useCardNumberInput();
 
   return (
     <div>
@@ -55,11 +56,11 @@ const CardNumberInput = () => {
 
 #### ✅ 반환 값
 
-| 항목 | 타입 | 설명 |
-|------|------|------|
-| `cardNumberState` | `{ value: string; isValid: boolean }[]` | 4개의 카드 번호 입력 상태 |
-| `errorMessage` | `string` | 유효성 검사 실패 시 표시할 메시지 |
-| `handleInputChange` | `(e, index) => void` | 입력 변경 핸들러 |
+| 항목                | 타입                                    | 설명                              |
+| ------------------- | --------------------------------------- | --------------------------------- |
+| `cardNumberState`   | `{ value: string; isValid: boolean }[]` | 4개의 카드 번호 입력 상태         |
+| `errorMessage`      | `string`                                | 유효성 검사 실패 시 표시할 메시지 |
+| `handleInputChange` | `(e, index) => void`                    | 입력 변경 핸들러                  |
 
 ---
 
@@ -69,7 +70,8 @@ const CardNumberInput = () => {
 import { useExpiryDateInput } from "@yeji0214/hooks";
 
 const ExpiryInput = () => {
-  const { expiryDateState, errorMessage, handleInputChange } = useExpiryDateInput();
+  const { expiryDateState, errorMessage, handleInputChange } =
+    useExpiryDateInput();
 
   return (
     <div>
@@ -93,11 +95,11 @@ const ExpiryInput = () => {
 
 #### ✅ 반환 값
 
-| 항목 | 타입 | 설명 |
-|------|------|------|
-| `expiryDateState` | `{ value: string; isValid: boolean }[]` | 월(MM), 년(YY) 상태 |
-| `errorMessage` | `string` | 유효성 검사 메시지 (월 또는 년 오류) |
-| `handleInputChange` | `(e, index) => void` | 입력 핸들러 |
+| 항목                | 타입                                    | 설명                                 |
+| ------------------- | --------------------------------------- | ------------------------------------ |
+| `expiryDateState`   | `{ value: string; isValid: boolean }[]` | 월(MM), 년(YY) 상태                  |
+| `errorMessage`      | `string`                                | 유효성 검사 메시지 (월 또는 년 오류) |
+| `handleInputChange` | `(e, index) => void`                    | 입력 핸들러                          |
 
 ---
 
@@ -124,11 +126,11 @@ const CVCInput = () => {
 
 #### ✅ 반환 값
 
-| 항목 | 타입 | 설명 |
-|------|------|------|
-| `singleState` | `{ value: string; isValid: boolean }` | 단일 인풋의 상태 |
-| `errorMessage` | `string` | 유효성 메시지 |
-| `handleInputChange` | `(e) => void` | 입력 핸들러 |
+| 항목                | 타입                                  | 설명             |
+| ------------------- | ------------------------------------- | ---------------- |
+| `singleState`       | `{ value: string; isValid: boolean }` | 단일 인풋의 상태 |
+| `errorMessage`      | `string`                              | 유효성 메시지    |
+| `handleInputChange` | `(e) => void`                         | 입력 핸들러      |
 
 ---
 
