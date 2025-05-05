@@ -2,19 +2,19 @@ import { useState } from "react";
 import validator from "../utils/validate";
 import ERROR_MESSAGE from "../constants/errorMessage";
 
-type singleState = {
+type SingleState = {
   value: string;
   isValid: boolean;
 };
 
 interface Props {
-  singleState: singleState;
+  singleState: SingleState;
   errorMessage: string;
   handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const useSingleInput = (maxLength: number): Props => {
-  const [singleState, setSingleState] = useState<singleState>({
+  const [singleState, setSingleState] = useState<SingleState>({
     value: "",
     isValid: true,
   });
