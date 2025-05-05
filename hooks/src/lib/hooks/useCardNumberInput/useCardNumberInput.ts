@@ -13,7 +13,7 @@ interface Props {
   errorMessage: string;
   handleInputChange: (
     e: React.ChangeEvent<HTMLInputElement>,
-    index: number,
+    index: number
   ) => void;
 }
 
@@ -22,14 +22,14 @@ const useCardNumberInput = (): Props => {
     Array.from({ length: CARD_INPUT.NUMBER_INPUTS }, () => ({
       value: "",
       isValid: true,
-    })),
+    }))
   );
 
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement>,
-    index: number,
+    index: number
   ) => {
     const inputValue = e.target.value;
 
@@ -46,11 +46,11 @@ const useCardNumberInput = (): Props => {
       errorMessage = `숫자 ${CARD_INPUT.MAX_LENGTH.CARD}${ERROR_MESSAGE.REQUIRE.SPECIFIC_LENGTH}`;
     }
 
-    const updatedState = cardNumberState.map((item, i) =>
-      i === index ? { value: inputValue, isValid } : item,
+    setCardNumberState((prev) =>
+      prev.map((item, i) =>
+        i === index ? { value: inputValue, isValid } : item
+      )
     );
-
-    setCardNumberState(updatedState);
     setErrorMessage(errorMessage);
   };
 
