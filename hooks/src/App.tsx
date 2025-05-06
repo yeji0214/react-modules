@@ -1,12 +1,5 @@
-import React from "react";
-import "./App.css";
-
-function App() {
-  return (
-    <>
-      <h1>Hooks Modules</h1>
-    </>
-  );
-}
+const App = () => {
+  return <div></div>;
+};
 
 export default App;

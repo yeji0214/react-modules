@@ -1,7 +1,16 @@
 {
-  "name": "hooks",
-  "version": "0.0.1",
-  "description": "npm modules",
+  "name": "@yeji0214/hooks",
+  "version": "0.0.2",
+  "author": "정예지 <yjyjyj0214@gmail.com> (https://github.com/yeji0214)",
+  "license": "MIT",
+  "keywords": [
+    "react",
+    "hooks",
+    "card",
+    "payment"
+  ],
+  "sideEffects": false,
+  "description": "카드 정보 커스텀 훅",
   "type": "module",
   "types": "dist/index.d.ts",
   "main": "dist/index.js",
@@ -16,9 +25,10 @@
     "preview": "vite preview",
     "test": "jest"
   },
-  "dependencies": {
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+  "dependencies": {},
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.6.3",
