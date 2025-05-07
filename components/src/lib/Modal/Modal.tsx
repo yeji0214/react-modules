@@ -1,44 +1,74 @@
 import styled from "@emotion/styled";
 import CloseButton from "../components/CloseButton/CloseButton";
 import ConfirmButton from "../components/ConfirmButton/ConfirmButton";
+import CancelButton from "../components/CancelButton/CancelButton";
+import Input from "../components/Input/Input";
 
 type ModalProps = {
-  position: "center" | "bottom" | "top";
-  title: string;
-  content: React.ReactNode;
+  type?: "alert" | "confirm" | "prompt";
+  position?: "center" | "bottom" | "top";
+  title?: string;
+  content?: React.ReactNode;
   handleBackdropClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
   hasCloseButton?: boolean;
   onClose: () => void;
-  onConfirm?: () => void;
+  onConfirm: () => void;
   confirmText?: string;
+  cancelText?: string;
+  inputTitle?: string;
 };
 
 const Modal = ({
-  position,
-  title,
-  content,
+  type = "alert",
+  position = "center",
+  title = "알림",
+  content = "내용이 없습니다.",
   handleBackdropClick,
   hasCloseButton = true,
   onClose,
   onConfirm,
   confirmText = "확인",
+  cancelText = "취소",
+  inputTitle = "입력해주세요.",
 }: ModalProps) => {
   return (
     <Overlay>
       <Wrapper position={position} onClick={handleBackdropClick}>
         <ModalContainer
           position={position}
-          onClick={(e) => e.stopPropagation()} // 모달 내부 클릭 시 backdrop 이벤트 방지
+          onClick={(e) => e.stopPropagation()}
         >
-          <ModalHeader>
-            <ModalTitle>{title}</ModalTitle>
-            <CloseButtonWrapper>
-              {hasCloseButton && <CloseButton onClose={onClose} />}
-            </CloseButtonWrapper>
-          </ModalHeader>
-          <ModalContent>{content}</ModalContent>
+          {type !== "prompt" && (
+            <>
+              <ModalHeader>
+                <ModalTitle>{title}</ModalTitle>
+                <CloseButtonWrapper>
+                  {hasCloseButton && <CloseButton onClose={onClose} />}
+                </CloseButtonWrapper>
+              </ModalHeader>
+              <ModalContent>{content}</ModalContent>
+            </>
+          )}
+
+          {type === "prompt" && (
+            <InputContainer>
+              <Input title={inputTitle} />
+            </InputContainer>
+          )}
+
           <ModalFooter>
-            {onConfirm && (
+            {type === "alert" && (
+              <ConfirmButton confirmText={confirmText} onClick={onConfirm} />
+            )}
+
+            {type === "confirm" && (
+              <Buttons>
+                <CancelButton cancelText={cancelText} onClick={onClose} />
+                <ConfirmButton confirmText={confirmText} onClick={onConfirm} />
+              </Buttons>
+            )}
+
+            {type === "prompt" && (
               <ConfirmButton confirmText={confirmText} onClick={onConfirm} />
             )}
           </ModalFooter>
@@ -70,8 +100,8 @@ const Wrapper = styled.div<{ position: "center" | "bottom" | "top" }>`
     position === "bottom"
       ? "flex-end"
       : position === "top"
-        ? "flex-start"
-        : "center"};
+      ? "flex-start"
+      : "center"};
   width: 100%;
   height: 100%;
 `;
@@ -115,4 +145,16 @@ const ModalFooter = styled.div`
   margin-top: auto;
   text-align: center;
   justify-content: flex-end;
+`;
+
+const Buttons = styled.div`
+  display: flex;
+  gap: 7px;
+`;
+
+const InputContainer = styled.div`
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
