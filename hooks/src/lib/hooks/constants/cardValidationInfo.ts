@@ -18,3 +18,9 @@ export const EXPIRATION = {
     CURRENT: new Date().getFullYear() % 100,
   },
 } as const;
+
+export const CARD_BRAND = {
+  VISA_START_NUMBER: 4,
+  MASTER_MIN_START_NUMBER: 51,
+  MASTER_MAX_START_NUMBER: 55,
+};

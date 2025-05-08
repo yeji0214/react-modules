@@ -13,7 +13,7 @@ interface Props {
   errorMessage: string;
   handleInputChange: (
     e: React.ChangeEvent<HTMLInputElement>,
-    index: number,
+    index: number
   ) => void;
 }
 
@@ -22,19 +22,26 @@ const useCardNumberInput = (): Props => {
     Array.from({ length: CARD_INPUT.NUMBER_INPUTS }, () => ({
       value: "",
       isValid: true,
-    })),
+    }))
   );
 
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement>,
-    index: number,
+    index: number
   ) => {
     const inputValue = e.target.value;
 
     let isValid = true;
     let errorMessage = "";
+
+    if (index === 0) {
+      const { isValidCardCompany, helperText } =
+        validator.validateFirstCardNumbers(inputValue);
+      isValid = isValidCardCompany;
+      errorMessage = helperText;
+    }
 
     if (validator.hasNonNumericValue(inputValue)) {
       isValid = false;
@@ -48,8 +55,8 @@ const useCardNumberInput = (): Props => {
 
     setCardNumberState((prev) =>
       prev.map((item, i) =>
-        i === index ? { value: inputValue, isValid } : item,
-      ),
+        i === index ? { value: inputValue, isValid } : item
+      )
     );
     setErrorMessage(errorMessage);
   };
