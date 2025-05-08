@@ -7,6 +7,7 @@ import Input from "../components/Input/Input";
 type ModalProps = {
   type?: "alert" | "confirm" | "prompt";
   position?: "center" | "bottom" | "top";
+  size?: "small" | "medium" | "large";
   title?: string;
   content?: React.ReactNode;
   handleBackdropClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
@@ -21,6 +22,7 @@ type ModalProps = {
 const Modal = ({
   type = "alert",
   position = "center",
+  size = "small",
   title = "알림",
   content = "내용이 없습니다.",
   handleBackdropClick,
@@ -36,6 +38,7 @@ const Modal = ({
       <Wrapper position={position} onClick={handleBackdropClick}>
         <ModalContainer
           position={position}
+          size={size}
           onClick={(e) => e.stopPropagation()}
         >
           {type !== "prompt" && (
@@ -80,6 +83,24 @@ const Modal = ({
 
 export default Modal;
 
+const positionMap: Record<"center" | "bottom" | "top", string> = {
+  center: "center",
+  top: "flex-start",
+  bottom: "flex-end",
+};
+
+const borderRadiusMap: Record<"center" | "bottom" | "top", string> = {
+  center: "8px",
+  bottom: "8px 8px 0 0",
+  top: "0 0 8px 8px",
+};
+
+const sizeMap: Record<"small" | "medium" | "large", string> = {
+  small: "304px",
+  medium: "600px",
+  large:"100%",
+};
+
 const Overlay = styled.div`
   position: fixed;
   top: 0;
@@ -96,28 +117,17 @@ const Overlay = styled.div`
 const Wrapper = styled.div<{ position: "center" | "bottom" | "top" }>`
   display: flex;
   justify-content: center;
-  align-items: ${({ position }) =>
-    position === "bottom"
-      ? "flex-end"
-      : position === "top"
-      ? "flex-start"
-      : "center"};
+  align-items: ${({ position }) => positionMap[position]};
   width: 100%;
   height: 100%;
 `;
 
-const borderRadiusMap: Record<"center" | "bottom" | "top", string> = {
-  center: "8px",
-  bottom: "8px 8px 0 0",
-  top: "0 0 8px 8px",
-};
-
-const ModalContainer = styled.div<{ position: "center" | "bottom" | "top" }>`
+const ModalContainer = styled.div<{ position: "center" | "bottom" | "top", size: "small" | "medium" | "large"}>`
   display: flex;
   flex-direction: column;
   background-color: white;
   border-radius: ${({ position }) => borderRadiusMap[position]};
-  width: 304px;
+  width: ${({ size }) => sizeMap[size]};
   min-height: 216px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   padding: 24px 32px;
