@@ -37,10 +37,12 @@ const validator = {
     if (!validator.isValidCardStartNumber(number))
       return {
         isValidCardCompany: false,
+        idx: 0,
         helperText: ERROR_MESSAGE.CARD_NUMBER.INVALID,
       };
     return {
       isValidCardCompany: true,
+      idx: null,
       helperText: "",
     };
   },

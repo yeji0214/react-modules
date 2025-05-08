@@ -8,9 +8,14 @@ type CardNumberState = {
   isValid: boolean;
 };
 
+type CardNumberErrorState = {
+  index: number | null;
+  message: string;
+};
+
 interface Props {
   cardNumberState: CardNumberState[];
-  errorMessage: string;
+  errorState: CardNumberErrorState;
   handleInputChange: (
     e: React.ChangeEvent<HTMLInputElement>,
     index: number
@@ -25,7 +30,10 @@ const useCardNumberInput = (): Props => {
     }))
   );
 
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorState, setErrorState] = useState<CardNumberErrorState>({
+    index: null,
+    message: "",
+  });
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -34,22 +42,26 @@ const useCardNumberInput = (): Props => {
     const inputValue = e.target.value;
 
     let isValid = true;
+    let errorIndex = null;
     let errorMessage = "";
 
     if (index === 0) {
-      const { isValidCardCompany, helperText } =
+      const { isValidCardCompany, idx, helperText } =
         validator.validateFirstCardNumbers(inputValue);
       isValid = isValidCardCompany;
+      errorIndex = idx;
       errorMessage = helperText;
     }
 
     if (validator.hasNonNumericValue(inputValue)) {
       isValid = false;
+      errorIndex = index;
       errorMessage = ERROR_MESSAGE.REQUIRE.NUMBER;
     } else if (
       validator.hasIncorrectLength(inputValue, CARD_INPUT.MAX_LENGTH.CARD)
     ) {
       isValid = false;
+      errorIndex = index;
       errorMessage = `숫자 ${CARD_INPUT.MAX_LENGTH.CARD}${ERROR_MESSAGE.REQUIRE.SPECIFIC_LENGTH}`;
     }
 
@@ -58,12 +70,13 @@ const useCardNumberInput = (): Props => {
         i === index ? { value: inputValue, isValid } : item
       )
     );
-    setErrorMessage(errorMessage);
+
+    setErrorState({ index, message: errorMessage });
   };
 
   return {
     cardNumberState,
-    errorMessage,
+    errorState,
     handleInputChange,
   };
 };
