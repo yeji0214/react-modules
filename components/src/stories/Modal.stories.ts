@@ -26,6 +26,12 @@ const meta = {
       description: "모달의 위치",
       defaultValue: "center",
     },
+    size: {
+      control: { type: "radio" },
+      options: ["small", "medium", "large"],
+      description: "모달의 크기",
+      defaultValue: "small",
+    },
     title: {
       control: "text",
       description: "모달의 제목 (prompt 타입 제외)",
@@ -105,6 +111,48 @@ export const BottomAlertModal: Story = {
     position: "bottom",
     title: "하단 모달",
     content: "하단에 위치한 모달입니다.",
+    confirmText: "확인",
+    hasCloseButton: true,
+    onClose: () => {},
+    onConfirm: () => {},
+  },
+};
+
+export const SmallAlertModal: Story = {
+  args: {
+    type: "alert",
+    position: "center",
+    size: "small",
+    title: "미니 모달",
+    content: "이것은 작은 크기의 알림 모달입니다.",
+    confirmText: "확인",
+    hasCloseButton: true,
+    onClose: () => {},
+    onConfirm: () => {},
+  },
+};
+
+export const MediumConfirmModal: Story = {
+  args: {
+    type: "confirm",
+    position: "center",
+    size: "medium",
+    title: "중간 모달",
+    content: "이것은 중간 크기의 확인 모달입니다.",
+    confirmText: "확인",
+    hasCloseButton: true,
+    onClose: () => {},
+    onConfirm: () => {},
+  },
+};
+
+export const LargePromptModal: Story = {
+  args: {
+    type: "prompt",
+    position: "center",
+    size: "large",
+    title: "빅 모달",
+    content: "이것은 큰 크기의 입력 모달입니다.",
     confirmText: "확인",
     hasCloseButton: true,
     onClose: () => {},
