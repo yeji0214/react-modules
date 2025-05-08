@@ -19,8 +19,8 @@ export const EXPIRATION = {
   },
 } as const;
 
-export const CARD_BRAND = {
-  VISA_START_NUMBER: 4,
-  MASTER_MIN_START_NUMBER: 51,
-  MASTER_MAX_START_NUMBER: 55,
+export const CARD_BRAND_START_NUMBER = {
+  VISA: 4,
+  MASTER_MIN: 51,
+  MASTER_MAX: 55,
 };

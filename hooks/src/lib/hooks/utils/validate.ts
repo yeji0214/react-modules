@@ -1,5 +1,6 @@
-import { CARD_BRAND, EXPIRATION } from "../constants/cardValidationInfo";
+import { EXPIRATION } from "../constants/cardValidationInfo";
 import ERROR_MESSAGE from "../constants/errorMessage";
+import { detectCardCompany } from "../useCardBrand/useCardBrand";
 
 const validator = {
   hasNonNumericValue(number: string) {
@@ -22,15 +23,8 @@ const validator = {
   },
 
   isValidCardStartNumber(number: string) {
-    if (number.length > 0) {
-      if (
-        Number(number[0]) !== CARD_BRAND.VISA_START_NUMBER &&
-        (Number(number.slice(0, 2)) < CARD_BRAND.MASTER_MIN_START_NUMBER ||
-          Number(number.slice(0, 2)) > CARD_BRAND.MASTER_MAX_START_NUMBER)
-      )
-        return false;
-    }
-    return true;
+    const brand = detectCardCompany(number);
+    return brand !== null;
   },
 
   validateFirstCardNumbers(number: string) {
