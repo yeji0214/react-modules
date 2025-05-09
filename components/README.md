@@ -15,6 +15,7 @@ React 환경에서 **접근성과 재사용성**을 고려한 모달 컴포넌�
 - 불필요한 필수 prop 최소화 (기본값 제공)
 - Alert / Confirm / Prompt의 다양한 모달 타입 지원
 - 위치 및 사이즈 조절 가능 (`center`, `top`, `bottom` + `small`, `medium`, `large`)
+- 모달 접근성 개선: Tab/Shift+Tab 키로 내부 요소 순환 가능 (Focus Trap)
 
 ---
 
