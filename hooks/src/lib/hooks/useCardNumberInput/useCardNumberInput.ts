@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { detectCardCompany } from "../useCardBrand/useCardBrand";
 import {
   getCardNumberMaxLength,
@@ -45,6 +45,17 @@ const useCardNumberInput = (): UseCardNumberInputResult => {
   };
 
   const formattedCardNumber = formattedNumber();
+
+  useEffect(() => {
+    if (
+      (!cardBrand && cardNumber.length > 0) ||
+      (cardBrand && !validateCardNumberForBrand(cardNumber, cardBrand))
+    ) {
+      setErrorMessage(ERROR_MESSAGE.CARD_NUMBER.INVALID);
+    } else {
+      setErrorMessage("");
+    }
+  }, [cardNumber, cardBrand]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const raw = e.target.value.replace(/\D/g, "");
