@@ -3,6 +3,7 @@ import CloseButton from "../components/CloseButton/CloseButton";
 import ConfirmButton from "../components/ConfirmButton/ConfirmButton";
 import CancelButton from "../components/CancelButton/CancelButton";
 import Input from "../components/Input/Input";
+import { useEffect, useRef } from "react";
 
 type ModalProps = {
   type?: "alert" | "confirm" | "prompt";
@@ -33,6 +34,50 @@ const Modal = ({
   cancelText = "취소",
   inputTitle = "입력해주세요.",
 }: ModalProps) => {
+  const modalRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const modal = modalRef.current;
+    if (!modal) return;
+
+    const focusableSelectors = [
+      "button",
+      "a[href]",
+      "input",
+      "textarea",
+      "select",
+      '[tabindex]:not([tabindex="-1"])',
+    ];
+
+    const focusableElements = modal.querySelectorAll<HTMLElement>(
+      focusableSelectors.join(",")
+    );
+    const first = focusableElements[0];
+    const last = focusableElements[focusableElements.length - 1];
+
+    first?.focus();
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key !== "Tab") return;
+      if (!first || !last) return;
+
+      if (e.shiftKey) {
+        if (document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        }
+      } else {
+        if (document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    };
+
+    modal.addEventListener("keydown", handleKeyDown);
+    return () => modal.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
   return (
     <Overlay>
       <Wrapper position={position} onClick={handleBackdropClick}>
@@ -40,6 +85,7 @@ const Modal = ({
           position={position}
           size={size}
           onClick={(e) => e.stopPropagation()}
+          ref={modalRef}
         >
           {type !== "prompt" && (
             <>
@@ -98,7 +144,7 @@ const borderRadiusMap: Record<"center" | "bottom" | "top", string> = {
 const sizeMap: Record<"small" | "medium" | "large", string> = {
   small: "304px",
   medium: "600px",
-  large:"100%",
+  large: "100%",
 };
 
 const Overlay = styled.div`
@@ -122,7 +168,10 @@ const Wrapper = styled.div<{ position: "center" | "bottom" | "top" }>`
   height: 100%;
 `;
 
-const ModalContainer = styled.div<{ position: "center" | "bottom" | "top", size: "small" | "medium" | "large"}>`
+const ModalContainer = styled.div<{
+  position: "center" | "bottom" | "top";
+  size: "small" | "medium" | "large";
+}>`
   display: flex;
   flex-direction: column;
   background-color: white;
