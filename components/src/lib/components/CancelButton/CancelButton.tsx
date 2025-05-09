@@ -14,10 +14,10 @@ export default CancelButton;
 const Button = styled.button`
   width: 100%;
   padding: 8px 16px;
-  background-color: #b5b5b5;
-  color: white;
-  border: none;
+  border: 1px solid gray;
   border-radius: 4px;
   cursor: pointer;
   font-size: 14px;
+  color: #333333;
+  background-color: white;
 `;
