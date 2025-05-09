@@ -87,17 +87,13 @@ const Modal = ({
           onClick={(e) => e.stopPropagation()}
           ref={modalRef}
         >
-          {type !== "prompt" && (
-            <>
-              <ModalHeader>
-                <ModalTitle>{title}</ModalTitle>
-                <CloseButtonWrapper>
-                  {hasCloseButton && <CloseButton onClose={onClose} />}
-                </CloseButtonWrapper>
-              </ModalHeader>
-              <ModalContent>{content}</ModalContent>
-            </>
-          )}
+          <ModalHeader>
+            <ModalTitle>{title}</ModalTitle>
+            <CloseButtonWrapper>
+              {hasCloseButton && <CloseButton onClose={onClose} />}
+            </CloseButtonWrapper>
+          </ModalHeader>
+          {type !== "prompt" && <ModalContent>{content}</ModalContent>}
 
           {type === "prompt" && (
             <InputContainer>
@@ -110,15 +106,11 @@ const Modal = ({
               <ConfirmButton confirmText={confirmText} onClick={onConfirm} />
             )}
 
-            {type === "confirm" && (
+            {(type === "confirm" || type === "prompt") && (
               <Buttons>
                 <CancelButton cancelText={cancelText} onClick={onClose} />
                 <ConfirmButton confirmText={confirmText} onClick={onConfirm} />
               </Buttons>
-            )}
-
-            {type === "prompt" && (
-              <ConfirmButton confirmText={confirmText} onClick={onConfirm} />
             )}
           </ModalFooter>
         </ModalContainer>
@@ -143,8 +135,8 @@ const borderRadiusMap: Record<"center" | "bottom" | "top", string> = {
 
 const sizeMap: Record<"small" | "medium" | "large", string> = {
   small: "304px",
-  medium: "600px",
-  large: "100%",
+  medium: "40%",
+  large: "70%",
 };
 
 const Overlay = styled.div`
