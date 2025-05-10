@@ -204,7 +204,7 @@ const Buttons = styled.div`
 `;
 
 const InputContainer = styled.div`
-  flex: 1;
+  margin-top: 30px;
   display: flex;
   justify-content: center;
   align-items: center;

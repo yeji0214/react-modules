@@ -21,11 +21,22 @@ const Wrapper = styled.div`
 
 const Label = styled.p`
   margin-bottom: 8px;
+  font-size: 14px;
 `;
 
 const StyledInput = styled.input`
   width: 100%;
-  padding: 3px;
+  padding: 8px 12px;
   font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
   box-sizing: border-box;
+
+  background: white;
+  color: black;
+
+  &:focus {
+    outline: none;
+    border-color: #333;
+  }
 `;
