@@ -50,7 +50,7 @@ const Modal = ({
     ];
 
     const focusableElements = modal.querySelectorAll<HTMLElement>(
-      focusableSelectors.join(",")
+      focusableSelectors.join(","),
     );
     const first = focusableElements[0];
     const last = focusableElements[focusableElements.length - 1];

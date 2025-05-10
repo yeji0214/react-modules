@@ -21,8 +21,8 @@ function App() {
       <button onClick={handleOpenModal}>모달 열기</button>
       {isOpen && (
         <Modal
-        // size="medium"
-        type="confirm"
+          // size="medium"
+          type="confirm"
           onClose={handleCloseModal}
           onConfirm={handleConfirm}
         />
