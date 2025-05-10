@@ -20,6 +20,7 @@ const Wrapper = styled.div`
 `;
 
 const Label = styled.p`
+margin-top: 20px;
   margin-bottom: 8px;
   font-size: 14px;
 `;

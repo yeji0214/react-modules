@@ -182,6 +182,7 @@ const ModalHeader = styled.div`
 const ModalTitle = styled.h2`
   font-size: 18px;
   font-weight: 700;
+  margin: 0;
 `;
 
 const CloseButtonWrapper = styled.div`
@@ -204,8 +205,5 @@ const Buttons = styled.div`
 `;
 
 const InputContainer = styled.div`
-  margin-top: 30px;
   display: flex;
-  justify-content: center;
-  align-items: center;
 `;
