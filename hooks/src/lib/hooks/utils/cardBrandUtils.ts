@@ -1,3 +1,5 @@
+import { CARD_BRAND_REGEX } from "../constants/cardValidationInfo";
+
 export const getCardNumberMaxLength = (brand: string | null): number => {
   switch (brand) {
     case "AMEX":
@@ -17,3 +19,10 @@ export const validateCardNumberForBrand = (
   number: string,
   brand: string
 ): boolean => number.length === getCardNumberMaxLength(brand);
+
+export const detectCardCompany = (cardNumber: string): string | null => {
+  for (const { brand, pattern } of CARD_BRAND_REGEX) {
+    if (pattern.test(cardNumber)) return brand;
+  }
+  return null;
+};

@@ -1,6 +1,5 @@
 import { EXPIRATION } from "../constants/cardValidationInfo";
-import ERROR_MESSAGE from "../constants/errorMessage";
-import { detectCardCompany } from "../useCardBrand/useCardBrand";
+import { detectCardCompany } from "./cardBrandUtils";
 
 const validator = {
   hasNonNumericValue(number: string) {

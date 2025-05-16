@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { detectCardCompany } from "../useCardBrand/useCardBrand";
+import { detectCardCompany } from "../utils/cardBrandUtils";
 import {
   getCardNumberMaxLength,
   validateCardNumberForBrand,
