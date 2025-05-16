@@ -7,10 +7,12 @@ import {
 import CARD_BRAND_FORMAT from "../constants/cardBrandInfo";
 import ERROR_MESSAGE from "../constants/errorMessage";
 
+export type CardBrand = "VISA" | "MASTERCARD" | "DINERS" | "AMEX" | "UNIONPAY";
+
 interface UseCardNumberInputResult {
   cardNumber: string;
   formattedCardNumber: string;
-  cardBrand: string | null;
+  cardBrand: CardBrand | null;
   isValid: boolean;
   errorMessage: string;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
