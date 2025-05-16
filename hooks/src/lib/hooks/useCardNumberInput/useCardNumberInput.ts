@@ -22,13 +22,29 @@ const useCardNumberInput = (): UseCardNumberInputResult => {
 
   const cardBrand = detectCardCompany(cardNumber);
 
-  const isValidCardNumber = (): boolean => {
-    if (!cardBrand) return false;
-    return validateCardNumberForBrand(cardNumber, cardBrand);
-  };
-  const isValid = isValidCardNumber();
+  const validateAndSetError = (
+    value: string,
+    brand: string | null
+  ): boolean => {
+    if (!brand && value.length > 0) {
+      setErrorMessage(ERROR_MESSAGE.CARD_NUMBER.INVALID);
+      return false;
+    }
 
-  const formattedNumber = (): string => {
+    if (brand && !validateCardNumberForBrand(value, brand)) {
+      setErrorMessage(ERROR_MESSAGE.CARD_NUMBER.INVALID);
+      return false;
+    }
+
+    setErrorMessage("");
+    return true;
+  };
+
+  const isValid = cardBrand
+    ? validateCardNumberForBrand(cardNumber, cardBrand)
+    : false;
+
+  const formattedCardNumber = (() => {
     if (!cardBrand) return cardNumber;
 
     const format = CARD_BRAND_FORMAT[cardBrand] || CARD_BRAND_FORMAT.DEFAULT;
@@ -42,33 +58,19 @@ const useCardNumberInput = (): UseCardNumberInputResult => {
     }
 
     return groups.filter(Boolean).join(" ");
-  };
-
-  const formattedCardNumber = formattedNumber();
+  })();
 
   useEffect(() => {
-    if (
-      (!cardBrand && cardNumber.length > 0) ||
-      (cardBrand && !validateCardNumberForBrand(cardNumber, cardBrand))
-    ) {
-      setErrorMessage(ERROR_MESSAGE.CARD_NUMBER.INVALID);
-    } else {
-      setErrorMessage("");
-    }
+    validateAndSetError(cardNumber, cardBrand);
   }, [cardNumber, cardBrand]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const raw = e.target.value.replace(/\D/g, "");
-    const maxLength = getCardNumberMaxLength(cardBrand);
-    const trimmed = raw.slice(0, maxLength);
-
+    const trimmed = raw.slice(0, getCardNumberMaxLength(cardBrand));
     setCardNumber(trimmed);
 
-    if (cardBrand && !validateCardNumberForBrand(trimmed, cardBrand)) {
-      setErrorMessage(ERROR_MESSAGE.CARD_NUMBER.INVALID);
-    } else {
-      setErrorMessage("");
-    }
+    const nextBrand = detectCardCompany(trimmed);
+    validateAndSetError(trimmed, nextBrand);
   };
 
   return {
