@@ -26,7 +26,7 @@ const useCardNumberInput = (): UseCardNumberInputResult => {
 
   const validateAndSetError = (
     value: string,
-    brand: string | null
+    brand: string | null,
   ): boolean => {
     if (!brand && value.length > 0) {
       setErrorMessage(ERROR_MESSAGE.CARD_NUMBER.INVALID);

@@ -18,7 +18,7 @@ export const getCardNumberMaxLength = (brand: string | null): number => {
 
 export const validateCardNumberForBrand = (
   number: string,
-  brand: string
+  brand: string,
 ): boolean => number.length === getCardNumberMaxLength(brand);
 
 export const detectCardCompany = (cardNumber: string): CardBrand | null => {

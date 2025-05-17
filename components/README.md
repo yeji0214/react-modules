@@ -116,7 +116,7 @@ function App() {
 | `confirmText`         | `string`                                        | ❌       | `"확인"`                                                                                  | 확인 버튼 텍스트입니다.                                      |
 | `cancelText`          | `string`                                        | ❌       | `"취소"`                                                                                  | 취소 버튼 텍스트입니다. (confirm, prompt 타입에서 사용)      |
 | `handleBackdropClick` | `(e: React.MouseEvent<HTMLDivElement>) => void` | ❌       | 모달 배경 클릭 시 실행할 커스텀 핸들러입니다. 전달하지 않으면 기본적으로 모달이 닫힙니다. |
-|  |
+|                       |
 
 ---
 

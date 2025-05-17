@@ -24,8 +24,7 @@ const StyledButton = styled.button<{ variant: "confirm" | "cancel" }>`
   cursor: pointer;
   border: ${({ variant }) =>
     variant === "cancel" ? "1px solid gray" : "none"};
-  color: ${({ variant }) =>
-    variant === "cancel" ? "#333333" : "white"};
+  color: ${({ variant }) => (variant === "cancel" ? "#333333" : "white")};
   background-color: ${({ variant }) =>
     variant === "cancel" ? "white" : "#333333"};
 `;

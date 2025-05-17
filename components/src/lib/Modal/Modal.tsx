@@ -67,7 +67,7 @@ const Modal = ({
     ];
 
     const focusableElements = modal.querySelectorAll<HTMLElement>(
-      focusableSelectors.join(",")
+      focusableSelectors.join(","),
     );
     const first = focusableElements[0];
     const last = focusableElements[focusableElements.length - 1];
@@ -97,10 +97,10 @@ const Modal = ({
     };
 
     modal.addEventListener("keydown", handleKeyDown);
-    return () => { 
+    return () => {
       modal.removeEventListener("keydown", handleKeyDown);
       document.body.style.overflow = originalOverflow;
-    }
+    };
   }, []);
 
   return (
