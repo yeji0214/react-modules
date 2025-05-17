@@ -1,7 +1,6 @@
 import styled from "@emotion/styled";
 import CloseButton from "../components/CloseButton/CloseButton";
-import ConfirmButton from "../components/ConfirmButton/ConfirmButton";
-import CancelButton from "../components/CancelButton/CancelButton";
+import Button from "../components/Button/Button";
 import Input from "../components/Input/Input";
 import { useEffect, useRef, useState } from "react";
 
@@ -112,13 +111,13 @@ const Modal = ({
 
           <ModalFooter>
             {type === "alert" && (
-              <ConfirmButton confirmText={confirmText} onClick={onConfirm} />
+              <Button text={confirmText} onClick={onConfirm} />
             )}
 
             {(type === "confirm" || type === "prompt") && (
               <Buttons>
-                <CancelButton cancelText={cancelText} onClick={onClose} />
-                <ConfirmButton confirmText={confirmText} onClick={onConfirm} />
+                <Button text={cancelText} onClick={onClose} variant="cancel" />
+                <Button text={confirmText} onClick={onConfirm} />
               </Buttons>
             )}
           </ModalFooter>
