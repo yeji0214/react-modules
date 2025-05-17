@@ -72,6 +72,11 @@ const Modal = ({
     first?.focus();
 
     const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        onClose();
+        return;
+      }
       if (e.key !== "Tab") return;
       if (!first || !last) return;
 
