@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import CloseButton from "../components/CloseButton/CloseButton";
-import Button from "../components/Button/Button";
+import Button, { ModalButtonProps } from "../components/Button/Button";
 import Input from "../components/Input/Input";
 import { useEffect, useRef, useState } from "react";
 
@@ -14,8 +14,8 @@ type ModalProps = {
   hasCloseButton?: boolean;
   onClose: () => void;
   onConfirm: () => void;
-  confirmText?: string;
-  cancelText?: string;
+  confirmButton?: ModalButtonProps;
+  cancelButton?: ModalButtonProps;
   inputTitle?: string;
   inputName?: string;
 };
@@ -30,13 +30,25 @@ const Modal = ({
   hasCloseButton = true,
   onClose,
   onConfirm,
-  confirmText = "확인",
-  cancelText = "취소",
+  confirmButton,
+  cancelButton,
   inputTitle = "입력해주세요.",
   inputName = "input"
 }: ModalProps) => {
   const modalRef = useRef<HTMLDivElement | null>(null);
   const [inputValue, setInputValue] = useState("");
+
+  const defaultConfirmButton = {
+    text: "확인",
+    onClick: onConfirm,
+    variant: "confirm" as const,
+  };
+  
+  const defaultCancelButton = {
+    text: "취소",
+    onClick: onClose,
+    variant: "cancel" as const,
+  };
 
   useEffect(() => {
     const modal = modalRef.current;
@@ -111,13 +123,13 @@ const Modal = ({
 
           <ModalFooter>
             {type === "alert" && (
-              <Button text={confirmText} onClick={onConfirm} />
+              <Button {...(confirmButton ? confirmButton : defaultConfirmButton)} />
             )}
 
             {(type === "confirm" || type === "prompt") && (
               <Buttons>
-                <Button text={cancelText} onClick={onClose} variant="cancel" />
-                <Button text={confirmText} onClick={onConfirm} />
+                <Button {...(cancelButton ? cancelButton : defaultCancelButton)} />
+                <Button {...(confirmButton ? confirmButton : defaultConfirmButton)} />
               </Buttons>
             )}
           </ModalFooter>

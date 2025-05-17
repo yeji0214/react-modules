@@ -1,12 +1,12 @@
 import styled from "@emotion/styled";
 
-type ButtonProps = {
+export type ModalButtonProps = {
   text: string;
   onClick: () => void;
   variant?: "confirm" | "cancel";
 };
 
-const Button = ({ text, onClick, variant = "confirm" }: ButtonProps) => {
+const Button = ({ text, onClick, variant = "confirm" }: ModalButtonProps) => {
   return (
     <StyledButton variant={variant} onClick={onClick}>
       {text}
