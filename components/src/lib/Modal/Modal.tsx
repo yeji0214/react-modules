@@ -5,7 +5,7 @@ import Input from "../components/Input/Input";
 import { useEffect, useRef, useState } from "react";
 
 type ModalProps = {
-  type?: "alert" | "confirm" | "prompt";
+  variant?: "alert" | "confirm" | "prompt";
   position?: "center" | "bottom" | "top";
   size?: "small" | "medium" | "large";
   title?: string;
@@ -21,7 +21,7 @@ type ModalProps = {
 };
 
 const Modal = ({
-  type = "alert",
+  variant = "alert",
   position = "center",
   size = "small",
   title = "알림",
@@ -107,9 +107,9 @@ const Modal = ({
               {hasCloseButton && <CloseButton onClose={onClose} />}
             </CloseButtonWrapper>
           </ModalHeader>
-          {type !== "prompt" && <ModalContent>{content}</ModalContent>}
+          {variant !== "prompt" && <ModalContent>{content}</ModalContent>}
 
-          {type === "prompt" && (
+          {variant === "prompt" && (
             <InputContainer>
               <Input
                 title={inputTitle}
@@ -122,11 +122,11 @@ const Modal = ({
           )}
 
           <ModalFooter>
-            {type === "alert" && (
+            {variant === "alert" && (
               <Button {...(confirmButton ? confirmButton : defaultConfirmButton)} />
             )}
 
-            {(type === "confirm" || type === "prompt") && (
+            {(variant === "confirm" || variant === "prompt") && (
               <Buttons>
                 <Button {...(cancelButton ? cancelButton : defaultCancelButton)} />
                 <Button {...(confirmButton ? confirmButton : defaultConfirmButton)} />

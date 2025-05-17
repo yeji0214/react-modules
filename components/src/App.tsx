@@ -22,7 +22,7 @@ function App() {
       {isOpen && (
         <Modal
           // size="medium"
-          type="confirm"
+          variant="confirm"
           onClose={handleCloseModal}
           onConfirm={handleConfirm}
         />
