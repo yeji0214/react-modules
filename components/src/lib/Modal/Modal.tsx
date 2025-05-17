@@ -33,7 +33,7 @@ const Modal = ({
   confirmButton,
   cancelButton,
   inputTitle = "입력해주세요.",
-  inputName = "input"
+  inputName = "input",
 }: ModalProps) => {
   const modalRef = useRef<HTMLDivElement | null>(null);
   const [inputValue, setInputValue] = useState("");
@@ -43,7 +43,7 @@ const Modal = ({
     onClick: onConfirm,
     variant: "confirm" as const,
   };
-  
+
   const defaultCancelButton = {
     text: "취소",
     onClick: onClose,
@@ -53,6 +53,9 @@ const Modal = ({
   useEffect(() => {
     const modal = modalRef.current;
     if (!modal) return;
+
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
 
     const focusableSelectors = [
       "button",
@@ -94,12 +97,18 @@ const Modal = ({
     };
 
     modal.addEventListener("keydown", handleKeyDown);
-    return () => modal.removeEventListener("keydown", handleKeyDown);
+    return () => { 
+      modal.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = originalOverflow;
+    }
   }, []);
 
   return (
     <Overlay>
-      <Wrapper position={position} onClick={handleBackdropClick ? handleBackdropClick : onClose}>
+      <Wrapper
+        position={position}
+        onClick={handleBackdropClick ? handleBackdropClick : onClose}
+      >
         <ModalContainer
           position={position}
           size={size}
@@ -128,13 +137,19 @@ const Modal = ({
 
           <ModalFooter>
             {variant === "alert" && (
-              <Button {...(confirmButton ? confirmButton : defaultConfirmButton)} />
+              <Button
+                {...(confirmButton ? confirmButton : defaultConfirmButton)}
+              />
             )}
 
             {(variant === "confirm" || variant === "prompt") && (
               <Buttons>
-                <Button {...(cancelButton ? cancelButton : defaultCancelButton)} />
-                <Button {...(confirmButton ? confirmButton : defaultConfirmButton)} />
+                <Button
+                  {...(cancelButton ? cancelButton : defaultCancelButton)}
+                />
+                <Button
+                  {...(confirmButton ? confirmButton : defaultConfirmButton)}
+                />
               </Buttons>
             )}
           </ModalFooter>
