@@ -3,7 +3,7 @@ import CloseButton from "../components/CloseButton/CloseButton";
 import ConfirmButton from "../components/ConfirmButton/ConfirmButton";
 import CancelButton from "../components/CancelButton/CancelButton";
 import Input from "../components/Input/Input";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type ModalProps = {
   type?: "alert" | "confirm" | "prompt";
@@ -18,6 +18,7 @@ type ModalProps = {
   confirmText?: string;
   cancelText?: string;
   inputTitle?: string;
+  inputName?: string;
 };
 
 const Modal = ({
@@ -33,8 +34,10 @@ const Modal = ({
   confirmText = "확인",
   cancelText = "취소",
   inputTitle = "입력해주세요.",
+  inputName = "input"
 }: ModalProps) => {
   const modalRef = useRef<HTMLDivElement | null>(null);
+  const [inputValue, setInputValue] = useState("");
 
   useEffect(() => {
     const modal = modalRef.current;
@@ -50,7 +53,7 @@ const Modal = ({
     ];
 
     const focusableElements = modal.querySelectorAll<HTMLElement>(
-      focusableSelectors.join(","),
+      focusableSelectors.join(",")
     );
     const first = focusableElements[0];
     const last = focusableElements[focusableElements.length - 1];
@@ -97,7 +100,13 @@ const Modal = ({
 
           {type === "prompt" && (
             <InputContainer>
-              <Input title={inputTitle} />
+              <Input
+                title={inputTitle}
+                name={inputName}
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                placeholder="이름을 입력하세요"
+              />
             </InputContainer>
           )}
 

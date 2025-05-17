@@ -2,13 +2,23 @@ import styled from "@emotion/styled";
 
 type InputProps = {
   title: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  name?: string;
+  placeholder?: string;
 };
 
-const Input = ({ title }: InputProps) => {
+const Input = ({ title, value, onChange, name, placeholder }: InputProps) => {
   return (
     <Wrapper>
       <Label>{title}</Label>
-      <StyledInput />
+      <StyledInput
+        id={name}
+        name={name}
+        value={value}
+        onChange={onChange}
+        placeholder={placeholder}
+      />
     </Wrapper>
   );
 };

@@ -64,14 +64,21 @@ function App() {
 
 ```tsx
 import Modal from "@yeji0214/modal";
+import { useState } from "react";
 
 function App() {
+  const [inputValue, setInputValue] = useState("");
+
   return (
     <Modal
       type="prompt"
       inputTitle="이름을 입력해주세요"
+      value={inputValue}
+      onChange={(e) => setInputValue(e.target.value)}
       confirmText="제출"
-      onConfirm={handleConfirm}
+      onConfirm={() => {
+        console.log("입력된 값:", inputValue);
+      }}
     />
   );
 }
@@ -109,6 +116,7 @@ function App() {
 | `confirmText`         | `string`                                        | ❌       | `"확인"`             | 확인 버튼 텍스트입니다.                                      |
 | `cancelText`          | `string`                                        | ❌       | `"취소"`             | 취소 버튼 텍스트입니다. (confirm, prompt 타입에서 사용)      |
 | `handleBackdropClick` | `(e: React.MouseEvent<HTMLDivElement>) => void` | ❌       | –                    | 백드롭 클릭 시 실행할 커스텀 핸들러입니다.                   |
+
 
 ---
 
