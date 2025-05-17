@@ -102,21 +102,21 @@ function App() {
 
 ## 🛠️ Props
 
-| Prop                  | Type                                            | Required | Default              | Description                                                  |
-| --------------------- | ----------------------------------------------- | -------- | -------------------- | ------------------------------------------------------------ |
-| `type`                | `"alert"` \| `"confirm"` \| `"prompt"`          | ❌       | `"alert"`            | 모달의 형태를 지정합니다.                                    |
-| `position`            | `"center"` \| `"bottom"` \| `"top"`             | ❌       | `"center"`           | 모달 위치를 지정합니다.                                      |
-| `size`                | `"small"` \| `"medium"` \| `"lage"`             | ❌       | `"small"`            | 모달 크기를 지정합니다.                                      |
-| `title`               | `string`                                        | ❌       | `"알림"`             | 모달 제목입니다. `prompt` 타입에서는 표시되지 않습니다.      |
-| `content`             | `React.ReactNode`                               | ❌       | `"내용이 없습니다."` | 모달 본문 내용입니다. `prompt` 타입에서는 표시되지 않습니다. |
-| `inputTitle`          | `string`                                        | ❌       | `"입력해주세요."`    | `prompt` 타입에서 입력 필드 상단의 안내 문구입니다.          |
-| `hasCloseButton`      | `boolean`                                       | ❌       | `true`               | 우측 상단 닫기 버튼 표시 여부입니다.                         |
-| `onClose`             | `() => void`                                    | ✅       | –                    | 닫기 버튼, 백드롭 클릭 시 실행되는 콜백입니다.               |
-| `onConfirm`           | `() => void`                                    | ✅       | –                    | 확인 버튼 클릭 시 실행되는 콜백입니다.                       |
-| `confirmText`         | `string`                                        | ❌       | `"확인"`             | 확인 버튼 텍스트입니다.                                      |
-| `cancelText`          | `string`                                        | ❌       | `"취소"`             | 취소 버튼 텍스트입니다. (confirm, prompt 타입에서 사용)      |
-| `handleBackdropClick` | `(e: React.MouseEvent<HTMLDivElement>) => void` | ❌       | –                    | 백드롭 클릭 시 실행할 커스텀 핸들러입니다.                   |
-
+| Prop                  | Type                                            | Required | Default                                                                                   | Description                                                  |
+| --------------------- | ----------------------------------------------- | -------- | ----------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
+| `type`                | `"alert"` \| `"confirm"` \| `"prompt"`          | ❌       | `"alert"`                                                                                 | 모달의 형태를 지정합니다.                                    |
+| `position`            | `"center"` \| `"bottom"` \| `"top"`             | ❌       | `"center"`                                                                                | 모달 위치를 지정합니다.                                      |
+| `size`                | `"small"` \| `"medium"` \| `"lage"`             | ❌       | `"small"`                                                                                 | 모달 크기를 지정합니다.                                      |
+| `title`               | `string`                                        | ❌       | `"알림"`                                                                                  | 모달 제목입니다. `prompt` 타입에서는 표시되지 않습니다.      |
+| `content`             | `React.ReactNode`                               | ❌       | `"내용이 없습니다."`                                                                      | 모달 본문 내용입니다. `prompt` 타입에서는 표시되지 않습니다. |
+| `inputTitle`          | `string`                                        | ❌       | `"입력해주세요."`                                                                         | `prompt` 타입에서 입력 필드 상단의 안내 문구입니다.          |
+| `hasCloseButton`      | `boolean`                                       | ❌       | `true`                                                                                    | 우측 상단 닫기 버튼 표시 여부입니다.                         |
+| `onClose`             | `() => void`                                    | ✅       | –                                                                                         | 닫기 버튼, 백드롭 클릭 시 실행되는 콜백입니다.               |
+| `onConfirm`           | `() => void`                                    | ✅       | –                                                                                         | 확인 버튼 클릭 시 실행되는 콜백입니다.                       |
+| `confirmText`         | `string`                                        | ❌       | `"확인"`                                                                                  | 확인 버튼 텍스트입니다.                                      |
+| `cancelText`          | `string`                                        | ❌       | `"취소"`                                                                                  | 취소 버튼 텍스트입니다. (confirm, prompt 타입에서 사용)      |
+| `handleBackdropClick` | `(e: React.MouseEvent<HTMLDivElement>) => void` | ❌       | 모달 배경 클릭 시 실행할 커스텀 핸들러입니다. 전달하지 않으면 기본적으로 모달이 닫힙니다. |
+|  |
 
 ---
 

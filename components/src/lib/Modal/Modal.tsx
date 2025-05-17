@@ -94,7 +94,7 @@ const Modal = ({
 
   return (
     <Overlay>
-      <Wrapper position={position} onClick={handleBackdropClick}>
+      <Wrapper position={position} onClick={handleBackdropClick ? handleBackdropClick : onClose}>
         <ModalContainer
           position={position}
           size={size}
